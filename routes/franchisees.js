@@ -1,4 +1,3 @@
-
 const express = require("express");
 const router = express.Router();
 const {
@@ -12,8 +11,8 @@ const {
 router
     .post("/", createFranchisee)
     .get("/", getFranchisees);
-// router.get("/:id", getFranchiseeById);
-// router.patch("/:id", updateFranchisee);
-// router.delete("/:id", deleteFranchisee);
+router.get("/:id", getFranchiseeById);
+router.patch("/:id", updateFranchisee);
+router.delete("/:id", deleteFranchisee);
 
 module.exports = router;

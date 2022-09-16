@@ -10,17 +10,7 @@ const app = express();
 // and gave access to the body of the request
 app.use(express.json());
 
-// const bodyParser = require("body-parser");
-// app.use(bodyParser.json());
-// app.use(
-//     bodyParser.urlencoded({
-//         extended: true
-//     })
-// );
-
-
 app.use("/franchisees", franchiseesRouter);
-
 
 // export app to access it from node server
 module.exports = app;

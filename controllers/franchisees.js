@@ -20,15 +20,15 @@ const getFranchisees = async (req, res, next) => {
 };
 
 const createFranchisee = async (req, res, next) => {
-    const { name, address, phone, default_modules, isActive } = req.body;
+    const {name, address, phone, default_modules, isActive} = req.body;
     const query =
         "INSERT INTO franchisees (name, address, phone, default_modules, isActive)  VALUES($1, $2, $3, $4, $5) RETURNING *;";
     const values = [name, address, phone, default_modules, isActive];
-    try{
+    try {
         const data = await pool.query(query, values);
 
         return res.status(201).json({
-            status:201,
+            status: 201,
             message: "Franchisee added successfully",
             data: data.rows
         });
@@ -39,7 +39,7 @@ const createFranchisee = async (req, res, next) => {
 
 const getFranchiseeById = async (req, res, next) => {
     const id = parseInt(req.params.id);
-    const query = "SELECT * FROM article WHERE id=$1;";
+    const query = "SELECT * FROM franchisees WHERE id=$1;";
     const value = [id];
 
     try {
@@ -48,7 +48,7 @@ const getFranchiseeById = async (req, res, next) => {
         if (data.rowCount === 0) return res.status(404).send("No franchisee exists");
 
         return res.status(200).json({
-            status:200,
+            status: 200,
             message: "Franchisee:",
             data: data.rows
         })
@@ -57,52 +57,52 @@ const getFranchiseeById = async (req, res, next) => {
     }
 };
 
-// const updateArticle = async (req, res, next) => {
-//     const id = parseInt(req.params.id);
-//     const { title, article} = req.body;
-//
-//     const query =
-//         "UPDATE article SET title=$1, article=$2 WHERE id=$3 RETURNING *;";
-//     const value = [title, article, id];
-//
-//     try {
-//         const data = await pool.query(query, value);
-//
-//         if (data.rowCount == 0) return res.status(404).send("Article does not exist");
-//
-//         return res.status(200).json({
-//             status:200,
-//             message: "Article updated successfully ",
-//             data: data.rows
-//         })
-//     } catch (error) {
-//         return next(error);
-//     }
-// };
-//
-// const deleteArticle = async (req, res, next) => {
-//     const id = parseInt(req.params.id);
-//     const value = [id];
-//     const query = "DELETE FROM article WHERE id=$1;";
-//
-//     try {
-//         const data = await pool.query(query, value);
-//
-//         if (data.rowCount == 0) return res.status(404).send("Article does not exist");
-//
-//         return res.status(200).json({
-//             status:200,
-//             message: "Article deleted successfully"
-//         })
-//     } catch (error) {
-//         return next(error);
-//     }
-// };
+const updateFranchisee = async (req, res, next) => {
+    const id = parseInt(req.params.id);
+    const {name, address, phone, default_modules, isActive} = req.body;
+
+    const query =
+        "UPDATE franchisees SET name=$1, address=$2, phone=$3, default_modules=$4, isActive=$5, id=$6 WHERE id=$6 RETURNING *;";
+    const value = [name, address, phone, default_modules, isActive, id];
+
+    try {
+        const data = await pool.query(query, value);
+
+        if (data.rowCount === 0) return res.status(404).send("Franchisee does not exist");
+
+        return res.status(200).json({
+            status: 200,
+            message: "Franchisee updated successfully ",
+            data: data.rows
+        })
+    } catch (error) {
+        return next(error);
+    }
+};
+
+const deleteFranchisee = async (req, res, next) => {
+    const id = parseInt(req.params.id);
+    const value = [id];
+    const query = "DELETE FROM franchisees WHERE id=$1;";
+
+    try {
+        const data = await pool.query(query, value);
+
+        if (data.rowCount === 0) return res.status(404).send("Franchisee does not exist");
+
+        return res.status(200).json({
+            status:200,
+            message: "Franchisee deleted successfully"
+        })
+    } catch (error) {
+        return next(error);
+    }
+};
 
 module.exports = {
     getFranchisees,
     createFranchisee,
     getFranchiseeById,
-    // updateFranchisee,
-    // deleteFranchisee
+    updateFranchisee,
+    deleteFranchisee
 };
