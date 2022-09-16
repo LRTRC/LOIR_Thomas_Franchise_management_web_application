@@ -1,4 +1,4 @@
-const { pool } = require("../config");
+const {pool} = require("../config");
 
 const getStructures = async (req, res, next) => {
     try {
@@ -20,7 +20,21 @@ const getStructures = async (req, res, next) => {
 };
 
 const createStructure = async (req, res, next) => {
-    const { id_franchise, name, address, phone, isActive, subscriptions, group_lessons, private_coaching, workforce, plannings, equipments, advertising, snacks } = req.body;
+    const {
+        id_franchise,
+        name,
+        address,
+        phone,
+        isActive,
+        subscriptions,
+        group_lessons,
+        private_coaching,
+        workforce,
+        plannings,
+        equipments,
+        advertising,
+        snacks
+    } = req.body;
     const query =
         "INSERT INTO structures (id_franchise, name, address, phone, isActive, subscriptions, group_lessons, private_coaching, workforce, plannings, equipments, advertising, snacks) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *;";
     const values = [id_franchise, name, address, phone, isActive, subscriptions, group_lessons, private_coaching, workforce, plannings, equipments, advertising, snacks];
@@ -45,11 +59,11 @@ const getStructureById = async (req, res, next) => {
     try {
         const data = await pool.query(query, value);
 
-        if (data.rowCount === 0) return res.status(404).send("No franchisee exists");
+        if (data.rowCount === 0) return res.status(404).send("No structure exists");
 
         return res.status(200).json({
             status: 200,
-            message: "Franchisee:",
+            message: "Structure:",
             data: data.rows
         })
     } catch (error) {
@@ -59,11 +73,25 @@ const getStructureById = async (req, res, next) => {
 
 const updateStructure = async (req, res, next) => {
     const id = parseInt(req.params.id);
-    const {name, address, phone, default_modules, isActive} = req.body;
+    const {
+        id_franchise,
+        name,
+        address,
+        phone,
+        isActive,
+        subscriptions,
+        group_lessons,
+        private_coaching,
+        workforce,
+        plannings,
+        equipments,
+        advertising,
+        snacks
+    } = req.body;
 
     const query =
-        "UPDATE structures SET name=$1, address=$2, phone=$3, default_modules=$4, isActive=$5, id=$6 WHERE id=$6 RETURNING *;";
-    const value = [name, address, phone, default_modules, isActive, id];
+        "UPDATE structures SET id_franchise=$1, name=$2, address=$3, phone=$4, isActive=$5, subscriptions=$6, group_lessons=$7, private_coaching=$8, workforce=$9, plannings=$10, equipments=$11, advertising=$12, snacks=$13, id=$14 WHERE id=$14 RETURNING *;";
+    const value = [id_franchise, name, address, phone, isActive, subscriptions, group_lessons, private_coaching, workforce, plannings, equipments, advertising, snacks, id];
 
     try {
         const data = await pool.query(query, value);
@@ -88,11 +116,11 @@ const deleteStructure = async (req, res, next) => {
     try {
         const data = await pool.query(query, value);
 
-        if (data.rowCount === 0) return res.status(404).send("Franchisee does not exist");
+        if (data.rowCount === 0) return res.status(404).send("Structure does not exist");
 
         return res.status(200).json({
-            status:200,
-            message: "Franchisee deleted successfully"
+            status: 200,
+            message: "Structure deleted successfully"
         })
     } catch (error) {
         return next(error);
