@@ -1,4 +1,3 @@
-
 const express = require("express");
 const router = express.Router();
 const {
@@ -7,7 +6,7 @@ const {
     getStructureById,
     updateStructure,
     deleteStructure
-} = require("../controllers/franchisees");
+} = require("../controllers/structures");
 
 router
     .post("/", createStructure)
