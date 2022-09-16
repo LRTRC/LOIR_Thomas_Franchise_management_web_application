@@ -7,11 +7,11 @@ const getFranchisees = async (req, res, next) => {
         );
 
         if (data.rowCount === 0)
-            return res.status(404).send("No article exists");
+            return res.status(404).send("No franchisee exists");
 
         return res.status(200).json({
             status: 200,
-            message: "All articles:",
+            message: "All franchisees:",
             data: data.rows
         });
     } catch (error) {
