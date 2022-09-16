@@ -1,0 +1,33 @@
+{
+  "name": "loir_thomas_franchise_management_web_application",
+  "version": "1.0.0",
+  "description": "TP DWWM Project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LRTRC/LOIR_Thomas_Franchise_management_web_application.git"
+  },
+  "author": "LOIR Thomas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LRTRC/LOIR_Thomas_Franchise_management_web_application/issues"
+  },
+  "homepage": "https://github.com/LRTRC/LOIR_Thomas_Franchise_management_web_application#readme",
+  "dependencies": {
+<<<<<<< HEAD
+=======
+    "body-parser": "^1.20.0",
+>>>>>>> e0764cb6c73ef67bc7cc4fb1f75f0de7364fa347
+    "dotenv": "^16.0.2",
+    "express": "^4.18.1",
+    "pg": "^8.8.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
+}
