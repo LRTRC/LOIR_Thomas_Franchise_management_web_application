@@ -1,16 +1,14 @@
-// to run the server => "$ nodemon server"
-
+// to run the server => "$ nodemon server.js"
 // import http package from NodeJs
 const http = require('http');
-
 //  to import app.js in the same folder
 const app = require('./app')
-
 // todo: dotenv to comment
 const dotenv = require('dotenv')
-
 // todo: dotenv config method to comment
 dotenv.config();
+
+
 
 const normalizePort = val => {
     // cast val as a number, on a decimal base
