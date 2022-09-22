@@ -1,4 +1,3 @@
-
 const express = require("express");
 const router = express.Router();
 const {
@@ -7,7 +6,7 @@ const {
     getUserById,
     updateUser,
     deleteUser
-} = require("../controllers/franchisees");
+} = require("../controllers/users");
 
 router
     .post("/", createUser)
