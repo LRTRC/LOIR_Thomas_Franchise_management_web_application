@@ -91,7 +91,7 @@ const deleteFranchisee = async (req, res, next) => {
         if (data.rowCount === 0) return res.status(404).send("Franchisee does not exist");
 
         return res.status(200).json({
-            status:200,
+            status: 200,
             message: "Franchisee deleted successfully"
         })
     } catch (error) {
