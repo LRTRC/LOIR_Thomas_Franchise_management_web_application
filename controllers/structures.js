@@ -96,11 +96,11 @@ const updateStructure = async (req, res, next) => {
     try {
         const data = await pool.query(query, value);
 
-        if (data.rowCount === 0) return res.status(404).send("Franchisee does not exist");
+        if (data.rowCount === 0) return res.status(404).send("Structure does not exist");
 
         return res.status(200).json({
             status: 200,
-            message: "Franchisee updated successfully ",
+            message: "Structure updated successfully ",
             data: data.rows
         })
     } catch (error) {
