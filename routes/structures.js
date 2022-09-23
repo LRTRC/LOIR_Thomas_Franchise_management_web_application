@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const auth = require('../middleware/auth');
 const {
     getStructures,
     createStructure,
@@ -9,10 +10,10 @@ const {
 } = require("../controllers/structures");
 
 router
-    .post("/", createStructure)
-    .get("/", getStructures);
-router.get("/:id", getStructureById);
-router.patch("/:id", updateStructure);
-router.delete("/:id", deleteStructure);
+    .post("/", auth, createStructure)
+    .get("/", auth, getStructures);
+router.get("/:id", auth, getStructureById);
+router.patch("/:id", auth, updateStructure);
+router.delete("/:id", auth, deleteStructure);
 
 module.exports = router;

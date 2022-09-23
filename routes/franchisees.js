@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const auth = require('../middleware/auth');
 const {
     getFranchisees,
     createFranchisee,
@@ -9,10 +10,10 @@ const {
 } = require("../controllers/franchisees");
 
 router
-    .post("/", createFranchisee)
-    .get("/", getFranchisees);
-router.get("/:id", getFranchiseeById);
-router.patch("/:id", updateFranchisee);
-router.delete("/:id", deleteFranchisee);
+    .post("/", auth, createFranchisee)
+    .get("/", auth, getFranchisees);
+router.get("/:id", auth, getFranchiseeById);
+router.patch("/:id", auth, updateFranchisee);
+router.delete("/:id", auth, deleteFranchisee);
 
 module.exports = router;
