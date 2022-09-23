@@ -5,7 +5,7 @@ const {
     createUser,
     getUserById,
     updateUser,
-    deleteUser
+    deleteUser,
 } = require("../controllers/users");
 
 router

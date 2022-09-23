@@ -1,4 +1,5 @@
 const {pool} = require("../config");
+const bcrypt = require("bcrypt");
 
 const getUsers = async (req, res, next) => {
     try {
@@ -20,7 +21,13 @@ const getUsers = async (req, res, next) => {
 };
 
 const createUser = async (req, res, next) => {
-    const {first_name, last_name, email, phone, role, passphrase} = req.body;
+    let hash = await bcrypt.hash(req.body.passphrase, 10).then((hash) => {
+        return hash
+    })
+
+    let {first_name, last_name, email, phone, role, passphrase} = req.body;
+    passphrase = hash;
+
     const query =
         "INSERT INTO users (first_name, last_name, email, phone, role, passphrase)  VALUES($1, $2, $3, $4, $5, $6) RETURNING *;";
     const values = [first_name, last_name, email, phone, role, passphrase];
@@ -104,5 +111,5 @@ module.exports = {
     createUser,
     getUserById,
     updateUser,
-    deleteUser
+    deleteUser,
 };
