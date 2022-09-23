@@ -1,5 +1,6 @@
 const {pool} = require("../config");
 const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken');
 
 const login = async (req, res, next) => {
     const email = req.body.email;
@@ -19,25 +20,23 @@ const login = async (req, res, next) => {
                     // if the result is false
                     if (!valid) {
                         // then sends an error message to client with code 401
-                        res.status(401).json({message: 'identifiant ou mot de passe incorrecte'})
+                        res.status(401).json({message: 'User or password invalid'})
                     } else {
+                        let user = data.rows[0]
+                        user.token = jwt.sign(
+                            {userId: user.id},
+                            "eyJ1c2VySWQiOjExLCJpYXQiOjE2NjM5NDEwOTk",
+                            {expiresIn: '12h'}
+                        )
+                        delete user.passphrase
                         return res.status(200).json({
                             status: 200,
                             message: "User:",
-                            data: data.rows[0]
+                            data: user
                         })
-
-                        // res.status(200).json({
-                        //     userId: user._id,
-                        //     token: jwt.sign(
-                        //         {userId: user._id},
-                        //         'RANDOM_TOKEN_SECRET',
-                        //         {expiresIn: '24h'}
-                        //     )
-                        // })
                     }
                 }) // if there is an error of communication between backend and database
-                    .catch(error => res.status(500).json({error}))
+                .catch(error => res.status(500).json({error}))
         }
     } catch (error) {
         return next(error);
