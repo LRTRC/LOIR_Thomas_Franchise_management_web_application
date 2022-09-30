@@ -14,6 +14,7 @@ module.exports = (req, res, next) => {
         req.auth = {
             userId: userId
         };
+        console.log('authorized')
         // use next to uses the next middleware
         next();
     } catch(error) {
