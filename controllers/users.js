@@ -53,11 +53,12 @@ const getUserById = async (req, res, next) => {
         const data = await pool.query(query, value);
 
         if (data.rowCount === 0) return res.status(404).send("No User exists");
-
+        let user = data.rows[0]
+        delete user.passphrase
         return res.status(200).json({
             status: 200,
-            message: "User:",
-            data: data.rows
+            message: `User id: ${id} :`,
+            data: user
         })
     } catch (error) {
         return next(error);
@@ -66,21 +67,23 @@ const getUserById = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
     const id = parseInt(req.params.id);
-    const {first_name, last_name, email, phone, role, passphrase} = req.body;
+    const {first_name, last_name, email, phone, role} = req.body;
 
     const query =
-        "UPDATE users SET first_name=$1, last_name=$2, email=$3, phone=$4, role=$5, passphrase=$6, id=$7 WHERE id=$7 RETURNING *;";
-    const value = [first_name, last_name, email, phone, role, passphrase, id];
+        "UPDATE users SET first_name=$1, last_name=$2, email=$3, phone=$4, role=$5, id=$6 WHERE id=$6 RETURNING *;";
+    const value = [first_name, last_name, email, phone, role, id];
 
     try {
         const data = await pool.query(query, value);
 
         if (data.rowCount === 0) return res.status(404).send("User does not exist");
+        let user = data.rows[0]
+        delete user.passphrase
 
         return res.status(200).json({
             status: 200,
-            message: "User updated successfully ",
-            data: data.rows
+            message: `User id: ${id} deleted successfully`,
+            data: user
         })
     } catch (error) {
         return next(error);
@@ -99,7 +102,7 @@ const deleteUser = async (req, res, next) => {
 
         return res.status(200).json({
             status: 200,
-            message: "User deleted successfully"
+            message: `User id: ${id} deleted successfully`
         })
     } catch (error) {
         return next(error);
