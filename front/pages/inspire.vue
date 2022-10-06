@@ -14,12 +14,30 @@
           </small>
         </footer>
       </blockquote>
+      <v-btn @click="fetch">
+        click me
+      </v-btn>
     </v-col>
   </v-row>
 </template>
 
 <script>
 export default {
-  name: 'InspirePage'
+  name: 'InspirePage',
+  data() {
+    return {
+    franchisees: [],
+    }
+  },
+  methods: {
+    async getFranchisees() {
+      const franchisees = await this.$axios.$get("http://localhost:3000/api/franchisees/")
+    },
+    async fetch() {
+      this.franchisees = await fetch(
+        'http://localhost:3000/api/franchisees/'
+      ).then(res => res.json())
+    }
+  }
 }
 </script>
