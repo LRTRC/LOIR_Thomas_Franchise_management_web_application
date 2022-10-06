@@ -6,7 +6,33 @@ export default {
   },
 
   auth: {
-    // Options
+    strategies: {
+      local: {
+        token: {
+          property: 'data.token',
+          global: true,
+          // required: true,
+          // type: 'Bearer'
+        },
+        user: {
+          property: 'user',
+          // autoFetch: true
+        },
+        endpoints: {
+          login: { url: '/auth/login', method: 'post', propertyName: 'data' },
+          logout: { url: '/auth/logout', method: 'post' },
+          user: false
+        }
+      }
+    }
+  },
+
+  axios: {
+    baseURL: 'http://localhost:3000'
+  },
+
+  router: {
+    middleware: ['auth']
   },
 
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
@@ -68,8 +94,8 @@ export default {
           success: '#24cfaa',
           warning: '#FFC107',
           background: '#e0e0e0',
-          a: '#a3e4f5',
-          b: '#CB21C1'
+          third: '#5685FF',
+          fourth: '#EF64D9'
         }
       }
     }

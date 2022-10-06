@@ -24,6 +24,7 @@
 <script>
 export default {
   name: 'InspirePage',
+  middleware: 'auth',
   data() {
     return {
     franchisees: [],
@@ -31,7 +32,7 @@ export default {
   },
   methods: {
     async getFranchisees() {
-      const franchisees = await this.$axios.$get("http://localhost:3000/api/franchisees/")
+      const franchisees = await this.$axios.$get("/api/franchisees/")
     },
     async fetch() {
       this.franchisees = await fetch(

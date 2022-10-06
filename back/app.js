@@ -1,5 +1,6 @@
 // import express
 const express = require('express');
+const cors = require('cors');
 
 // import franchisees router
 const franchiseesRouter = require("./routes/franchisees");
@@ -25,6 +26,9 @@ app.use((req, res, next) => {
 // This middleware sets on all request that have a json content
 // and gave access to the body of the request
 app.use(express.json());
+
+//
+app.use(cors());
 
 app.use("/api/franchisees", franchiseesRouter);
 app.use("/api/structures", structuresRouter);

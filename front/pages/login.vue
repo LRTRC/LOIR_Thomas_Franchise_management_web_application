@@ -1,8 +1,8 @@
 <template>
   <v-row justify="center">
     <v-col cols="11" sm="8" md="7" lg="5">
-      <v-card class="card-neumorphism">
-        <v-card-title class="justify-center ma-4 py-8">
+      <v-card class="card-neumorphism py-12">
+        <v-card-title class="justify-center">
           Connexion
         </v-card-title>
         <v-form
@@ -43,6 +43,7 @@
           <v-row justify="center">
             <v-col class="text-center">
               <v-btn
+                class="btn-neumorphism"
                 :disabled="!valid"
                 color="success"
                 width="60%"
@@ -56,9 +57,10 @@
           <v-row justify="center">
             <v-col class="text-center">
               <v-btn
+                class="btn-neumorphism"
                 width="60%"
-                @click="reset"
                 rounded
+                @click="reset"
               >
                 Annuler
               </v-btn>
@@ -72,10 +74,11 @@
 </template>
 
 <script>
-import { mdiEmail, mdiLock } from '@mdi/js';
+import {mdiEmail, mdiLock} from '@mdi/js';
 
 export default {
   name: "login",
+  auth: false,
   data() {
     return {
       icons: [mdiEmail, mdiLock],
@@ -83,22 +86,38 @@ export default {
       email: '',
       emailRules: [
         v => !!v || 'Email is required',
-        v =>  v && v.length <= 255 || 'Email must be less than 255 characters',
+        v => v && v.length <= 255 || 'Email must be less than 255 characters',
         v => /.+@.+/.test(v) || 'E-mail must be valid',
       ],
       password: '',
       passwordRules: [
         v => !!v || 'Password is required',
-        v => v && v.length <= 60 ||  'Password must be less than 60 characters',
+        v => v && v.length <= 60 || 'Password must be less than 60 characters',
       ],
     }
   },
   methods: {
     validate() {
       this.$refs.form.validate()
+      this.userLogin()
     },
     reset() {
       this.$refs.form.reset()
+    },
+    async userLogin() {
+      try {
+        let response = await this.$auth.loginWith('local',
+          {data: {email: this.email, passphrase: this.password}})
+        // this.$auth.setUser(response.data.data)
+        // this.$auth.loggedIn
+        console.log(this.$auth.user)
+        console.log(this.$auth.loggedIn)
+
+
+        await this.$router.push('/')
+      } catch (err) {
+        console.log(err)
+      }
     },
   },
 }
