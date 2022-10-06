@@ -1,5 +1,5 @@
 <template>
-  <v-app dark>
+  <v-app :style="{background: $vuetify.theme.themes['light'].background}">
     <v-navigation-drawer
       v-model="drawer"
       :mini-variant="miniVariant"
@@ -91,6 +91,8 @@
 <script>
 export default {
   name: 'DefaultLayout',
+  auth: true,
+  middleware: ['auth'],
   data () {
     return {
       clipped: false,
