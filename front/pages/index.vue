@@ -72,6 +72,9 @@
           </v-btn>
         </v-card-actions>
       </v-card>
+      <v-btn @click="fetch">
+        click me
+      </v-btn>
     </v-col>
   </v-row>
 </template>
@@ -79,7 +82,30 @@
 <script>
 export default {
   name: 'IndexPage',
-  middleware: 'auth',
+  data() {
+    return {
+      franchisees: [],
+    }
+  },
+  mounted() {
 
+  },
+  methods: {
+    // async getFranchisees() {
+    //   const franchisees = await this.$axios.$get("/api/franchisees/")
+    //   return this.franchisees = franchisees
+    // },
+    async fetch() {
+      console.log(JSON.stringify(this.$auth.state.user.token))
+      // await this.$auth.setToken('local', JSON.stringify(this.$auth.state.user.token))
+      this.franchisees = await fetch(
+        'http://localhost:3000/api/franchisees/'
+      ).then(res => {
+        console.log(res)
+
+        res.json()
+      })
+    }
+  }
 }
 </script>

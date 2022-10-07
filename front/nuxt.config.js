@@ -15,12 +15,12 @@ export default {
           // type: 'Bearer'
         },
         user: {
-          property: 'user',
+          property: 'data',
           // autoFetch: true
         },
         endpoints: {
           login: { url: '/auth/login', method: 'post', propertyName: 'data' },
-          logout: { url: '/auth/logout', method: 'post' },
+          logout: false,
           user: false
         }
       }
@@ -75,7 +75,7 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@nuxtjs/axios',
-    '@nuxtjs/auth-next'
+    '@nuxtjs/auth'
   ],
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify

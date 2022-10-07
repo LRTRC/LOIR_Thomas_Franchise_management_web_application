@@ -24,7 +24,6 @@
 <script>
 export default {
   name: 'InspirePage',
-  middleware: 'auth',
   data() {
     return {
     franchisees: [],

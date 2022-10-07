@@ -79,6 +79,12 @@ import {mdiEmail, mdiLock} from '@mdi/js';
 export default {
   name: "login",
   auth: false,
+  beforeCreate() {
+    // todo: do better
+    if (this.$auth.loggedIn) {
+      this.$router.push('/')
+    }
+  },
   data() {
     return {
       icons: [mdiEmail, mdiLock],
@@ -108,15 +114,11 @@ export default {
       try {
         let response = await this.$auth.loginWith('local',
           {data: {email: this.email, passphrase: this.password}})
-        // this.$auth.setUser(response.data.data)
-        // this.$auth.loggedIn
-        console.log(this.$auth.user)
-        console.log(this.$auth.loggedIn)
-
-
+        let user = response.data.data
+        this.$auth.setUser(user)
         await this.$router.push('/')
       } catch (err) {
-        console.log(err)
+        throw err
       }
     },
   },
@@ -124,9 +126,7 @@ export default {
 </script>
 
 <style scoped>
-.btnValidate {
-  color: #4CAF50;
-}
+
 </style>
 
 

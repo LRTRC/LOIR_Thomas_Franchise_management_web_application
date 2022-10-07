@@ -1,6 +1,7 @@
 <template>
   <v-app :style="{background: $vuetify.theme.themes['light'].background}">
     <v-navigation-drawer
+      v-if="loggedIn"
       permanent
       expand-on-hover
       app
@@ -17,35 +18,26 @@
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
+            <v-list-item-title v-text="item.title"/>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item @click="logout">
+          <v-list-item-action>
+              <v-icon>{{ iconLogout }}</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title v-text="'Déconnexion'" />
           </v-list-item-content>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-main>
       <v-container class="fill-height">
-        <Nuxt />
+        <Nuxt/>
       </v-container>
     </v-main>
-    <v-navigation-drawer
-      v-model="rightDrawer"
-      :right="right"
-      temporary
-      fixed
-    >
-      <v-list>
-        <v-list-item @click.native="right = !right">
-          <v-list-item-action>
-            <v-icon light>
-              mdi-repeat
-            </v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Switch drawer (click me)</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
     <v-footer
-      :absolute="!fixed"
+      absolute
       app
     >
       <span>&copy; {{ new Date().getFullYear() }}</span>
@@ -54,31 +46,37 @@
 </template>
 
 <script>
+import {mdiApps, mdiChartBubble, mdiLogout} from "@mdi/js"
+
 export default {
   name: 'DefaultLayout',
-  middleware: 'auth',
-  data () {
+  data() {
     return {
-      clipped: false,
-      drawer: false,
-      fixed: false,
+      iconLogout: mdiLogout,
       items: [
         {
-          icon: 'mdi-apps',
+          icon: mdiApps,
           title: 'Welcome',
           to: '/'
         },
         {
-          icon: 'mdi-chart-bubble',
+          icon: mdiChartBubble,
           title: 'Inspire',
           to: '/inspire'
-        }
+        },
       ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: 'Vuetify.js'
     }
+  },
+  computed: {
+    loggedIn() {
+      return !!this.$auth.loggedIn
+    }
+  },
+  methods: {
+    async logout() {
+      await this.$auth.logout();
+      await this.$router.push('/login')
+    },
   }
 }
 </script>
