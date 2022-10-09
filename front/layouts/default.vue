@@ -7,6 +7,7 @@
     >
       <v-icon class="mx-4" @click="drawer = !drawer" >{{icons[1]}}</v-icon>
       <v-toolbar-title>Gestion des franchisés</v-toolbar-title>
+
     </v-app-bar>
     <v-navigation-drawer
       v-model="drawer"
@@ -43,6 +44,15 @@
     </v-navigation-drawer>
     <v-main>
       <v-container >
+        <v-alert
+          v-if="type !== null"
+          :type="type"
+          transition="scroll-x-reverse-transition"
+          class="alert"
+          style="position: absolute; right: 2%; z-index: 999;"
+        >
+          {{ message }}
+        </v-alert>
         <Nuxt/>
       </v-container>
     </v-main>
@@ -57,6 +67,7 @@
 
 <script>
 import {mdiApps, mdiChartBubble, mdiLogout, mdiMenu} from "@mdi/js"
+import {mapGetters} from 'vuex'
 
 export default {
   name: 'DefaultLayout',
@@ -79,6 +90,10 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      type: "errors/type",
+      message: 'errors/message'
+    }),
     loggedIn() {
       return !!this.$auth.loggedIn
     }

@@ -2,7 +2,7 @@
   <v-card class="v-card-glass">
     <v-banner
       id="bannerHandleFranchisee"
-      color="accent"
+      color="info"
       width="100%"
       :icon="icons[0]"
       icon-color="white"
@@ -17,7 +17,6 @@
           id="isActive"
           label="Activé / désactivé"
           v-model="franchisee.isactive"
-          color="success"
         />
       </template>
     </v-banner>
@@ -25,7 +24,6 @@
       class="pa-4"
       ref="form"
       v-model="valid"
-      lazy-validation
     >
       <v-row>
         <v-col cols="12" lg="4">
@@ -124,7 +122,7 @@ export default {
         name: '',
         address: '',
         phone: '',
-        isactive: '',
+        isactive: false,
         default_modules: {
           subscriptions: false,
           group_lessons: false,
