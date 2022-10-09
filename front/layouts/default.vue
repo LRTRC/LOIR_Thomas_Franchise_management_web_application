@@ -49,7 +49,7 @@
           :type="type"
           transition="scroll-x-reverse-transition"
           class="alert"
-          style="position: absolute; right: 2%; z-index: 999;"
+          style="position: absolute; right: 5%; top:5%; z-index: 999;"
         >
           {{ message }}
         </v-alert>

@@ -126,10 +126,10 @@ export default {
           type: 'success',
           message: 'Authentification réussie'
         })
-      } catch (err) {
+      } catch (error) {
         this.alertError({
           type: 'error',
-          message: err.message
+          message: error.message
         })
       }
     },

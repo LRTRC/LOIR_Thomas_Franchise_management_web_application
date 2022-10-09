@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row justify="center" >
+    <v-row justify="center">
       <v-col class="justify-center">
         <v-card class="card-neumorphism pa-4">
           <v-skeleton-loader
@@ -39,6 +39,7 @@
               :headers="headers"
               :items="franchiseesWithoutNullables"
               :items-per-page="franchiseesWithoutNullables.length"
+              :search="search"
               item-key="id"
               loading-text="Chargement des données"
               no-data-text="Aucune donnée"
@@ -68,6 +69,7 @@
       <handle_franchisee
         id="handleFranchisee"
         @close-dialog="dialog = false"
+        @updated-franchisees-list="franchisees = $event"
       />
     </v-dialog>
   </div>
@@ -76,6 +78,7 @@
 <script>
 import {mdiMagnify} from '@mdi/js';
 import Handle_franchisee from "../components/franchisees/handle_franchisee";
+import {mapActions} from 'vuex'
 
 export default {
   name: 'IndexPage',
@@ -117,13 +120,36 @@ export default {
     },
   },
   methods: {
+    ...mapActions({
+      alertError: 'errors/error',
+      alertSuccess: 'errors/success'
+    }),
     async getFranchisees() {
-      const franchisees = await this.$axios.$get("/api/franchisees/")
-      return this.franchisees = franchisees.data
+      try {
+        const franchisees = await this.$axios.$get("/api/franchisees/")
+        return this.franchisees = franchisees.data
+      } catch (error) {
+        this.alertError({
+          type: 'error',
+          message: error.message
+        })
+      }
     },
     async patchFranchisee(franchisee, value) {
-      franchisee.isactive = value
-      return await this.$axios.$patch(`api/franchisees/${franchisee.id}`, franchisee)
+      try {
+        franchisee.isactive = value
+        this.alertSuccess({
+          type: 'success',
+          message: `Franchisé '${franchisee.name}' modifié avec succès'`
+        })
+        return await this.$axios.$patch(`api/franchisees/${franchisee.id}`, franchisee)
+      } catch (error) {
+        this.alertError({
+          type: 'error',
+          message: error.message
+        })
+      }
+
     },
   }
 }
@@ -131,7 +157,7 @@ export default {
 
 <style scoped>
 #franchiseesDataTable, #franchiseesLoader {
-  background-color: #ecf0f3!important;
+  background-color: #ecf0f3 !important;
 }
 
 </style>

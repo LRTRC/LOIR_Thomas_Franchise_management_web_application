@@ -76,7 +76,7 @@
             class="pa-4"
             color="success"
             :prepend-icon="icons[5]"
-            v-model="default_modules"
+            v-model="selectedModules"
             label="Modules activés par défault"
             :items="modules "
             item-color="success"
@@ -101,7 +101,7 @@
         color="success"
         :disabled="!valid"
         text
-        @click.native="setPayload(franchisee)"
+        @click.native="send(franchisee)"
       >
         sauvegarder
       </v-btn>
@@ -111,13 +111,14 @@
 
 <script>
 import {mdiPlaylistPlus, mdiClose, mdiAccount, mdiMapMarker, mdiPhone, mdiFormatListChecks} from '@mdi/js';
+import {mapActions} from "vuex";
 
 export default {
   name: "handle_franchisee",
   data() {
     return {
       valid: false,
-      default_modules: [],
+      selectedModules: [],
       franchisee: {
         name: '',
         address: '',
@@ -176,25 +177,74 @@ export default {
     }
   },
   methods: {
-    async createFranchisee(franchisee) {
-      return await this.$axios.$post('api/franchisees/', franchisee)
-    },
+    ...mapActions({
+      alertError: 'errors/error',
+      alertSuccess: 'errors/success'
+    }),
     send(franchisee) {
       this.setPayload(franchisee);
-      this.createFranchisee(franchisee);
+      this.createFranchisee(franchisee).then(() => this.getFranchisees())
       this.clear()
     },
+    async createFranchisee(franchisee) {
+      try {
+        this.alertSuccess({
+          type: 'success',
+          message: `Franchisé '${franchisee.name}' créé avec succès'`
+        })
+        return await this.$axios.$post('api/franchisees/', franchisee)
+      } catch (error) {
+        this.alertError({
+          type: 'error',
+          message: error.message
+        })
+      }
+    },
+    async getFranchisees() {
+      try {
+        const franchisees = await this.$axios.$get("/api/franchisees/")
+        return this.$emit('updated-franchisees-list', franchisees.data)
+      } catch (error) {
+        this.alertError({
+          type: 'error',
+          message: error.message
+        })
+      }
+    },
     setPayload(franchisee) {
-      console.log(franchisee)
-
+      this.selectedModules.map((element) => {
+        console.log(element)
+        for (let [key, value] of Object.entries(franchisee.default_modules)) {
+          if (key === element) {
+            franchisee.default_modules[key] = !value
+          }
+        }
+      })
+      return franchisee
     },
     clear() {
-      this.franchisee = {};
+      this.franchisee = {
+        name: '',
+        address: '',
+        phone: '',
+        isactive: false,
+        default_modules: {
+          subscriptions: false,
+          group_lessons: false,
+          private_coaching: false,
+          workforce: false,
+          plannings: false,
+          equipments: false,
+          advertising: false,
+          snacks: false,
+        }
+      }
+      this.selectedModules = [];
       this.emitCloseDialog();
     },
     emitCloseDialog() {
       return this.$emit('close-dialog');
-    }
+    },
   }
 }
 </script>
