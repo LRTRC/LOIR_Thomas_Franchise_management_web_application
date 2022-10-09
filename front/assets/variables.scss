@@ -2,3 +2,39 @@
 //
 // The variables you want to modify
 // $font-size-root: 20px;
+
+//.card-neumorphism {
+//  border-radius: 10px!important;
+//  background: #F0F0F0!important;
+//  box-shadow:  20px 20px 60px #bebebe,
+//  -20px -20px 60px #ffffff!important;
+//}
+
+.card-neumorphism {
+  border-radius: 40px!important;
+  background: #ecf0f3!important;
+  box-shadow: 13px 13px 20px #cbced1,
+  -13px -13px 20px #ffffff!important;
+}
+.btn-neumorphism {
+  border-radius: 10px!important;
+  background: #ecf0f3!important;
+  box-shadow:  5px 5px 10px #b6b6b6,
+  -5px -5px 10px #ffffff!important;
+}
+
+//.fields {
+//  width: 100%;
+//  padding: 75px 5px 5px 5px;
+//}
+.fields .field {
+  border: none!important;
+  outline:none!important;
+  background: none!important;;
+  color: #555!important;;
+}
+.username, .password {
+  border-radius: 25px!important;;
+  box-shadow: inset 8px 8px 8px #cbced1,
+  inset -8px -8px 8px #ffffff!important;;
+}

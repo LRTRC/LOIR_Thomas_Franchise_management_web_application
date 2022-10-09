@@ -22,7 +22,6 @@ const login = async (req, res, next) => {
                         // then sends an error message to client with code 401
                         res.status(401).json({message: 'User or password invalid'})
                     } else {
-                        let user = data.rows[0]
                         user.token = jwt.sign(
                             {userId: user.id},
                             "eyJ1c2VySWQiOjExLCJpYXQiOjE2NjM5NDEwOTk",
