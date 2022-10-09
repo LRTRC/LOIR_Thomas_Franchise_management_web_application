@@ -1,12 +1,22 @@
 <template>
   <v-app :style="{background: $vuetify.theme.themes['light'].background}">
-    <v-navigation-drawer
+    <v-app-bar
       v-if="loggedIn"
-      permanent
-      expand-on-hover
       app
+      dense
     >
-      <v-list>
+      <v-icon class="mx-4" @click="drawer = !drawer" >{{icons[1]}}</v-icon>
+      <v-toolbar-title>Gestion des franchisés</v-toolbar-title>
+    </v-app-bar>
+    <v-navigation-drawer
+      v-model="drawer"
+      absolute
+      temporary
+    >
+      <v-list
+        nav
+        dense
+      >
         <v-list-item
           v-for="(item, i) in items"
           :key="i"
@@ -23,16 +33,16 @@
         </v-list-item>
         <v-list-item @click="logout">
           <v-list-item-action>
-              <v-icon>{{ iconLogout }}</v-icon>
+            <v-icon>{{ icons[0] }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title v-text="'Déconnexion'" />
+            <v-list-item-title v-text="'Déconnexion'"/>
           </v-list-item-content>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-main>
-      <v-container class="fill-height">
+      <v-container >
         <Nuxt/>
       </v-container>
     </v-main>
@@ -46,13 +56,14 @@
 </template>
 
 <script>
-import {mdiApps, mdiChartBubble, mdiLogout} from "@mdi/js"
+import {mdiApps, mdiChartBubble, mdiLogout, mdiMenu} from "@mdi/js"
 
 export default {
   name: 'DefaultLayout',
   data() {
     return {
-      iconLogout: mdiLogout,
+      drawer: false,
+      icons: [mdiLogout, mdiMenu],
       items: [
         {
           icon: mdiApps,

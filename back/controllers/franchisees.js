@@ -59,11 +59,12 @@ const getFranchiseeById = async (req, res, next) => {
 
 const updateFranchisee = async (req, res, next) => {
     const id = parseInt(req.params.id);
-    const {name, address, phone, default_modules, isActive} = req.body;
+    console.log(req.body)
+    const {name, address, phone, default_modules, isactive} = req.body;
 
     const query =
         "UPDATE franchisees SET name=$1, address=$2, phone=$3, default_modules=$4, isActive=$5, id=$6 WHERE id=$6 RETURNING *;";
-    const value = [name, address, phone, default_modules, isActive, id];
+    const value = [name, address, phone, default_modules, isactive, id];
 
     try {
         const data = await pool.query(query, value);
