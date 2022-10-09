@@ -46,14 +46,12 @@
               no-results-text="Aucun résultat"
               hide-default-footer
             >
-              <template v-slot:item.action="{ item }">
+              <template v-slot:item.isactive="{ item }">
                 <v-switch
                   id="franchiseeIsActiveBtn"
                   v-model="item.isactive"
                   @change="patchFranchisee(item, $event)"
-                >
-
-                </v-switch>
+                 />
               </template>
             </v-data-table>
           </div>
@@ -93,7 +91,10 @@ export default {
         {text: 'Nom', value: 'name'},
         {text: 'Adresse', value: 'address'},
         {text: 'Téléphone', value: 'phone'},
-        {text: "Actif", value: "action", sortable: false}
+        {text: "Actif", value: "isactive"},
+        {text: "Modifier / supprimer", value: "actions", sortable: false},
+        {text: "Structures", sortable: false},
+        {text: "Membres", sortable: false},
       ],
     }
   },
