@@ -10,7 +10,7 @@ export default {
       local: {
         token: {
           property: 'data.token',
-          global: true,
+          // global: true,
           // required: true,
           // type: 'Bearer'
         },
@@ -75,7 +75,7 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@nuxtjs/axios',
-    '@nuxtjs/auth'
+    '@nuxtjs/auth-next'
   ],
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify

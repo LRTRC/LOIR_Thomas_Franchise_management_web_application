@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-col cols="11" sm="8" md="7" lg="5">
+    <v-col cols="11" sm="8" md="7" lg="4" xl="3">
       <v-card class="card-neumorphism py-12">
         <v-card-title class="justify-center">
           Connexion
@@ -19,6 +19,7 @@
                 :rules="emailRules"
                 :counter="255"
                 :prepend-icon="icons[0]"
+                :clear-icon="icons[2]"
                 type="email"
                 placeholder="Email"
                 required
@@ -32,6 +33,7 @@
                 :rules="passwordRules"
                 :counter="60"
                 :prepend-icon="icons[1]"
+                :clear-icon="icons[2]"
                 type="password"
                 placeholder="password"
                 required
@@ -74,7 +76,7 @@
 </template>
 
 <script>
-import {mdiEmail, mdiLock} from '@mdi/js';
+import {mdiEmail, mdiLock, mdiClose} from '@mdi/js';
 
 export default {
   name: "login",
@@ -87,7 +89,7 @@ export default {
   },
   data() {
     return {
-      icons: [mdiEmail, mdiLock],
+      icons: [mdiEmail, mdiLock, mdiClose],
       valid: false,
       email: '',
       emailRules: [
