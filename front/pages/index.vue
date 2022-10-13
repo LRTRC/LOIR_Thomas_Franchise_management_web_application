@@ -57,7 +57,7 @@
                 <v-btn
                   id="btnEditItem"
                   icon
-                  @click.native="setFranchiseeAndDialog(item, 'update')"
+                  @click.native="setFranchiseeAndDialog(item, 'handle')"
                 >
                   <v-icon
                     id="btnEditItemIcon"
@@ -87,7 +87,7 @@
     </v-row>
     <v-dialog
       id="dialog"
-
+      persistent
       v-model="dialog"
       max-width="50%"
     >

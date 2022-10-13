@@ -64,12 +64,14 @@ export default {
       alertError: 'errors/error',
       updateDialog: 'franchisees/updateDialog',
       getFranchisees: 'franchisees/getFranchisees',
+      clearFranchisee: 'franchisees/clearFranchisee'
     }),
     async send() {
       try {
         await this.$axios.$delete(`/api/franchisees/${this.franchisee.id}`)
           .then(() => {
             this.getFranchisees()
+            this.clearFranchisee()
             this.updateDialog({value: false, type: ''})
           })
       } catch (error) {
