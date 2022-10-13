@@ -178,6 +178,8 @@ export default {
   },
   methods: {
     ...mapActions({
+      getFranchisees: 'franchisees/getFranchisees',
+      updateDialog: 'franchisees/updateDialog',
       alertError: 'errors/error',
       alertSuccess: 'errors/success'
     }),
@@ -200,20 +202,8 @@ export default {
         })
       }
     },
-    async getFranchisees() {
-      try {
-        const franchisees = await this.$axios.$get("/api/franchisees/")
-        return this.$emit('updated-franchisees-list', franchisees.data)
-      } catch (error) {
-        this.alertError({
-          type: 'error',
-          message: error.message
-        })
-      }
-    },
     setPayload(franchisee) {
       this.selectedModules.map((element) => {
-        console.log(element)
         for (let [key, value] of Object.entries(franchisee.default_modules)) {
           if (key === element) {
             franchisee.default_modules[key] = !value
@@ -240,10 +230,7 @@ export default {
         }
       }
       this.selectedModules = [];
-      this.emitCloseDialog();
-    },
-    emitCloseDialog() {
-      return this.$emit('close-dialog');
+      this.updateDialog({value: false, type: ''})
     },
   }
 }
