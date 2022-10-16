@@ -6,10 +6,10 @@
           <v-skeleton-loader
             id="franchiseesLoader"
             class="pa-4"
-            v-if="franchiseesWithoutNullables.length === 0"
+            v-if="franchisees.length === 0"
             type=" table-heading, table-row-divider, table-row-divider, table-row-divider"
           />
-          <div v-if="franchiseesWithoutNullables.length > 0">
+          <div v-if="franchisees.length > 0">
             <v-row justify="center" class="text-center ma-4">
               <v-col cols="12" sm="6" md="4" class="d-flex">
                 <v-text-field
@@ -24,11 +24,12 @@
               <v-spacer/>
               <v-btn
                 id="btnCreateFranchisee"
+                class="align-self-end"
                 elevation="4"
                 color="success"
                 rounded
                 dark
-                @click.native="updateDialog({value: true, type: 'handle'})"
+                @click.native="updateDialog({value: true, type: 'create'})"
               >
                 Ajouter un franchisé
               </v-btn>
@@ -37,8 +38,8 @@
               id="franchiseesDataTable"
               class="pa-4"
               :headers="headers"
-              :items="franchiseesWithoutNullables"
-              :items-per-page="franchiseesWithoutNullables.length"
+              :items="franchisees"
+              :items-per-page="franchisees.length"
               :search="search"
               item-key="id"
               loading-text="Chargement des données"
@@ -50,14 +51,14 @@
                 <v-switch
                   id="franchiseeIsActiveBtn"
                   v-model="item.isactive"
-                  @change="patchFranchisee(item, $event)"
+                  @change="patchFranchiseeIsActive(item, $event)"
                  />
               </template>
               <template v-slot:item.actions="{ item }" >
                 <v-btn
                   id="btnEditItem"
                   icon
-                  @click.native="setFranchiseeAndDialog(item, 'handle')"
+                  @click.native="setFranchiseeAndDialog(item, 'patch')"
                 >
                   <v-icon
                     id="btnEditItemIcon"
@@ -92,9 +93,8 @@
       max-width="50%"
     >
       <handle_franchisee
-        v-if="dialogType === 'handle' && dialog"
+        v-if="dialogType === 'patch' || dialogType === 'create' && dialog"
         id="handleFranchisee"
-
       />
       <delete-franchisee
         v-if="(dialogType === 'delete') && dialog"
@@ -105,10 +105,10 @@
 </template>
 
 <script>
-import {mdiDelete, mdiMagnify, mdiPencil} from '@mdi/js';
 import Handle_franchisee from "../components/franchisees/handle_franchisee";
-import {mapActions, mapGetters} from 'vuex'
 import DeleteFranchisee from "../components/franchisees/delete_franchisee";
+import {mdiDelete, mdiMagnify, mdiPencil} from '@mdi/js';
+import {mapActions, mapGetters} from 'vuex'
 
 export default {
   name: 'IndexPage',
@@ -116,7 +116,6 @@ export default {
   data() {
     return {
       search: '',
-      // franchisees: [],
       icons: [mdiMagnify, mdiPencil, mdiDelete],
       headers: [
         {text: 'Nom', value: 'name', align: 'center'},
@@ -138,42 +137,30 @@ export default {
       dialog: 'franchisees/dialog',
       dialogType: 'franchisees/dialogType',
     }),
-    isLoading() {
-      return this.franchisees.length === 0
-    },
-    franchiseesWithoutNullables() {
-      if (this.franchisees.length > 0) {
-        return this.franchisees.map(element => {
-          for (let [key, value] of Object.entries(element)) {
-            if (value === null) {
-              element[key] = '-'
-            }
-          }
-          return element
-        })
-      } else {
-        return []
-      }
-    },
   },
   methods: {
     ...mapActions({
       getFranchisees: 'franchisees/getFranchisees',
+      updateName: 'franchisees/updateName',
+      updateID: 'franchisees/updateID',
+      updateAddress: 'franchisees/updateAddress',
+      updatePhone: 'franchisees/updatePhone',
+      updateIsActive: 'franchisees/updateIsActive',
+      updateSelectedModules: 'franchisees/updateSelectedModules',
       updateDialog: 'franchisees/updateDialog',
-      updateFranchisee: 'franchisees/updateFranchisee',
       alertError: 'errors/error',
       alertSuccess: 'errors/success'
     }),
 
-    async patchFranchisee(franchisee, value) {
+    async patchFranchiseeIsActive(franchisee, value) {
       try {
         franchisee.isactive = value
-        this.alertSuccess({
-          type: 'success',
-          message: `Franchisé '${franchisee.name}' modifié avec succès'`
-        })
         return await this.$axios.$patch(`api/franchisees/${franchisee.id}`, franchisee).then(() => {
           this.getFranchisees()
+          this.alertSuccess({
+            type: 'success',
+            message: `Franchisé '${franchisee.name}' modifié avec succès'`
+          })
         })
       } catch (error) {
         this.alertError({
@@ -183,7 +170,19 @@ export default {
       }
     },
     setFranchiseeAndDialog(franchisee, dialogType) {
-      this.updateFranchisee(franchisee)
+      this.updateID(franchisee.id)
+      this.updateName(franchisee.name)
+      this.updateAddress(franchisee.address)
+      this.updatePhone(franchisee.phone)
+      this.updateIsActive(franchisee.isactive)
+      let modules = (() => {
+        let array = []
+        for (let [key, value] of Object.entries(franchisee.default_modules)) {
+          if (value) array.push(key)
+        }
+        return array
+      })();
+      this.updateSelectedModules(modules)
       this.updateDialog({value: true , type: dialogType})
     }
   }

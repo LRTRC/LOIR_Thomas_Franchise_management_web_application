@@ -43,13 +43,13 @@
       </v-list>
     </v-navigation-drawer>
     <v-main>
-      <v-container class="fill-height justify-center">
+      <v-container class="justify-center">
         <v-alert
           v-if="type !== null"
           :type="type"
           transition="scroll-x-reverse-transition"
           class="alert"
-          style="position: absolute; right: 5%; top:5%; z-index: 999;"
+          style="position: absolute; right: 1%; top:1%; z-index: 999;"
         >
           {{ message }}
         </v-alert>

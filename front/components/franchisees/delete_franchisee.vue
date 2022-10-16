@@ -25,8 +25,7 @@
         id="cardTitle"
         class="text-h6 justify-center"
       >
-        Êtes-vous sûr de vouloir supprimer le franchisé "<span
-        style="font-weight: bold">{{ franchisee.name }}</span>" ?
+        Êtes-vous sûr de vouloir supprimer le franchisé "{{ name }}" ?
       </v-card-title>
     </div>
     <v-card-actions>
@@ -56,7 +55,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      franchisee: 'franchisees/franchisee',
+      id: 'franchisees/id',
+      name: 'franchisees/name',
     })
   },
   methods: {
@@ -68,7 +68,7 @@ export default {
     }),
     async send() {
       try {
-        await this.$axios.$delete(`/api/franchisees/${this.franchisee.id}`)
+        await this.$axios.$delete(`/api/franchisees/${this.id}`)
           .then(() => {
             this.getFranchisees()
             this.clearFranchisee()
@@ -86,5 +86,7 @@ export default {
 </script>
 
 <style scoped>
-
+#cardTitle {
+  word-break: break-word!important;
+}
 </style>

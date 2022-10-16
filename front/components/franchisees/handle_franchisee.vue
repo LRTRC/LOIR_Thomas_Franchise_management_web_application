@@ -4,19 +4,19 @@
       id="bannerHandleFranchisee"
       color="info"
       width="100%"
-      :icon="icons[0]"
+      :icon="bannerIcon"
       icon-color="white"
       single-line
       dark
     >
-      Ajouter un franchisé
+      {{ bannerTitle }}
       <v-spacer/>
       <template v-slot:actions>
         <v-switch
           class="px-4"
           id="isActive"
           label="Activé / désactivé"
-          v-model="franchisee.isactive"
+          v-model="isActive"
         />
       </template>
     </v-banner>
@@ -29,7 +29,7 @@
         <v-col cols="12" lg="4">
           <v-text-field
             id="name"
-            v-model="franchisee.name"
+            v-model="name"
             label="Nom"
             class="pa-4"
             color="success"
@@ -45,7 +45,7 @@
         <v-col cols="12" lg="4">
           <v-text-field
             id="adress"
-            v-model="franchisee.address"
+            v-model="address"
             label="Adresse"
             class="pa-4"
             color="success"
@@ -58,7 +58,7 @@
         <v-col cols="12" lg="4">
           <v-text-field
             id="phone"
-            v-model="franchisee.phone"
+            v-model="phone"
             label="Téléphone"
             class="pa-4"
             color="success"
@@ -101,7 +101,7 @@
         color="success"
         :disabled="!valid"
         text
-        @click.native="send(franchisee)"
+        @click.native="send"
       >
         sauvegarder
       </v-btn>
@@ -110,31 +110,14 @@
 </template>
 
 <script>
-import {mdiPlaylistPlus, mdiClose, mdiAccount, mdiMapMarker, mdiPhone, mdiFormatListChecks} from '@mdi/js';
-import {mapActions} from "vuex";
+import {mdiPlaylistPlus, mdiClose, mdiAccount, mdiMapMarker, mdiPhone, mdiFormatListChecks, mdiPlaylistEdit} from '@mdi/js';
+import {mapGetters, mapActions} from "vuex";
 
 export default {
   name: "handle_franchisee",
   data() {
     return {
       valid: false,
-      selectedModules: [],
-      franchisee: {
-        name: '',
-        address: '',
-        phone: '',
-        isactive: false,
-        default_modules: {
-          subscriptions: false,
-          group_lessons: false,
-          private_coaching: false,
-          workforce: false,
-          plannings: false,
-          equipments: false,
-          advertising: false,
-          snacks: false,
-        },
-      },
       modules: [
         {
           text: 'abonnements',
@@ -169,11 +152,65 @@ export default {
           value: 'snacks'
         },
       ],
-      icons: [mdiPlaylistPlus, mdiClose, mdiAccount, mdiMapMarker, mdiPhone, mdiFormatListChecks],
+      icons: [mdiPlaylistPlus, mdiClose, mdiAccount, mdiMapMarker, mdiPhone, mdiFormatListChecks, mdiPlaylistEdit],
       nameRules: [
         v => !!v || 'Le nom est requis',
         v => v && v.length <= 100 || 'Le nom ne peut faire plus de 100 caractères',
       ],
+    }
+  },
+  computed: {
+    ...mapGetters({
+      id: 'franchisees/id',
+      dialogType: 'franchisees/dialogType',
+    }),
+    name: {
+      get() {
+        return this.$store.getters["franchisees/name"]
+      },
+      set(newValue) {
+        return this.$store.dispatch('franchisees/updateName', newValue)
+      },
+    },
+    address: {
+      get() {
+        return this.$store.getters["franchisees/address"]
+      },
+      set(newValue) {
+        return this.$store.dispatch('franchisees/updateAddress', newValue)
+      },
+    },
+    phone: {
+      get() {
+        return this.$store.getters["franchisees/phone"]
+      },
+      set(newValue) {
+        return this.$store.dispatch('franchisees/updatePhone', newValue)
+      },
+    },
+    isActive: {
+      get() {
+        return this.$store.getters["franchisees/isActive"]
+      },
+      set(newValue) {
+        return this.$store.dispatch('franchisees/updateIsActive', newValue)
+      },
+    },
+    selectedModules: {
+      get() {
+        return this.$store.getters["franchisees/selectedModules"]
+      },
+      set(newValue) {
+        return this.$store.dispatch('franchisees/updateSelectedModules', newValue)
+      },
+    },
+    bannerTitle() {
+      return this.dialogType === 'create' ? 'Ajouter un franchisé' : this.dialogType === 'patch' ?
+        'Modifier un franchisé' : ''
+    },
+    bannerIcon() {
+      return this.dialogType === 'create' ? this.icons[0] : this.dialogType === 'patch' ?
+        this.icons[6] : null
     }
   },
   methods: {
@@ -181,20 +218,38 @@ export default {
       getFranchisees: 'franchisees/getFranchisees',
       updateDialog: 'franchisees/updateDialog',
       alertError: 'errors/error',
-      alertSuccess: 'errors/success'
+      alertSuccess: 'errors/success',
+      clearFranchisee: 'franchisees/clearFranchisee'
     }),
     send(franchisee) {
-      this.setPayload(franchisee);
-      this.createFranchisee(franchisee).then(() => this.getFranchisees())
-      this.clear()
+      this.postFranchisee(franchisee).then(() => {
+        this.clear();
+        this.getFranchisees()
+      })
     },
-    async createFranchisee(franchisee) {
+    async postFranchisee() {
       try {
-        this.alertSuccess({
-          type: 'success',
-          message: `Franchisé '${franchisee.name}' créé avec succès'`
-        })
-        return await this.$axios.$post('api/franchisees/', franchisee)
+        if (this.dialogType === 'create') {
+          let franchisee = this.setFranchisee();
+          return await this.$axios.$post('api/franchisees/', franchisee)
+            .then(() => {
+              this.alertSuccess({
+                type: 'success',
+                message: `'${franchisee.name}' à été créé avec succès'`
+              })
+              this.clear();
+            })
+        }
+        if (this.dialogType === 'patch') {
+          let franchisee = this.setFranchisee();
+          return await this.$axios.$patch(`api/franchisees/${this.id}`, franchisee).then(() => {
+            this.alertSuccess({
+              type: 'success',
+              message: `Franchisé '${franchisee.name}' modifié avec succès'`
+            })
+            this.clear();
+          })
+        }
       } catch (error) {
         this.alertError({
           type: 'error',
@@ -202,22 +257,12 @@ export default {
         })
       }
     },
-    setPayload(franchisee) {
-      this.selectedModules.map((element) => {
-        for (let [key, value] of Object.entries(franchisee.default_modules)) {
-          if (key === element) {
-            franchisee.default_modules[key] = !value
-          }
-        }
-      })
-      return franchisee
-    },
-    clear() {
-      this.franchisee = {
-        name: '',
-        address: '',
-        phone: '',
-        isactive: false,
+    setFranchisee() {
+      let franchisee = {
+        name: this.name,
+        address: this.address,
+        phone: this.phone,
+        isactive: this.isActive,
         default_modules: {
           subscriptions: false,
           group_lessons: false,
@@ -229,7 +274,17 @@ export default {
           snacks: false,
         }
       }
-      this.selectedModules = [];
+      this.selectedModules.map((element) => {
+        for (let [key, value] of Object.entries(franchisee.default_modules)) {
+          if (key === element) {
+            franchisee.default_modules[key] = !value
+          }
+        }
+      })
+      return franchisee
+    },
+    clear() {
+      this.clearFranchisee();
       this.updateDialog({value: false, type: ''})
     },
   }
