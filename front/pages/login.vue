@@ -8,7 +8,6 @@
         <v-form
           ref="form"
           v-model="valid"
-          lazy-validation
         >
           <v-row justify="center">
             <v-col cols="10">
@@ -68,7 +67,6 @@
               </v-btn>
             </v-col>
           </v-row>
-
         </v-form>
       </v-card>
     </v-col>
@@ -77,6 +75,7 @@
 
 <script>
 import {mdiEmail, mdiLock, mdiClose} from '@mdi/js';
+import {mapActions} from 'vuex'
 
 export default {
   name: "login",
@@ -105,6 +104,10 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      alertError: 'errors/error',
+      alertSuccess: 'errors/success'
+    }),
     validate() {
       this.$refs.form.validate()
       this.userLogin()
@@ -119,8 +122,15 @@ export default {
         let user = response.data.data
         this.$auth.setUser(user)
         await this.$router.push('/')
-      } catch (err) {
-        throw err
+        this.alertSuccess({
+          type: 'success',
+          message: 'Authentification réussie'
+        })
+      } catch (error) {
+        this.alertError({
+          type: 'error',
+          message: error.message
+        })
       }
     },
   },

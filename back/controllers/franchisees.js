@@ -20,10 +20,10 @@ const getFranchisees = async (req, res, next) => {
 };
 
 const createFranchisee = async (req, res, next) => {
-    const {name, address, phone, default_modules, isActive} = req.body;
+    const {name, address, phone, default_modules, isactive} = req.body;
     const query =
-        "INSERT INTO franchisees (name, address, phone, default_modules, isActive)  VALUES($1, $2, $3, $4, $5) RETURNING *;";
-    const values = [name, address, phone, default_modules, isActive];
+        "INSERT INTO franchisees (name, address, phone, default_modules, isactive)  VALUES($1, $2, $3, $4, $5) RETURNING *;";
+    const values = [name, address, phone, default_modules, isactive];
     try {
         const data = await pool.query(query, values);
 
@@ -59,11 +59,12 @@ const getFranchiseeById = async (req, res, next) => {
 
 const updateFranchisee = async (req, res, next) => {
     const id = parseInt(req.params.id);
-    const {name, address, phone, default_modules, isActive} = req.body;
+    console.log(req.body)
+    const {name, address, phone, default_modules, isactive} = req.body;
 
     const query =
-        "UPDATE franchisees SET name=$1, address=$2, phone=$3, default_modules=$4, isActive=$5, id=$6 WHERE id=$6 RETURNING *;";
-    const value = [name, address, phone, default_modules, isActive, id];
+        "UPDATE franchisees SET name=$1, address=$2, phone=$3, default_modules=$4, isactive=$5, id=$6 WHERE id=$6 RETURNING *;";
+    const value = [name, address, phone, default_modules, isactive, id];
 
     try {
         const data = await pool.query(query, value);

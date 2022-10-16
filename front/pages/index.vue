@@ -1,112 +1,197 @@
 <template>
   <div>
-    <v-row justify="center" align="center">
+    <v-row justify="center">
       <v-col>
-        <v-data-table
-
-        >
-
-        </v-data-table>
-      </v-col>
-
-    </v-row>
-    <v-row justify="center" align="center">
-      <v-col cols="12" sm="8" md="6">
-        <v-card class="logo py-4 d-flex justify-center">
-          <NuxtLogo />
-          <VuetifyLogo />
+        <v-card class="card-neumorphism pa-4 ma-4">
+          <v-skeleton-loader
+            id="franchiseesLoader"
+            class="pa-4"
+            v-if="franchisees.length === 0"
+            type=" table-heading, table-row-divider, table-row-divider, table-row-divider"
+          />
+          <div v-if="franchisees.length > 0">
+            <v-row justify="center" class="text-center ma-4">
+              <v-col cols="12" sm="6" md="4" class="d-flex">
+                <v-text-field
+                  id="franchiseesSearchBar"
+                  v-model="search"
+                  clearable
+                  :prepend-icon="icons[0]"
+                  label="Rechercher"
+                  hide-details
+                />
+              </v-col>
+              <v-spacer/>
+              <v-btn
+                id="btnCreateFranchisee"
+                class="align-self-end"
+                elevation="4"
+                color="success"
+                rounded
+                dark
+                @click.native="updateDialog({value: true, type: 'create'})"
+              >
+                Ajouter un franchisé
+              </v-btn>
+            </v-row>
+            <v-data-table
+              id="franchiseesDataTable"
+              class="pa-4"
+              :headers="headers"
+              :items="franchisees"
+              :items-per-page="franchisees.length"
+              :search="search"
+              item-key="id"
+              loading-text="Chargement des données"
+              no-data-text="Aucune donnée"
+              no-results-text="Aucun résultat"
+              hide-default-footer
+            >
+              <template v-slot:item.isactive="{ item }">
+                <v-switch
+                  id="franchiseeIsActiveBtn"
+                  v-model="item.isactive"
+                  @change="patchFranchiseeIsActive(item, $event)"
+                 />
+              </template>
+              <template v-slot:item.actions="{ item }" >
+                <v-btn
+                  id="btnEditItem"
+                  icon
+                  @click.native="setFranchiseeAndDialog(item, 'patch')"
+                >
+                  <v-icon
+                    id="btnEditItemIcon"
+                    small
+                    class="mr-2"
+                  >
+                    {{ icons[1] }}
+                  </v-icon>
+                </v-btn>
+                <v-btn
+                  id="btnDeleteItem"
+                  icon
+                  @click.native="setFranchiseeAndDialog(item, 'delete')"
+                >
+                  <v-icon
+                    id="btnDeleteItemIcon"
+                    small
+                  >
+                    {{ icons[2] }}
+                  </v-icon>
+                </v-btn>
+              </template>
+            </v-data-table>
+          </div>
         </v-card>
-        <v-card>
-          <v-card-title class="headline">
-            Welcome to the Vuetify + Nuxt.js template
-          </v-card-title>
-          <v-card-text>
-            <p>Vuetify is a progressive Material Design component framework for Vue.js. It was designed to empower developers to create amazing applications.</p>
-            <p>
-              For more information on Vuetify, check out the <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              documentation
-            </a>.
-            </p>
-            <p>
-              If you have questions, please join the official <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="chat"
-            >
-              discord
-            </a>.
-            </p>
-            <p>
-              Find a bug? Report it on the github <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="contribute"
-            >
-              issue board
-            </a>.
-            </p>
-            <p>Thank you for developing with Vuetify and I look forward to bringing more exciting features in the future.</p>
-            <div class="text-xs-right">
-              <em><small>&mdash; John Leider</small></em>
-            </div>
-            <hr class="my-3">
-            <a
-              href="https://nuxtjs.org/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Nuxt Documentation
-            </a>
-            <br>
-            <a
-              href="https://github.com/nuxt/nuxt.js"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Nuxt GitHub
-            </a>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer />
-            <v-btn
-              color="primary"
-              nuxt
-              to="/inspire"
-            >
-              Continue
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-        <v-btn @click="getFranchisees">
-          click me
-        </v-btn>
       </v-col>
     </v-row>
+    <v-dialog
+      id="dialog"
+      persistent
+      v-model="dialog"
+      max-width="50%"
+    >
+      <handle_franchisee
+        v-if="dialogType === 'patch' || dialogType === 'create' && dialog"
+        id="handleFranchisee"
+      />
+      <delete-franchisee
+        v-if="(dialogType === 'delete') && dialog"
+        id="deleteFranchisee"
+      />
+    </v-dialog>
   </div>
 </template>
 
 <script>
+import Handle_franchisee from "../components/franchisees/handle_franchisee";
+import DeleteFranchisee from "../components/franchisees/delete_franchisee";
+import {mdiDelete, mdiMagnify, mdiPencil} from '@mdi/js';
+import {mapActions, mapGetters} from 'vuex'
+
 export default {
   name: 'IndexPage',
+  components: {DeleteFranchisee, Handle_franchisee},
   data() {
     return {
-      franchisees: [],
+      search: '',
+      icons: [mdiMagnify, mdiPencil, mdiDelete],
+      headers: [
+        {text: 'Nom', value: 'name', align: 'center'},
+        {text: 'Adresse', value: 'address', align: 'center'},
+        {text: 'Téléphone', value: 'phone', align: 'center'},
+        {text: "Actif", value: "isactive", align: 'center'},
+        {text: "Modifier / supprimer", value: "actions", sortable: false, align: 'center'},
+        {text: "Structures", sortable: false, align: 'center'},
+        {text: "Membres", sortable: false, align: 'center'},
+      ],
     }
   },
   mounted() {
-
+    this.getFranchisees()
+  },
+  computed: {
+    ...mapGetters({
+      franchisees: 'franchisees/franchisees',
+      dialog: 'franchisees/dialog',
+      dialogType: 'franchisees/dialogType',
+    }),
   },
   methods: {
-    async getFranchisees() {
-      const franchisees = await this.$axios.$get("/api/franchisees/")
-      return this.franchisees = franchisees.data
+    ...mapActions({
+      getFranchisees: 'franchisees/getFranchisees',
+      updateName: 'franchisees/updateName',
+      updateID: 'franchisees/updateID',
+      updateAddress: 'franchisees/updateAddress',
+      updatePhone: 'franchisees/updatePhone',
+      updateIsActive: 'franchisees/updateIsActive',
+      updateSelectedModules: 'franchisees/updateSelectedModules',
+      updateDialog: 'franchisees/updateDialog',
+      alertError: 'errors/error',
+      alertSuccess: 'errors/success'
+    }),
+
+    async patchFranchiseeIsActive(franchisee, value) {
+      try {
+        franchisee.isactive = value
+        return await this.$axios.$patch(`api/franchisees/${franchisee.id}`, franchisee).then(() => {
+          this.getFranchisees()
+          this.alertSuccess({
+            type: 'success',
+            message: `Franchisé '${franchisee.name}' modifié avec succès'`
+          })
+        })
+      } catch (error) {
+        this.alertError({
+          type: 'error',
+          message: error.message
+        })
+      }
     },
+    setFranchiseeAndDialog(franchisee, dialogType) {
+      this.updateID(franchisee.id)
+      this.updateName(franchisee.name)
+      this.updateAddress(franchisee.address)
+      this.updatePhone(franchisee.phone)
+      this.updateIsActive(franchisee.isactive)
+      let modules = (() => {
+        let array = []
+        for (let [key, value] of Object.entries(franchisee.default_modules)) {
+          if (value) array.push(key)
+        }
+        return array
+      })();
+      this.updateSelectedModules(modules)
+      this.updateDialog({value: true , type: dialogType})
+    }
   }
 }
 </script>
+
+<style scoped>
+#franchiseesDataTable, #franchiseesLoader {
+  background-color: #ecf0f3 !important;
+}
+
+</style>
