@@ -55,10 +55,10 @@ export const mutations = {
     state.name = '';
     state.address = '';
     state.phone = '';
-    state.isactive = false;
+    state.isActive = false;
     state.selectedModules = [];
   },
-  CLEAR_FRANCHISEES(state, payload) {
+  CLEAR_FRANCHISEES(state) {
     state.franchisees = [];
   },
 }
@@ -70,11 +70,10 @@ export const actions = {
       const franchisees = await this.$axios.$get("/api/franchisees/")
       if (franchisees) {
         commit('MUTATE_FRANCHISEES', franchisees.data)
+        return true
       }
     } catch (error) {
-      dispatch('errors/error', {
-        message: error.message
-      }, {root: true})
+      dispatch('errors/error', error.message, {root: true})
     }
   },
   updateID({commit}, payload) {
