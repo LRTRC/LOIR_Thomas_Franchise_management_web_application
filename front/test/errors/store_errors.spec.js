@@ -4,6 +4,7 @@ import axiosMock from "../mocks/axios_mock";
 import {mutations, state, getters, actions} from '../../store/errors.js'
 
 // $ npm test errors/store_errors
+// todo: tests setTimout without waiting
 
 describe('store errors', () => {
   const createStore = () => {

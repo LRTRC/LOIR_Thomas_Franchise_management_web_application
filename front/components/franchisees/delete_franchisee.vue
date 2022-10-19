@@ -30,7 +30,7 @@
     </div>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn id="btnCancelDelete" color="error" text @click.native="updateDialog({value: false, type: ''})"
+      <v-btn id="btnCancelDelete" color="error" text @click.native="clear"
       >
         ANNULER
       </v-btn>
@@ -80,6 +80,10 @@ export default {
           message: error.message
         })
       }
+    },
+    clear() {
+      this.clearFranchisee()
+      this.updateDialog({value: false, type: ''})
     }
   },
 }

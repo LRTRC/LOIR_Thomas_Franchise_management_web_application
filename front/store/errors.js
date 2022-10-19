@@ -37,7 +37,7 @@ export const actions = {
     commit('SET_TYPE_AND_MESSAGE', {type: 'error', message: message})
     setTimeout(() => {
       commit('CLEAR')
-    }, 5000);
+    }, 3000);
   },
   // Action to dispatch to pass info type values to a <v-alert> component
   info({commit}, message) {
