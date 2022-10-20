@@ -52,9 +52,9 @@
                   id="franchiseeIsActiveBtn"
                   v-model="item.isactive"
                   @change="patchFranchiseeIsActive(item, $event)"
-                 />
+                />
               </template>
-              <template v-slot:item.actions="{ item }" >
+              <template v-slot:item.actions="{ item }">
                 <v-btn
                   id="btnEditItem"
                   icon
@@ -157,16 +157,10 @@ export default {
         franchisee.isactive = value
         return await this.$axios.$patch(`api/franchisees/${franchisee.id}`, franchisee).then(() => {
           this.getFranchisees()
-          this.alertSuccess({
-            type: 'success',
-            message: `Franchisé '${franchisee.name}' modifié avec succès'`
-          })
+          this.alertSuccess(`Franchisé '${franchisee.name}' modifié avec succès'`)
         })
       } catch (error) {
-        this.alertError({
-          type: 'error',
-          message: error.message
-        })
+        this.alertError(error.message)
       }
     },
     setFranchiseeAndDialog(franchisee, dialogType) {
@@ -183,7 +177,7 @@ export default {
         return array
       })();
       this.updateSelectedModules(modules)
-      this.updateDialog({value: true , type: dialogType})
+      this.updateDialog({value: true, type: dialogType})
     }
   }
 }

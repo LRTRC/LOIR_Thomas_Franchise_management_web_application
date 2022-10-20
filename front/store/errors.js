@@ -27,35 +27,28 @@ export const mutations = {
 export const actions = {
   // Action to dispatch to pass success type values to a <v-alert> component
   success({commit}, message) {
-    commit('SET_TYPE_AND_MESSAGE', {type: 'success', message: message.message})
+    commit('SET_TYPE_AND_MESSAGE', {type: 'success', message: message})
     setTimeout(() => {
       commit('CLEAR')
     }, 3000);
   },
   // Action to dispatch to pass error type values to a <v-alert> component
   error({commit}, message) {
-    commit('SET_TYPE_AND_MESSAGE', {type: 'error', message: message.message})
+    commit('SET_TYPE_AND_MESSAGE', {type: 'error', message: message})
     setTimeout(() => {
       commit('CLEAR')
-    }, 5000);
+    }, 3000);
   },
   // Action to dispatch to pass info type values to a <v-alert> component
   info({commit}, message) {
-    commit('SET_TYPE_AND_MESSAGE', {type: 'info', message: message.message})
+    commit('SET_TYPE_AND_MESSAGE', {type: 'info', message: message})
     setTimeout(() => {
       commit('CLEAR')
     }, 3000);
   },
   // Action to dispatch to pass warning type values to a <v-alert> component
   warning({commit}, message) {
-    commit('SET_TYPE_AND_MESSAGE', {type: 'warning', message: message.message})
-    setTimeout(() => {
-      commit('CLEAR')
-    }, 3000);
-  },
-
-  generic({commit}, payload) {
-    commit('SET_TYPE_AND_MESSAGE', {type: payload.type, message: payload.message})
+    commit('SET_TYPE_AND_MESSAGE', {type: 'warning', message: message})
     setTimeout(() => {
       commit('CLEAR')
     }, 3000);

@@ -110,7 +110,15 @@
 </template>
 
 <script>
-import {mdiPlaylistPlus, mdiClose, mdiAccount, mdiMapMarker, mdiPhone, mdiFormatListChecks, mdiPlaylistEdit} from '@mdi/js';
+import {
+  mdiPlaylistPlus,
+  mdiClose,
+  mdiAccount,
+  mdiMapMarker,
+  mdiPhone,
+  mdiFormatListChecks,
+  mdiPlaylistEdit
+} from '@mdi/js';
 import {mapGetters, mapActions} from "vuex";
 
 export default {
@@ -233,28 +241,19 @@ export default {
           let franchisee = this.setFranchisee();
           return await this.$axios.$post('api/franchisees/', franchisee)
             .then(() => {
-              this.alertSuccess({
-                type: 'success',
-                message: `'${franchisee.name}' à été créé avec succès'`
-              })
+              this.alertSuccess(`'${franchisee.name}' à été créé avec succès'`)
               this.clear();
             })
         }
         if (this.dialogType === 'patch') {
           let franchisee = this.setFranchisee();
           return await this.$axios.$patch(`api/franchisees/${this.id}`, franchisee).then(() => {
-            this.alertSuccess({
-              type: 'success',
-              message: `Franchisé '${franchisee.name}' modifié avec succès'`
-            })
+            this.alertSuccess(`Franchisé '${franchisee.name}' modifié avec succès'`)
             this.clear();
           })
         }
       } catch (error) {
-        this.alertError({
-          type: 'error',
-          message: error.message
-        })
+        this.alertError(error.message)
       }
     },
     setFranchisee() {
