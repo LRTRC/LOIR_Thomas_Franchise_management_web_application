@@ -42,7 +42,7 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-main class="align-center">
+    <v-main>
       <v-container class="justify-center">
         <v-alert
           v-if="type !== null"

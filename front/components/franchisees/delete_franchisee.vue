@@ -62,6 +62,7 @@ export default {
   methods: {
     ...mapActions({
       alertError: 'errors/error',
+      alertSuccess: 'errors/success',
       updateDialog: 'franchisees/updateDialog',
       getFranchisees: 'franchisees/getFranchisees',
       clearFranchisee: 'franchisees/clearFranchisee'
@@ -69,16 +70,16 @@ export default {
     async send() {
       try {
         await this.$axios.$delete(`/api/franchisees/${this.id}`)
-          .then(() => {
-            this.getFranchisees()
-            this.clearFranchisee()
-            this.updateDialog({value: false, type: ''})
+          .then((response) => {
+            if (response) {
+              this.getFranchisees()
+              this.alertSuccess(`'${this.name}' à été supprimé avec succès'`)
+              this.clearFranchisee()
+              this.updateDialog({value: false, type: ''})
+            }
           })
       } catch (error) {
-        this.alertError({
-          type: 'error',
-          message: error.message
-        })
+        this.alertError(error.message)
       }
     },
     clear() {
