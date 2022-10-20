@@ -59,7 +59,6 @@ const getFranchiseeById = async (req, res, next) => {
 
 const updateFranchisee = async (req, res, next) => {
     const id = parseInt(req.params.id);
-    console.log(req.body)
     const {name, address, phone, default_modules, isactive} = req.body;
 
     const query =
