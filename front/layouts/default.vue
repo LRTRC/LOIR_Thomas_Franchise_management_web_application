@@ -43,7 +43,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-main>
-      <v-container class="justify-center">
+      <v-container class="justify-center fill-height" fluid>
         <v-alert
           v-if="type !== null"
           :type="type"

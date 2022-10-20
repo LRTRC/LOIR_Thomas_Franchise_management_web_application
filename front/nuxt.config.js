@@ -10,7 +10,7 @@ export default {
       local: {
         token: {
           property: 'data.token',
-          // global: true,
+          global: true,
           // required: true,
           // type: 'Bearer'
         },
@@ -22,7 +22,7 @@ export default {
           login: { url: '/auth/login', method: 'post', propertyName: 'data' },
           logout: false,
           user: false
-        }
+        },
       }
     }
   },

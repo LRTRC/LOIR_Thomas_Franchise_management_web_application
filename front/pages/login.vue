@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="center">
+  <v-row justify="center" class="ma-auto">
     <v-col cols="11" sm="8" md="7" lg="4" xl="3">
       <v-card class="card-neumorphism py-12">
         <v-card-title class="justify-center">
@@ -92,14 +92,15 @@ export default {
       valid: false,
       email: '',
       emailRules: [
-        v => !!v || 'Email is required',
-        v => v && v.length <= 255 || 'Email must be less than 255 characters',
-        v => /.+@.+/.test(v) || 'E-mail must be valid',
+        v => !!v || "L'email est requis",
+        v => v && v.length <= 255 || "L'email doit contenir moins de 255 caractères",
+        v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || "L'email doit être valide",
       ],
       password: '',
       passwordRules: [
-        v => !!v || 'Password is required',
-        v => v && v.length <= 60 || 'Password must be less than 60 characters',
+        v => !!v || 'Le mot de passe est requis',
+        v => v && v.length <= 60 || "le mot de passe doit contenir moins de 60 caractères",
+        v => /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}/.test(v) || "Le mot de pass doit contenir au moins une majuscule, une minuscule, une chiffre, un symbole et 8 caractères minimum",
       ],
     }
   },
@@ -117,20 +118,18 @@ export default {
     },
     async userLogin() {
       try {
+        // let passRegex = new RegExp("^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Z\\d!@#$%^&*]{8}$");
+        // let password = passRegex.test(this.password) ?
+        //   this.password : ''
+
         let response = await this.$auth.loginWith('local',
           {data: {email: this.email, passphrase: this.password}})
         let user = response.data.data
         this.$auth.setUser(user)
         await this.$router.push('/')
-        this.alertSuccess({
-          type: 'success',
-          message: 'Authentification réussie'
-        })
+        this.alertSuccess('Authentification réussie')
       } catch (error) {
-        this.alertError({
-          type: 'error',
-          message: error.message
-        })
+        this.alertError(error.message)
       }
     },
   },
