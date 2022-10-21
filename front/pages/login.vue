@@ -123,7 +123,7 @@ export default {
         //   this.password : ''
 
         let response = await this.$auth.loginWith('local',
-          {data: {email: this.email, passphrase: this.password}})
+          {data: {email: this.email.toString(), passphrase: this.password.toString()}})
         let user = response.data.data
         this.$auth.setUser(user)
         await this.$router.push('/')
