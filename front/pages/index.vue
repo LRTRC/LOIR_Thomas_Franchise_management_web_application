@@ -46,6 +46,9 @@
               no-data-text="Aucune donnée"
               no-results-text="Aucun résultat"
               hide-default-footer
+              dense
+              multi-sort
+
             >
               <template v-slot:item.isactive="{ item }">
                 <v-switch
@@ -186,6 +189,13 @@ export default {
 <style scoped>
 #franchiseesDataTable, #franchiseesLoader {
   background-color: #ecf0f3 !important;
+  min-height: 50vh!important;
+  max-width: 100vh!important;
+}
+
+#franchiseesDataTable:deep(td) {
+  word-break: break-word!important;
+
 }
 
 </style>

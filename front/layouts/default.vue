@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import {mdiApps, mdiChartBubble, mdiLogout, mdiMenu} from "@mdi/js"
+import { mdiFormatListBulletedSquare, mdiLogout, mdiMenu} from "@mdi/js"
 import {mapGetters} from 'vuex'
 
 export default {
@@ -77,14 +77,9 @@ export default {
       icons: [mdiLogout, mdiMenu],
       items: [
         {
-          icon: mdiApps,
-          title: 'Welcome',
+          icon:  mdiFormatListBulletedSquare,
+          title: 'Franchisés',
           to: '/'
-        },
-        {
-          icon: mdiChartBubble,
-          title: 'Inspire',
-          to: '/inspire'
         },
       ],
     }

@@ -49,6 +49,8 @@
             label="Adresse"
             class="pa-4"
             color="success"
+            :rules="addressRules"
+            :counter="255"
             :prepend-icon="icons[3]"
             :clear-icon="icons[1]"
             clearable
@@ -62,6 +64,8 @@
             label="Téléphone"
             class="pa-4"
             color="success"
+            :rules="phoneRules"
+            :counter="50"
             :prepend-icon="icons[4]"
             :clear-icon="icons[1]"
             clearable
@@ -165,6 +169,13 @@ export default {
         v => !!v || 'Le nom est requis',
         v => v && v.length <= 100 || 'Le nom ne peut faire plus de 100 caractères',
       ],
+      addressRules: [
+        v => v.length <= 255 || "l'adresse ne peut faire plus de 255 caractères",
+      ],
+      phoneRules: [
+        v => v.length <= 50 || "le téléphone ne peut faire plus de 50 caractères",
+      ],
+
     }
   },
   computed: {
