@@ -73,6 +73,7 @@
                     id="btnEditItemIcon"
                     small
                     class="mr-2"
+                    color="primary"
                   >
                     {{ icons[1] }}
                   </v-icon>
@@ -81,6 +82,7 @@
                   id="btnDeleteItem"
                   icon
                   @click.native="setFranchiseeAndDialog(item, 'delete')"
+                  color="error"
                 >
                   <v-icon
                     id="btnDeleteItemIcon"

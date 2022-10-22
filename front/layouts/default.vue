@@ -4,8 +4,10 @@
       v-if="loggedIn"
       app
       dense
+      dark
+      color="primary"
     >
-      <v-icon color="primary" class="mx-4" @click="drawer = !drawer" >{{icons[1]}}</v-icon>
+      <v-icon dark class="mx-4" @click="drawer = !drawer" >{{icons[1]}}</v-icon>
       <v-toolbar-title>Gestion des franchisés</v-toolbar-title>
 
     </v-app-bar>
@@ -13,7 +15,8 @@
       v-model="drawer"
       app
       temporary
-      :style="{background: $vuetify.theme.themes['light'].background}"
+      dark
+      color="primary"
     >
       <v-list
         nav
@@ -27,7 +30,7 @@
           exact
         >
           <v-list-item-action>
-            <v-icon color="primary">{{ item.icon }}</v-icon>
+            <v-icon dark>{{ item.icon }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title v-text="item.title"/>
