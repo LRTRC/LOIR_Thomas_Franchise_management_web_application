@@ -46,7 +46,7 @@
               <v-btn
                 class="btn-neumorphism"
                 :disabled="!valid"
-                color="success"
+                color="primary"
                 width="60%"
                 rounded
                 @click="validate"
