@@ -2,7 +2,7 @@
   <v-card class="v-card-glass">
     <v-banner
       id="bannerHandleFranchisee"
-      color="info"
+      color="primary"
       width="100%"
       :icon="bannerIcon"
       icon-color="white"
@@ -17,6 +17,10 @@
           id="isActive"
           label="Activé / désactivé"
           v-model="isActive"
+          color="success"
+          inset
+          dense
+          dark
         />
       </template>
     </v-banner>
@@ -302,5 +306,13 @@ export default {
 </script>
 
 <style scoped>
+#bannerHandleFranchisee:deep(label) {
+  color: white!important;
+}
+
+:deep(.v-chip), :deep(.v-chip__close) {
+  color: white!important;
+  background-color: #24cfaa!important;
+}
 
 </style>

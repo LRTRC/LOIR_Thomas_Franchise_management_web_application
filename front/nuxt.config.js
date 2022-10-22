@@ -86,17 +86,29 @@ export default {
       light: true,
       themes: {
         light: {
-          primary: '#E9967A',
-          secondary: '#424242',
+          primary: '#19344F',
+          secondary: '#E9967A',
           accent: '#800080',
-          error: '#CF4F23',
+          error: '#CF2D40',
           info: '#82B1FF',
           success: '#24cfaa',
           warning: '#FFC107',
           background: '#e0e0e0',
           third: '#5685FF',
           fourth: '#EF64D9'
-        }
+        },
+        // light: {
+        //   primary: '#19344F',
+        //   secondary: '#225F9C',
+        //   accent: '#082139',
+        //   error: '#9C3832',
+        //   info: '#2D9ACF',
+        //   success: '#419C2A',
+        //   warning: '#FFC107',
+        //   background: '#e0e0e0',
+        //   third: '#225F9C',
+        //   fourth: '#EF64D9'
+        // }
       }
     }
   },
