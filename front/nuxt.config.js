@@ -28,7 +28,7 @@ export default {
   },
 
   axios: {
-    baseURL: 'http://localhost:3000'
+    baseURL: 'https://loir-thomas-franchise-management-web.onrender.com'
   },
 
   router: {

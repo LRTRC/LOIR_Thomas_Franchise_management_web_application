@@ -90,13 +90,13 @@ export default {
     return {
       icons: [mdiEmail, mdiLock, mdiClose],
       valid: false,
-      email: '',
+      email: 'toto@dev.fr',
       emailRules: [
         v => !!v || "L'email est requis",
         v => v && v.length <= 255 || "L'email doit contenir moins de 255 caractères",
         v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || "L'email doit être valide",
       ],
-      password: '',
+      password: 'AZE1234a!',
       passwordRules: [
         v => !!v || 'Le mot de passe est requis',
         v => v && v.length <= 60 || "le mot de passe doit contenir moins de 60 caractères",
