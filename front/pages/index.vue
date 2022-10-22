@@ -12,6 +12,20 @@
           <div v-if="franchisees.length > 0">
             <v-row justify="center" class="text-center ma-4">
               <v-col cols="12" sm="6" md="4" class="d-flex">
+                <v-btn
+                  id="btnCreateFranchisee"
+                  class="align-self-end"
+                  elevation="4"
+                  color="primary"
+                  rounded
+                  dark
+                  @click.native="updateDialog({value: true, type: 'create'})"
+                >
+                  Ajouter un franchisé
+                </v-btn>
+              </v-col>
+              <v-spacer/>
+              <v-col cols="12" sm="6" md="4" class="d-flex">
                 <v-text-field
                   id="franchiseesSearchBar"
                   v-model="search"
@@ -19,20 +33,9 @@
                   :prepend-icon="icons[0]"
                   label="Rechercher"
                   hide-details
+                  color="primary"
                 />
               </v-col>
-              <v-spacer/>
-              <v-btn
-                id="btnCreateFranchisee"
-                class="align-self-end"
-                elevation="4"
-                color="success"
-                rounded
-                dark
-                @click.native="updateDialog({value: true, type: 'create'})"
-              >
-                Ajouter un franchisé
-              </v-btn>
             </v-row>
             <v-data-table
               id="franchiseesDataTable"
@@ -55,6 +58,9 @@
                   id="franchiseeIsActiveBtn"
                   v-model="item.isactive"
                   @change="patchFranchiseeIsActive(item, $event)"
+                  color="success"
+                  dense
+
                 />
               </template>
               <template v-slot:item.actions="{ item }">
@@ -93,7 +99,7 @@
       id="dialog"
       persistent
       v-model="dialog"
-      max-width="50%"
+      max-width="600px"
     >
       <handle_franchisee
         v-if="dialogType === 'patch' || dialogType === 'create' && dialog"
@@ -125,9 +131,9 @@ export default {
         {text: 'Adresse', value: 'address', align: 'center'},
         {text: 'Téléphone', value: 'phone', align: 'center'},
         {text: "Actif", value: "isactive", align: 'center'},
-        {text: "Modifier / supprimer", value: "actions", sortable: false, align: 'center'},
         {text: "Structures", sortable: false, align: 'center'},
         {text: "Membres", sortable: false, align: 'center'},
+        {text: "Modifier / supprimer", value: "actions", sortable: false, align: 'center'},
       ],
     }
   },
@@ -189,12 +195,12 @@ export default {
 <style scoped>
 #franchiseesDataTable, #franchiseesLoader {
   background-color: #ecf0f3 !important;
-  min-height: 50vh!important;
-  max-width: 100vh!important;
+  min-height: 50vh !important;
+  max-width: 100vh !important;
 }
 
 #franchiseesDataTable:deep(td) {
-  word-break: break-word!important;
+  word-break: break-word !important;
 
 }
 

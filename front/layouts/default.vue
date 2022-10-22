@@ -5,14 +5,15 @@
       app
       dense
     >
-      <v-icon class="mx-4" @click="drawer = !drawer" >{{icons[1]}}</v-icon>
+      <v-icon color="primary" class="mx-4" @click="drawer = !drawer" >{{icons[1]}}</v-icon>
       <v-toolbar-title>Gestion des franchisés</v-toolbar-title>
 
     </v-app-bar>
     <v-navigation-drawer
       v-model="drawer"
-      absolute
+      app
       temporary
+      :style="{background: $vuetify.theme.themes['light'].background}"
     >
       <v-list
         nav
@@ -26,7 +27,7 @@
           exact
         >
           <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
+            <v-icon color="primary">{{ item.icon }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title v-text="item.title"/>
@@ -34,7 +35,7 @@
         </v-list-item>
         <v-list-item @click="logout">
           <v-list-item-action>
-            <v-icon>{{ icons[0] }}</v-icon>
+            <v-icon color="error">{{ icons[0] }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title v-text="'Déconnexion'"/>
