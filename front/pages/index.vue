@@ -2,12 +2,13 @@
   <div>
     <v-row justify="center">
       <v-col>
-        <v-card class="card-neumorphism pa-4 ma-4">
+        <v-card class="card-neumorphism pa-4 ma-auto">
           <v-skeleton-loader
             id="franchiseesLoader"
-            class="pa-4"
+            class="pa-4 ma-auto"
             v-if="franchisees.length === 0"
             type=" table-heading, table-row-divider, table-row-divider, table-row-divider"
+            min-width="100vh"
           />
           <div v-if="franchisees.length > 0">
             <v-row justify="center" class="text-center ma-4">
@@ -204,6 +205,25 @@ export default {
 #franchiseesDataTable:deep(td) {
   word-break: break-word !important;
 
+}
+
+#btnCreateFranchisee {
+  font-weight: bold;
+}
+
+:deep(th) {
+  font-size: 0.9em !important;
+  font-weight: bold;
+  vertical-align: text-top !important;
+  color: #36405a!important;
+}
+
+:deep(.v-data-table__mobile-row ) {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+:deep(.v-data-table__mobile-row__header) {
+  font-weight: bold;
 }
 
 </style>

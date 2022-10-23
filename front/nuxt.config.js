@@ -90,7 +90,7 @@ export default {
           primary: '#19344F',
           secondary: '#E9967A',
           accent: '#800080',
-          error: '#CF2D40',
+          error: '#B52838',
           info: '#82B1FF',
           success: '#24cfaa',
           warning: '#FFC107',
