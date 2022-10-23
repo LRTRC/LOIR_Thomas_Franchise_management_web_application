@@ -8,10 +8,11 @@
       color="primary"
     >
       <v-icon dark class="mx-4" @click="drawer = !drawer" >{{icons[1]}}</v-icon>
-      <v-toolbar-title>Gestion des franchisés</v-toolbar-title>
+      <v-toolbar-title id="toolbarTitle">Gestion des franchisés</v-toolbar-title>
 
     </v-app-bar>
     <v-navigation-drawer
+      id="drawer"
       v-model="drawer"
       app
       temporary
@@ -53,7 +54,7 @@
           :type="type"
           transition="scroll-x-reverse-transition"
           class="alert"
-          style="position: absolute; right: 1%; top:1%; z-index: 999;"
+          style="position: fixed; right: 1%; top:1%; z-index: 999;"
         >
           {{ message }}
         </v-alert>
@@ -63,6 +64,8 @@
     <v-footer
       absolute
       app
+      color="primary"
+      dark
     >
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
@@ -105,3 +108,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+#toolbarTitle, #drawer {
+  font-family: 'Poppins', sans-serif !important;
+}
+</style>

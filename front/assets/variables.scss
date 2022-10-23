@@ -3,12 +3,24 @@
 // The variables you want to modify
 // $font-size-root: 20px;
 
-//.card-neumorphism {
-//  border-radius: 10px!important;
-//  background: #F0F0F0!important;
-//  box-shadow:  20px 20px 60px #bebebe,
-//  -20px -20px 60px #ffffff!important;
-//}
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/Poppins-Regular.ttf') format('truetype');
+}
+
+
+
+html {
+  [class*='text-'] {
+    color: #36405a;
+    font-family: 'Poppins', sans-serif !important;
+  }
+  font-family: 'Poppins', sans-serif !important;
+}
 
 .card-neumorphism {
   border-radius: 40px!important;
@@ -46,5 +58,9 @@
   -webkit-backdrop-filter: blur( 6.5px )!important;
   border-radius: 10px!important;
   //border: 2px solid rgba( 255, 255, 255, 0.18 )!important;
-
 }
+
+.v-btn, .v-card-title, .v-banner {
+  font-family: 'Poppins', sans-serif !important;
+}
+

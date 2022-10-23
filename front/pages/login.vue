@@ -2,7 +2,7 @@
   <v-row justify="center" class="ma-auto">
     <v-col cols="11" sm="8" md="7" lg="4" xl="3">
       <v-card class="card-neumorphism py-12">
-        <v-card-title class="justify-center">
+        <v-card-title style="font-family: 'Poppins', sans-serif;font-weight: bold" class="justify-center">
           Connexion
         </v-card-title>
         <v-form
@@ -137,7 +137,9 @@ export default {
 </script>
 
 <style scoped>
-
+.v-btn {
+  font-weight: bold;
+}
 </style>
 
 
