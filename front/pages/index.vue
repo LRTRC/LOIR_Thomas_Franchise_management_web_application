@@ -2,99 +2,97 @@
   <div>
     <v-row justify="center">
       <v-col>
-        <v-card class="card-neumorphism pa-4 ma-auto">
-          <v-skeleton-loader
-            id="franchiseesLoader"
-            class="pa-4 ma-auto"
-            v-if="franchisees.length === 0"
-            type=" table-heading, table-row-divider, table-row-divider, table-row-divider"
-            min-width="100vh"
-          />
-          <div v-if="franchisees.length > 0">
-            <v-row justify="center" class="text-center ma-4">
-              <v-col cols="12" sm="6" md="4" class="d-flex">
-                <v-btn
-                  id="btnCreateFranchisee"
-                  class="align-self-end"
-                  elevation="4"
-                  color="primary"
-                  rounded
-                  dark
-                  @click.native="updateDialog({value: true, type: 'create'})"
-                >
-                  Ajouter un franchisé
-                </v-btn>
-              </v-col>
-              <v-spacer/>
-              <v-col cols="12" sm="6" md="4" class="d-flex">
-                <v-text-field
-                  id="franchiseesSearchBar"
-                  v-model="search"
-                  clearable
-                  :prepend-icon="icons[0]"
-                  label="Rechercher"
-                  hide-details
-                  color="primary"
-                />
-              </v-col>
-            </v-row>
-            <v-data-table
-              id="franchiseesDataTable"
-              class="pa-4"
-              :headers="headers"
-              :items="franchisees"
-              :items-per-page="franchisees.length"
-              :search="search"
-              item-key="id"
-              loading-text="Chargement des données"
-              no-data-text="Aucune donnée"
-              no-results-text="Aucun résultat"
-              hide-default-footer
-              dense
-              multi-sort
+        <v-progress-circular
+          v-if="franchisees.length === 0"
+          color="primary"
+          indeterminate
+          size="120"
+          width="5"
+        />
+        <v-card v-if="franchisees.length > 0" class="card-neumorphism pa-4 ma-auto">
+          <v-row justify="center" class="text-center ma-4">
+            <v-col cols="12" sm="6" md="4" class="d-flex">
+              <v-btn
+                id="btnCreateFranchisee"
+                class="align-self-end"
+                elevation="4"
+                color="primary"
+                rounded
+                dark
+                @click.native="updateDialog({value: true, type: 'create'})"
+              >
+                Ajouter un franchisé
+              </v-btn>
+            </v-col>
+            <v-spacer/>
+            <v-col cols="12" sm="6" md="4" class="d-flex">
+              <v-text-field
+                id="franchiseesSearchBar"
+                v-model="search"
+                clearable
+                :prepend-icon="icons[0]"
+                label="Rechercher"
+                hide-details
+                color="primary"
+              />
+            </v-col>
+          </v-row>
+          <v-data-table
+            id="franchiseesDataTable"
+            class="pa-4"
+            :headers="headers"
+            :items="franchisees"
+            :items-per-page="franchisees.length"
+            :search="search"
+            item-key="id"
+            loading-text="Chargement des données"
+            no-data-text="Aucune donnée"
+            no-results-text="Aucun résultat"
+            hide-default-footer
+            dense
+            multi-sort
 
-            >
-              <template v-slot:item.isactive="{ item }">
-                <v-switch
-                  id="franchiseeIsActiveBtn"
-                  v-model="item.isactive"
-                  @change="patchFranchiseeIsActive(item, $event)"
-                  color="success"
-                  dense
+          >
+            <template v-slot:item.isactive="{ item }">
+              <v-switch
+                id="franchiseeIsActiveBtn"
+                v-model="item.isactive"
+                @change="patchFranchiseeIsActive(item, $event)"
+                color="success"
+                dense
 
-                />
-              </template>
-              <template v-slot:item.actions="{ item }">
-                <v-btn
-                  id="btnEditItem"
-                  icon
-                  @click.native="setFranchiseeAndDialog(item, 'patch')"
+              />
+            </template>
+            <template v-slot:item.actions="{ item }">
+              <v-btn
+                id="btnEditItem"
+                icon
+                @click.native="setFranchiseeAndDialog(item, 'patch')"
+              >
+                <v-icon
+                  id="btnEditItemIcon"
+                  small
+                  class="mr-2"
+                  color="primary"
                 >
-                  <v-icon
-                    id="btnEditItemIcon"
-                    small
-                    class="mr-2"
-                    color="primary"
-                  >
-                    {{ icons[1] }}
-                  </v-icon>
-                </v-btn>
-                <v-btn
-                  id="btnDeleteItem"
-                  icon
-                  @click.native="setFranchiseeAndDialog(item, 'delete')"
-                  color="error"
+                  {{ icons[1] }}
+                </v-icon>
+              </v-btn>
+              <v-btn
+                id="btnDeleteItem"
+                icon
+                @click.native="setFranchiseeAndDialog(item, 'delete')"
+                color="error"
+              >
+                <v-icon
+                  id="btnDeleteItemIcon"
+                  small
                 >
-                  <v-icon
-                    id="btnDeleteItemIcon"
-                    small
-                  >
-                    {{ icons[2] }}
-                  </v-icon>
-                </v-btn>
-              </template>
-            </v-data-table>
-          </div>
+                  {{ icons[2] }}
+                </v-icon>
+              </v-btn>
+            </template>
+          </v-data-table>
         </v-card>
       </v-col>
     </v-row>
@@ -215,7 +213,7 @@ export default {
   font-size: 0.9em !important;
   font-weight: bold;
   vertical-align: text-top !important;
-  color: #36405a!important;
+  color: #36405a !important;
 }
 
 :deep(.v-data-table__mobile-row ) {

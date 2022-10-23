@@ -1,4 +1,5 @@
 const {pool} = require("../config");
+const Franchisee = require('../models/franchisees')
 
 const getFranchisees = async (req, res, next) => {
     try {
@@ -21,9 +22,12 @@ const getFranchisees = async (req, res, next) => {
 
 const createFranchisee = async (req, res, next) => {
     const {name, address, phone, default_modules, isactive} = req.body;
+    const franchisee = new Franchisee(name, address, phone, default_modules, isactive)
+
+
     const query =
         "INSERT INTO franchisees (name, address, phone, default_modules, isactive)  VALUES($1, $2, $3, $4, $5) RETURNING *;";
-    const values = [name, address, phone, default_modules, isactive];
+    const values = [franchisee.name, franchisee.address, franchisee.phone, franchisee.default_modules, franchisee.isactive];
     try {
         const data = await pool.query(query, values);
 
@@ -60,10 +64,11 @@ const getFranchiseeById = async (req, res, next) => {
 const updateFranchisee = async (req, res, next) => {
     const id = parseInt(req.params.id);
     const {name, address, phone, default_modules, isactive} = req.body;
+    const franchisee = new Franchisee(name, address, phone, default_modules, isactive)
 
     const query =
         "UPDATE franchisees SET name=$1, address=$2, phone=$3, default_modules=$4, isactive=$5, id=$6 WHERE id=$6 RETURNING *;";
-    const value = [name, address, phone, default_modules, isactive, id];
+    const value = [franchisee.name, franchisee.address, franchisee.phone, franchisee.default_modules, franchisee.isactive, id];
 
     try {
         const data = await pool.query(query, value);

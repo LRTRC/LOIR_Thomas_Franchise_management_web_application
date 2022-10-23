@@ -1,4 +1,5 @@
 const {pool} = require("../config");
+const Structure = require('../models/structures')
 
 const getStructures = async (req, res, next) => {
     try {
@@ -25,7 +26,7 @@ const createStructure = async (req, res, next) => {
         name,
         address,
         phone,
-        isActive,
+        isactive,
         subscriptions,
         group_lessons,
         private_coaching,
@@ -35,9 +36,25 @@ const createStructure = async (req, res, next) => {
         advertising,
         snacks
     } = req.body;
+    const structure = new Structure(id_franchise,
+        name,
+        address,
+        phone,
+        isactive,
+        subscriptions,
+        group_lessons,
+        private_coaching,
+        workforce,
+        plannings,
+        equipments,
+        advertising,
+        snacks)
+
     const query =
-        "INSERT INTO structures (id_franchise, name, address, phone, isActive, subscriptions, group_lessons, private_coaching, workforce, plannings, equipments, advertising, snacks) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *;";
-    const values = [id_franchise, name, address, phone, isActive, subscriptions, group_lessons, private_coaching, workforce, plannings, equipments, advertising, snacks];
+        "INSERT INTO structures (id_franchise, name, address, phone, isactive, subscriptions, group_lessons, private_coaching, workforce, plannings, equipments, advertising, snacks) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *;";
+    const values = [structure.id_franchise, structure.name, structure.address, structure.phone,
+        structure.isactive, structure.subscriptions, structure.group_lessons, structure.private_coaching,
+        structure.workforce, structure.plannings, structure.equipments, structure.advertising, structure.snacks];
     try {
         const data = await pool.query(query, values);
 
@@ -78,7 +95,7 @@ const updateStructure = async (req, res, next) => {
         name,
         address,
         phone,
-        isActive,
+        isactive,
         subscriptions,
         group_lessons,
         private_coaching,
@@ -88,10 +105,25 @@ const updateStructure = async (req, res, next) => {
         advertising,
         snacks
     } = req.body;
+    const structure = new Structure(id_franchise,
+        name,
+        address,
+        phone,
+        isactive,
+        subscriptions,
+        group_lessons,
+        private_coaching,
+        workforce,
+        plannings,
+        equipments,
+        advertising,
+        snacks)
 
     const query =
-        "UPDATE structures SET id_franchise=$1, name=$2, address=$3, phone=$4, isActive=$5, subscriptions=$6, group_lessons=$7, private_coaching=$8, workforce=$9, plannings=$10, equipments=$11, advertising=$12, snacks=$13, id=$14 WHERE id=$14 RETURNING *;";
-    const value = [id_franchise, name, address, phone, isActive, subscriptions, group_lessons, private_coaching, workforce, plannings, equipments, advertising, snacks, id];
+        "UPDATE structures SET id_franchise=$1, name=$2, address=$3, phone=$4, isactive=$5, subscriptions=$6, group_lessons=$7, private_coaching=$8, workforce=$9, plannings=$10, equipments=$11, advertising=$12, snacks=$13, id=$14 WHERE id=$14 RETURNING *;";
+    const value = [structure.id_franchise, structure.name, structure.address, structure.phone, structure.isactive,
+        structure.subscriptions, structure.group_lessons, structure.private_coaching, structure.workforce,
+        structure.plannings, structure.equipments, structure.advertising, structure.snacks, id];
 
     try {
         const data = await pool.query(query, value);
