@@ -28,7 +28,8 @@ export default {
   },
 
   axios: {
-    baseURL: 'https://loir-thomas-franchise-management-web.onrender.com'
+    // baseURL: 'https://loir-thomas-franchise-management-web.onrender.com',
+    baseURL: 'http://localhost:3000'
   },
 
   router: {
@@ -41,10 +42,10 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - front',
-    title: 'front',
+    titleTemplate: '%s - Gestion de vos franchisés',
+    title: 'Application web',
     htmlAttrs: {
-      lang: 'en'
+      lang: 'fr'
     },
     meta: [
       {charset: 'utf-8'},
