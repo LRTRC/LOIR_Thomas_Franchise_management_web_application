@@ -28,8 +28,8 @@ export default {
   },
 
   axios: {
-    // baseURL: 'https://loir-thomas-franchise-management-web.onrender.com',
-    baseURL: 'http://localhost:3000'
+    baseURL: 'https://loir-thomas-franchise-management-web.onrender.com',
+    // baseURL: 'http://localhost:3000'
   },
 
   router: {
