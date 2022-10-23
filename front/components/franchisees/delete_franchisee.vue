@@ -93,5 +93,6 @@ export default {
 <style scoped>
 #cardTitle {
   word-break: break-word!important;
+  font-family: 'Poppins', sans-serif!important;
 }
 </style>
