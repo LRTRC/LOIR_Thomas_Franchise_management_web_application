@@ -25,7 +25,7 @@ const login = async (req, res, next) => {
                         user.token = jwt.sign(
                             {userId: user.id},
                             "eyJ1c2VySWQiOjExLCJpYXQiOjE2NjM5NDEwOTk",
-                            {expiresIn: '6h'}
+                            {expiresIn: '30m'}
                         )
                         delete user.passphrase
                         return res.status(200).json({

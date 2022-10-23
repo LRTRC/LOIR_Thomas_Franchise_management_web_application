@@ -1,5 +1,6 @@
 const {pool} = require("../config");
 const bcrypt = require("bcrypt");
+const User = require('../models/users')
 
 const getUsers = async (req, res, next) => {
     try {
@@ -27,10 +28,11 @@ const createUser = async (req, res, next) => {
 
     let {first_name, last_name, email, phone, role, passphrase} = req.body;
     passphrase = hash;
+    const user = new User (first_name, last_name, email, phone, role, passphrase)
 
     const query =
         "INSERT INTO users (first_name, last_name, email, phone, role, passphrase)  VALUES($1, $2, $3, $4, $5, $6) RETURNING *;";
-    const values = [first_name, last_name, email, phone, role, passphrase];
+    const values = [user.first_name, user.last_name, user.email, user.phone, user.role, user.passphrase];
     try {
         const data = await pool.query(query, values);
 
@@ -68,10 +70,13 @@ const getUserById = async (req, res, next) => {
 const updateUser = async (req, res, next) => {
     const id = parseInt(req.params.id);
     const {first_name, last_name, email, phone, role} = req.body;
+    const user = new User (first_name, last_name, email, phone, role)
+    delete user.passphrase
+
 
     const query =
         "UPDATE users SET first_name=$1, last_name=$2, email=$3, phone=$4, role=$5, id=$6 WHERE id=$6 RETURNING *;";
-    const value = [first_name, last_name, email, phone, role, id];
+    const value = [user.first_name, user.last_name, user.email, user.phone, user.role, id];
 
     try {
         const data = await pool.query(query, value);
@@ -82,7 +87,7 @@ const updateUser = async (req, res, next) => {
 
         return res.status(200).json({
             status: 200,
-            message: `User id: ${id} deleted successfully`,
+            message: `User id: ${id} updated successfully`,
             data: user
         })
     } catch (error) {
