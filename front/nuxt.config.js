@@ -47,8 +47,8 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - Gestion de vos franchisés',
-    title: 'Application web',
+    titleTemplate: '%s - Gestion des franchisés et des modules',
+    title: 'GYM CLUB',
     htmlAttrs: {
       lang: 'fr'
     },

@@ -1,81 +1,81 @@
 <template>
-  <v-row justify="center" class="ma-auto">
-    <v-col cols="11" sm="8" md="7" lg="4" xl="3">
-      <v-card class="card-neumorphism py-12">
-        <v-card-title style="font-family: 'Poppins', sans-serif;font-weight: bold" class="justify-center">
-          Franchises
-          </br>
-          GYM CLUB
-        </v-card-title>
-        <v-card-subtitle style="font-weight: bold" class="text-center">
-          Connexion
-        </v-card-subtitle>
-        <v-form
-          ref="form"
-          v-model="valid"
-        >
-          <v-row justify="center">
-            <v-col cols="10">
-              <v-text-field
-                class="ma-4 mb-10 pa-4 username field"
-                color="success"
-                v-model="email"
-                :rules="emailRules"
-                :counter="255"
-                :prepend-icon="icons[0]"
-                :clear-icon="icons[2]"
-                type="email"
-                placeholder="Email"
-                required
-                clearable
-                dense
-              />
-              <v-text-field
-                class="ma-4 pa-4 password field"
-                color="success"
-                v-model="password"
-                :rules="passwordRules"
-                :counter="60"
-                :prepend-icon="icons[1]"
-                :clear-icon="icons[2]"
-                type="password"
-                placeholder="password"
-                required
-                clearable
-                dense
-              />
-            </v-col>
-          </v-row>
-          <v-row justify="center">
-            <v-col class="text-center">
-              <v-btn
-                class="btn-neumorphism"
-                :disabled="!valid"
-                color="primary"
-                width="60%"
-                rounded
-                @click="validate"
-              >
-                Valider
-              </v-btn>
-            </v-col>
-          </v-row>
-          <v-row justify="center">
-            <v-col class="text-center">
-              <v-btn
-                class="btn-neumorphism"
-                width="60%"
-                rounded
-                @click="reset"
-              >
-                Annuler
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-form>
-      </v-card>
-    </v-col>
-  </v-row>
+      <v-row justify="center" class="ma-auto">
+        <v-col cols="12" sm="7" md="4" lg="3" xl="3">
+          <v-card class="card-neumorphism py-12">
+            <v-card-title style="font-family: 'Poppins', sans-serif;font-weight: bold" class="justify-center">
+              Franchises
+              <br>
+              GYM CLUB
+            </v-card-title>
+            <v-card-subtitle style="font-weight: bold" class="text-center">
+              Connexion
+            </v-card-subtitle>
+            <v-form
+              ref="form"
+              v-model="valid"
+            >
+              <v-row justify="center">
+                <v-col cols="10">
+                  <v-text-field
+                    class="ma-4 mb-10 pa-4 username field"
+                    color="success"
+                    v-model="email"
+                    :rules="emailRules"
+                    :counter="255"
+                    :prepend-icon="icons[0]"
+                    :clear-icon="icons[2]"
+                    type="email"
+                    placeholder="Email"
+                    required
+                    clearable
+                    dense
+                  />
+                  <v-text-field
+                    class="ma-4 pa-4 password field"
+                    color="success"
+                    v-model="password"
+                    :rules="passwordRules"
+                    :counter="60"
+                    :prepend-icon="icons[1]"
+                    :clear-icon="icons[2]"
+                    type="password"
+                    placeholder="password"
+                    required
+                    clearable
+                    dense
+                  />
+                </v-col>
+              </v-row>
+              <v-row justify="center">
+                <v-col class="text-center">
+                  <v-btn
+                    class="btn-neumorphism"
+                    :disabled="!valid"
+                    color="primary"
+                    width="60%"
+                    rounded
+                    @click="validate"
+                  >
+                    Valider
+                  </v-btn>
+                </v-col>
+              </v-row>
+              <v-row justify="center">
+                <v-col class="text-center">
+                  <v-btn
+                    class="btn-neumorphism"
+                    width="60%"
+                    rounded
+                    @click="reset"
+                  >
+                    Annuler
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-form>
+          </v-card>
+        </v-col>
+      </v-row>
 </template>
 
 <script>
