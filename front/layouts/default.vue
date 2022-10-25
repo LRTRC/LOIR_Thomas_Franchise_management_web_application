@@ -84,6 +84,27 @@
         </v-alert>
         <Nuxt/>
       </v-container>
+      <v-snackbar
+        v-model="snackbar"
+        v-if="!loggedIn"
+        timeout="30000"
+        multi-line
+        color="primary"
+      >
+        {{ snackbarText }}
+        <v-icon> {{ icons[3] }}</v-icon>
+
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            dark
+            text
+            v-bind="attrs"
+            @click="snackbar = false"
+          >
+            Fermer
+          </v-btn>
+        </template>
+      </v-snackbar>
     </v-main>
     <v-footer
       id="footer"
@@ -99,16 +120,28 @@
 </template>
 
 <script>
-import {mdiHome, mdiLogout, mdiMenu, mdiAccountCircle, mdiAccountGroup, mdiLayersTriple} from "@mdi/js"
+import {
+  mdiHome, mdiLogout, mdiMenu, mdiAccountCircle,
+  mdiAccountGroup, mdiLayersTriple, mdiEarth
+} from "@mdi/js"
 import {mapGetters} from 'vuex'
 
 export default {
   name: 'DefaultLayout',
+  mounted() {
+    this.snackbar = true;
+  },
   data() {
     return {
+      snackbar: false,
+      snackbarText: "Cette application est une version de démonstration. " +
+        "Pour des raisons pratiques son server et son API s'éteignent après 15 minutes d'inactivité. " +
+        "Le redémarrage de l'application peut prendre 1 minute lors du premier chargement de page. " +
+        "Merci d'avoir attendu jusque-là. L'API peut prendre 20 secondes pour " +
+        "redémarrer lors de la première demande d'authentification. Merci de votre patience :).",
       title: 'Franchises GYM CLUB',
       drawer: false,
-      icons: [mdiLogout, mdiMenu, mdiAccountCircle],
+      icons: [mdiLogout, mdiMenu, mdiAccountCircle, mdiEarth],
       items: [
         {
           icon: mdiHome,
