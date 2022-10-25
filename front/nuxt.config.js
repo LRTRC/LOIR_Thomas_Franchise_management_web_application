@@ -4,6 +4,10 @@ export default {
   server: {
     port: 3001
   },
+  
+   privateRuntimeConfig: {
+    apiUrl: process.env.API_URL
+  },
 
   auth: {
     strategies: {
@@ -28,7 +32,7 @@ export default {
   },
 
   axios: {
-    baseURL: 'https://loir-thomas-franchise-management-web.onrender.com',
+    baseURL: process.env.API_URL,
     // baseURL: 'http://localhost:3000'
   },
 
