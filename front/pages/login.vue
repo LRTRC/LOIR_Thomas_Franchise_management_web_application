@@ -3,8 +3,13 @@
     <v-col cols="11" sm="8" md="7" lg="4" xl="3">
       <v-card class="card-neumorphism py-12">
         <v-card-title style="font-family: 'Poppins', sans-serif;font-weight: bold" class="justify-center">
-          Connexion
+          Franchises
+          </br>
+          GYM CLUB
         </v-card-title>
+        <v-card-subtitle style="font-weight: bold" class="text-center">
+          Connexion
+        </v-card-subtitle>
         <v-form
           ref="form"
           v-model="valid"
@@ -118,14 +123,12 @@ export default {
     },
     async userLogin() {
       try {
-        // let passRegex = new RegExp("^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Z\\d!@#$%^&*]{8}$");
-        // let password = passRegex.test(this.password) ?
-        //   this.password : ''
 
         let response = await this.$auth.loginWith('local',
           {data: {email: this.email.toString(), passphrase: this.password.toString()}})
         let user = response.data.data
         this.$auth.setUser(user)
+        sessionStorage.setItem('user', JSON.stringify(user))
         await this.$router.push('/')
         this.alertSuccess('Authentification réussie')
       } catch (error) {

@@ -4,12 +4,13 @@ export default {
   server: {
     port: 3001
   },
-  
+
    privateRuntimeConfig: {
     apiUrl: process.env.API_URL
   },
 
   auth: {
+    plugins: [ '~/plugins/auth.js' ],
     strategies: {
       local: {
         token: {
@@ -92,7 +93,7 @@ export default {
       themes: {
         light: {
           primary: '#19344F',
-          secondary: '#E9967A',
+          secondary: '#424242',
           accent: '#800080',
           error: '#B52838',
           info: '#82B1FF',
