@@ -1,11 +1,15 @@
-// to run the server => "$ nodemon server.js"
-// import http package from NodeJs
+// to run the server => "$ nodemon server.js" or "$ npm run dev"
+
+// import http module from NodeJs
 const http = require('http');
-//  to import app.js in the same folder
+
+// import app.js
 const app = require('./app')
-// todo: dotenv to comment
-const dotenv = require('dotenv')
-// todo: dotenv config method to comment
+
+// import dotenv module
+const dotenv = require("dotenv");
+
+// configure dotenv and process.env now has the keys and values defined in .env file
 dotenv.config();
 
 
@@ -76,7 +80,7 @@ const server = http.createServer(app);
 // on error, call the errorHandler function
 server.on('error', errorHandler);
 
-// todo: on listening comment
+//  registers event handler for listening event.
 server.on('listening', () => {
     const address = server.address();
     const bind = typeof address == 'string' ? 'pipe ' + address : 'port ' + port;
