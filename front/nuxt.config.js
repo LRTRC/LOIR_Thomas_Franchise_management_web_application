@@ -7,6 +7,7 @@ export default {
 
    privateRuntimeConfig: {
     apiUrl: process.env.API_URL
+    //  apiUrl: 'http://localhost:3000'
   },
 
   auth: {
