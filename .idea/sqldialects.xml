@@ -5,5 +5,6 @@
     <file url="file://$PROJECT_DIR$/back/controllers/franchisees.js" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/back/controllers/structures.js" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/back/controllers/users.js" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/back/middleware/auth.js" dialect="GenericSQL" />
   </component>
 </project>
