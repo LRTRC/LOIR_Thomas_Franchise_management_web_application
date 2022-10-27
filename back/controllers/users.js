@@ -7,17 +7,19 @@ const bcrypt = require("bcrypt");
 // import user model
 const User = require('../models/users');
 
-// request all columns from users table
-// todo: except password column
+// get all users
 const getUsers = async (req, res, next) => {
     try {
-        const data = await pool.query(
-            "SELECT * FROM users ORDER BY id ASC;"
-        );
 
+        // build SQL query : gets all columns from users except passphrase
+        const data = await pool.query(
+            "SELECT id, first_name, last_name, email, phone, role FROM users ORDER BY id ASC;"
+        );
+        //if no users returns 404
         if (data.rowCount === 0)
             return res.status(404).send("No user exists");
 
+        // else returns result
         return res.status(200).json({
             status: 200,
             message: "All users:",
@@ -28,7 +30,7 @@ const getUsers = async (req, res, next) => {
     }
 };
 
-// Query to create a single new user
+// create a single new user
 const createUser = async (req, res, next) => {
 
     // get values from request
@@ -42,9 +44,9 @@ const createUser = async (req, res, next) => {
     // sets a new instance of user Class
     const user = new User(first_name, last_name, email, phone, role, passphrase)
 
-    // build the SQL query to create a new user
+    // build the SQL query : insert in all columns except id and returns all columns except passphrase
     const query =
-        "INSERT INTO users (first_name, last_name, email, phone, role, passphrase)  VALUES($1, $2, $3, $4, $5, $6) RETURNING *;";
+        "INSERT INTO users (first_name, last_name, email, phone, role, passphrase)  VALUES($1, $2, $3, $4, $5, $6) RETURNING id, first_name, last_name, email, phone, role;";
     const values = [user.first_name, user.last_name, user.email, user.phone, user.role, user.passphrase];
 
 
@@ -66,15 +68,14 @@ const createUser = async (req, res, next) => {
 };
 
 
-// Query to get one user by its ID
+// get one user by its ID
 const getUserById = async (req, res, next) => {
 
     // get its id from request
     const id = parseInt(req.params.id);
 
-    // build SQL query
-    // todo: except passphrase
-    const query = "SELECT * FROM users WHERE id=$1;";
+    // build SQL query : select id, first_name, last_name, email, phone, role
+    const query = "SELECT id, first_name, last_name, email, phone, role FROM users WHERE id=$1;";
     const value = [id];
 
     try {
@@ -87,8 +88,6 @@ const getUserById = async (req, res, next) => {
 
         // else sets result in user variable
         let user = data.rows[0]
-        //delete user's passphrase
-        delete user.passphrase
 
         // returns the founded user
         return res.status(200).json({
@@ -101,7 +100,7 @@ const getUserById = async (req, res, next) => {
     }
 };
 
-// Query to update an existing user, one by one
+// update an existing user, one by one
 const updateUser = async (req, res, next) => {
 
     // get its id from request
@@ -113,13 +112,10 @@ const updateUser = async (req, res, next) => {
     // sets a new instance of user Class
     const user = new User(first_name, last_name, email, phone, role)
 
-    //  delete default value given from the model, as it as not been sets in the constructor above
-    delete user.passphrase
-
-    // build SQL query todo: returning except passphrass
+    // build SQL query : update first_name, last_name, phone, role and returns all except passphrase
     const query =
-        "UPDATE users SET first_name=$1, last_name=$2, email=$3, phone=$4, role=$5, id=$6 WHERE id=$6 RETURNING *;";
-    const value = [user.first_name, user.last_name, user.email, user.phone, user.role, id];
+        "UPDATE users SET first_name=$1, last_name=$2, phone=$3, role=$4 WHERE id=id RETURNING id, first_name, last_name, email, phone, role;";
+    const value = [user.first_name, user.last_name, user.phone, user.role];
 
     try {
 
@@ -145,12 +141,14 @@ const updateUser = async (req, res, next) => {
 };
 
 
-// Query to delete a user
+// delete a user
 const deleteUser = async (req, res, next) => {
 
     // get its id from request
     const id = parseInt(req.params.id);
     const value = [id];
+
+    // build SQL query : delete tuple from users where id = id in request
     const query = "DELETE FROM users WHERE id=$1;";
 
     try {
@@ -171,6 +169,7 @@ const deleteUser = async (req, res, next) => {
     }
 };
 
+// export functions
 module.exports = {
     getUsers,
     createUser,

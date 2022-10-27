@@ -13,10 +13,24 @@ class Structure {
                 advertising,
                 snacks) {
         try {
+
+            // if the value isn't null or undefined and its type is number returns the value else returns null
+            // id_franchise can't be null in the db so the data validation needs to be stricter
             this.id_franchise = id_franchise != null && typeof id_franchise === "number" ? id_franchise : null
+
+            // same as above
             this.name = name != null && typeof name === "string" ? name : null
+
+            // if the value isn't null or defined and its type is string returns value
+            // else if the value is null or undefined returns default value (empty string)
+            // else casts the to string
             this.address = address != null && typeof address === "string" ? address : address == null ? '' : address.toString()
+
+            // same as above
             this.phone = phone != null && typeof phone === "string" ? phone : phone == null ? '' : phone.toString()
+
+            // if the value isn't null or undefined and type is boolean returns the value else returns false
+            // those values needs a strict data validation
             this.isactive = isactive != null && typeof isactive === "boolean" ? isactive : false
             this.subscriptions = subscriptions != null && typeof subscriptions === "boolean" ? subscriptions : false
             this.group_lessons = group_lessons != null && typeof group_lessons === "boolean" ? group_lessons : false
