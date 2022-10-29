@@ -1,12 +1,12 @@
-# front
+# front-end
 
 ## Build Setup
-
+(Be sure to be in the root folder /LOIR_Thomas_Franchise_management_web_application/front/)
 ```bash
 # install dependencies
 $ npm install
 
-# serve with hot reload at localhost:3000
+# serve with hot reload at localhost:3001
 $ npm run dev
 
 # build for production and launch server
@@ -16,8 +16,33 @@ $ npm run start
 # generate static project
 $ npm run generate
 ```
-
 For detailed explanation on how things work, check out the [documentation](https://nuxtjs.org).
+
+
+## Environment variables
+On dev setup, create a .env file in root folder : '/LOIR_Thomas_Franchise_management_web_application/front/' and set
+```bash
+# API url
+API_URL=http://localhost:3000
+```
+For detailed explanation on how things work, check out the [documentation](https://github.com/motdotla/dotenv).
+
+
+## Unit tests with Jest
+To run tests
+(Be sure to be in the root folder /LOIR_Thomas_Franchise_management_web_application/front/)
+```bash
+# run all tests
+$ npm run test
+# run the 'delete' franchisee component tests
+$ npm test franchisees/store_franchisees
+# run vuex store
+$ npm test franchisees/store_franchisees
+# run vuex store 'errors'
+$ npm test errors/store_errors
+```
+
+For detailed explanation on how things work, check out the [documentation](https://jestjs.io/).
 
 ## Special Directories
 

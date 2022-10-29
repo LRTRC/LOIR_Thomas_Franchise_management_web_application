@@ -128,20 +128,22 @@ import {mapGetters} from 'vuex'
 
 export default {
   name: 'DefaultLayout',
-  mounted() {
-    this.snackbar = true;
-  },
   data() {
     return {
+      // set snack (infos demo version)
       snackbar: false,
       snackbarText: "Cette application est une version de démonstration. " +
         "Pour des raisons pratiques son server et son API s'éteignent après 15 minutes d'inactivité. " +
         "Le redémarrage de l'application peut prendre 1 minute lors du premier chargement de page. " +
         "Merci d'avoir attendu jusque-là. L'API peut prendre 20 secondes pour " +
         "redémarrer lors de la première demande d'authentification. Merci de votre patience :).",
+      // app bar title
       title: 'Franchises GYM CLUB',
+      // used with menu drawer's v-model to set it enabled or disabled
       drawer: false,
+      // bunch of icons
       icons: [mdiLogout, mdiMenu, mdiAccountCircle, mdiEarth],
+      // links into the navigation drawer menu
       items: [
         {
           icon: mdiHome,
@@ -162,26 +164,37 @@ export default {
       ],
     }
   },
+  // on mounted, displays snackbar
+  mounted() {
+    this.snackbar = true
+  },
   computed: {
     ...mapGetters({
+      // used to set alerts type and message (from errors store)
       type: "errors/type",
       message: 'errors/message'
     }),
+    // tells if loggedIn is true (from nuxt auth)
     loggedIn() {
       return !!this.$auth.loggedIn
     },
+    // set a string to display into the footer
     footerText() {
       return `GYM CLUB © ${new Date().getFullYear()}`
     },
+    // set the user's name into the app bar next to the user's my account icon
     name() {
       let user = this.$auth.user
+      // if user is logged in a has a first name
       if (this.$auth.loggedIn && user.first_name) {
         let first_letter = this.$auth.user.first_name
         return `${first_letter}. ${this.$auth.user.last_name}`
-      }
+        // else returns default value
+      } else return ''
     }
   },
   methods: {
+    // calls nuxt auth logout method, clean the session storage used in auth plugin and push to /login route
     async logout() {
       await this.$auth.logout();
       sessionStorage.clear()

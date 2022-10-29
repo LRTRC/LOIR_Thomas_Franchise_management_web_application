@@ -133,7 +133,9 @@ export default {
   name: "handle_franchisee",
   data() {
     return {
+      // enable or disable #sendBtn
       valid: false,
+      // existing modules that can be selected, used in the select input
       modules: [
         {
           text: 'abonnements',
@@ -168,25 +170,32 @@ export default {
           value: 'snacks'
         },
       ],
+      // bunch of icons
       icons: [mdiPlaylistPlus, mdiClose, mdiAccount, mdiMapMarker, mdiPhone, mdiFormatListChecks, mdiPlaylistEdit],
+      // field name regex: required, length <= 100
       nameRules: [
         v => !!v || 'Le nom est requis',
         v => v && v.length <= 100 || 'Le nom ne peut faire plus de 100 caractères',
       ],
+      // field address regex: length <= 255
       addressRules: [
         v => v.length <= 255 || "l'adresse ne peut faire plus de 255 caractères",
       ],
+      // field phone regex: length <= 50
       phoneRules: [
         v => v.length <= 50 || "le téléphone ne peut faire plus de 50 caractères",
       ],
-
     }
   },
   computed: {
     ...mapGetters({
+      // id of the handle franchisee, used when editing one
       id: 'franchisees/id',
+      // mutate dialog type in store
       dialogType: 'franchisees/dialogType',
     }),
+
+    // way to use v-models with vuex state. Used in the form to create or edit a franchisee
     name: {
       get() {
         return this.$store.getters["franchisees/name"]
@@ -227,10 +236,12 @@ export default {
         return this.$store.dispatch('franchisees/updateSelectedModules', newValue)
       },
     },
+    // return the good banner title depending on the dialog type
     bannerTitle() {
       return this.dialogType === 'create' ? 'Ajouter un franchisé' : this.dialogType === 'patch' ?
         'Modifier un franchisé' : ''
     },
+    // return the good banner icon depending on the dialog type
     bannerIcon() {
       return this.dialogType === 'create' ? this.icons[0] : this.dialogType === 'patch' ?
         this.icons[6] : null
@@ -238,39 +249,81 @@ export default {
   },
   methods: {
     ...mapActions({
+      // get all franchisees from API
       getFranchisees: 'franchisees/getFranchisees',
+      // mutate dialog value and type
       updateDialog: 'franchisees/updateDialog',
+      // display success or error alert
       alertError: 'errors/error',
       alertSuccess: 'errors/success',
+      // clear values used to handle a specific franchisee
       clearFranchisee: 'franchisees/clearFranchisee'
     }),
+
+    // function used to validate the form
     send(franchisee) {
       this.postFranchisee(franchisee).then(() => {
         this.clear();
         this.getFranchisees()
       })
     },
+
+    // function to post a new franchisee or edit an existing one
     async postFranchisee() {
+
       try {
+
+        // if the dialog type is create
         if (this.dialogType === 'create') {
+
+          // calls setFranchisee to set the payload
           let franchisee = this.setFranchisee();
+
+          // send request to API
           return await this.$axios.$post('api/franchisees/', franchisee)
-            .then(() => {
-              this.alertSuccess(`'${franchisee.name}' à été créé avec succès'`)
+            .then((response) => {
+
+              // if response ok
+              if (response.status === 200) {
+
+                // set a success alert
+                this.alertSuccess(`'${franchisee.name}' à été créé avec succès'`)
+              }
+
+              // and calls clear
               this.clear();
             })
         }
+
+        // if the dialog type is patch
         if (this.dialogType === 'patch') {
+
+          // calls setFranchisee to set the payload
           let franchisee = this.setFranchisee();
-          return await this.$axios.$patch(`api/franchisees/${this.id}`, franchisee).then(() => {
-            this.alertSuccess(`Franchisé '${franchisee.name}' modifié avec succès'`)
-            this.clear();
-          })
+
+          // send request to API
+          return await this.$axios.$patch(`api/franchisees/${this.id}`, franchisee)
+            .then((response) => {
+
+              // if response ok
+              if (response.status === 200) {
+
+                // set a success alert
+                this.alertSuccess(`Franchisé '${franchisee.name}' modifié avec succès'`)
+              }
+
+              // and calls clear
+              this.clear();
+            })
         }
+
+        // else catch error and set error alert
       } catch (error) {
         this.alertError(error.message)
       }
     },
+
+    // used to set a formatted payload before sending a request to API
     setFranchisee() {
       let franchisee = {
         name: this.name,
@@ -288,6 +341,9 @@ export default {
           snacks: false,
         }
       }
+
+      // for each value in the selected modules (sets by select input and kept in store)
+      // set its value to true in the default_modules property
       this.selectedModules.map((element) => {
         for (let [key, value] of Object.entries(franchisee.default_modules)) {
           if (key === element) {
@@ -295,8 +351,12 @@ export default {
           }
         }
       })
+
+      // return the formatted object
       return franchisee
     },
+
+    // function to clear values of the handled franchisee in store and close the dialog
     clear() {
       this.clearFranchisee();
       this.updateDialog({value: false, type: ''})
@@ -307,12 +367,12 @@ export default {
 
 <style scoped>
 #bannerHandleFranchisee:deep(label) {
-  color: white!important;
+  color: white !important;
 }
 
 :deep(.v-chip), :deep(.v-chip__close) {
-  color: white!important;
-  background-color: #24cfaa!important;
+  color: white !important;
+  background-color: #24cfaa !important;
 }
 
 </style>

@@ -34,7 +34,6 @@ export default {
 
   axios: {
     baseURL: process.env.API_URL,
-    // baseURL: 'http://localhost:3000'
   },
 
   router: {
@@ -67,7 +66,9 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: [
+    { src: '~/plugins/axios.js', mode:'client'}
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,

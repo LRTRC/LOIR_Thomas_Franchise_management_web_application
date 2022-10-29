@@ -50,41 +50,66 @@ export default {
   name: "deleteFranchisee",
   data() {
     return {
+      // bunch of icons
       icons: [mdiPlaylistRemove, mdiAlert],
     }
   },
   computed: {
     ...mapGetters({
+      // used when a specific franchisee is handled in the v-data table
       id: 'franchisees/id',
       name: 'franchisees/name',
     })
   },
   methods: {
     ...mapActions({
+      // calls actions to display success or error type alert (from errors store)
       alertError: 'errors/error',
       alertSuccess: 'errors/success',
+      // mutate dialog
       updateDialog: 'franchisees/updateDialog',
+      // get all franchisees from API
       getFranchisees: 'franchisees/getFranchisees',
+      // clear the current values used to handle a specific franchisee
       clearFranchisee: 'franchisees/clearFranchisee'
     }),
+
+    // function to validate the form to delete an existing franchisee
     async send() {
+
       try {
+
+        // sent to API
         await this.$axios.$delete(`/api/franchisees/${this.id}`)
           .then((response) => {
-            if (response) {
-              this.getFranchisees()
-              this.alertSuccess(`'${this.name}' à été supprimé avec succès'`)
-              this.clearFranchisee()
-              this.updateDialog({value: false, type: ''})
+
+            // if status ok
+            if (response.status === 200) {
+
+              // displays a success alert
+              this.alertSuccess(`'${this.name}' à été supprimé avec succès'`);
             }
+            // get all franchisees from API
+            this.getFranchisees();
+
+            // calls clear function
+            this.clear()
           })
+
+        // or catch error and sets error alert
       } catch (error) {
-        this.alertError(error.message)
+        this.alertError(error.message);
       }
     },
+
+    // used to reset form
     clear() {
-      this.clearFranchisee()
-      this.updateDialog({value: false, type: ''})
+
+      // clear handled franchisee in the store
+      this.clearFranchisee();
+
+      // close dialog
+      this.updateDialog({value: false, type: ''});
     }
   },
 }

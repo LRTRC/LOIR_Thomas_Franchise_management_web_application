@@ -1,5 +1,7 @@
-// import express
+// import express module
 const express = require('express');
+
+// import cors module
 const cors = require('cors');
 
 // import franchisees router
@@ -27,9 +29,11 @@ app.use((req, res, next) => {
 // and gave access to the body of the request
 app.use(express.json());
 
-//
+// sets cors as middleware
 app.use(cors());
 
+// As API REST pattern, sets the different routers for main entities available in the API
+// with a corresponding path
 app.use("/api/franchisees", franchiseesRouter);
 app.use("/api/structures", structuresRouter);
 app.use("/api/users", usersRouter);
