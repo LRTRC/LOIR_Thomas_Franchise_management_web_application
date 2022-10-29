@@ -1,4 +1,4 @@
-# front-end
+# back-end
 
 ## Build Setup
 
@@ -16,6 +16,6 @@ $ npm run start
 ## Environment variables
 On dev setup, create a .env file in root folder : 'front/' and set
 ```bash
-# API url
-DATABASE_URL='your database URI'
+# database url
+DATABASE_URL=postgresql://franchisemanager:zx9Kr4LNK7S@localhost:5432/franchisesmanagement
 ```
