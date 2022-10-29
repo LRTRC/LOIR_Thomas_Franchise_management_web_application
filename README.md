@@ -140,7 +140,9 @@ $ sudo service postgresql restart
 
 ### When connected to psql
 List all schemas : \dn
+
 List all databases : \db
-List all tables : \dt
+
+(when connect to database) List all tables : \dt
 
 
