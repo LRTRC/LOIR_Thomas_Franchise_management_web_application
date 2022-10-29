@@ -1,6 +1,7 @@
 # back-end
 
 ## Build Setup
+(Be sure to be in the root folder /LOIR_Thomas_Franchise_management_web_application/back/)
 
 ```bash
 # install dependencies

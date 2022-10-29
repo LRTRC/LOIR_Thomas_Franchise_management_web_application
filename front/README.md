@@ -6,7 +6,7 @@
 # install dependencies
 $ npm install
 
-# serve with hot reload at localhost:3000
+# serve with hot reload at localhost:3001
 $ npm run dev
 
 # build for production and launch server
@@ -31,14 +31,14 @@ For detailed explanation on how things work, check out the [documentation](https
 ## Unit tests with Jest
 To run tests
 (Be sure to be in the root folder /LOIR_Thomas_Franchise_management_web_application/front/)
-```bash
-# run all tests
+```javascript
+// run all tests
 $ npm run test
-# run the 'delete' franchisee component tests
+// run the 'delete' franchisee component tests
 $ npm test franchisees/store_franchisees
-# run vuex store
+// run vuex store
 $ npm test franchisees/store_franchisees
-# run vuex store 'errors'
+// run vuex store 'errors'
 $ npm test errors/store_errors
 ```
 
