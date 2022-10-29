@@ -48,7 +48,7 @@ const login = async (req, res, next) => {
                         user.token = jwt.sign(
                             {userId: user.id},
                             "eyJ1c2VySWQiOjExLCJpYXQiOjE2NjM5NDEwOTk",
-                            {expiresIn: '10s'}
+                            {expiresIn: '30m'}
                         )
 
                         // delete the key value from user constant
