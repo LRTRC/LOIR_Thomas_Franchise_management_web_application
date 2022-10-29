@@ -1,7 +1,7 @@
 # Documentation
 
 ## Deployed version 
-This deployed version is a demo version. For practical reasons its server and its API will shut down after 15 minutes of inactivity. The App restart may take 1 minute on first page load (front-end server). Thank you for waiting until then. The API (back-end server) may take 20 seconds to restart on first authentication request. Thank you for your patience :).",
+> _This deployed version is a demo version. For practical reasons its server and its API will shut down after 15 minutes of inactivity. The App restart may take 1 minute on first page load (front-end server). Thank you for waiting until then. The API (back-end server) may take 20 seconds to restart on first authentication request. Thank you for your patience :)._
 
 https://loir-thomas-franchise-management-web-0r8c.onrender.com/
 
