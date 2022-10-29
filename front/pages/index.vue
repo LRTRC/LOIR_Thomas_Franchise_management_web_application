@@ -9,7 +9,7 @@
           size="120"
           width="5"
         />
-        <v-card v-if="franchisees.length > 0" class="card-neumorphism pa-4 ma-auto">
+        <v-card v-if="franchisees.length > 0" class="card-neumorphism pa-4 ma-4">
           <v-row justify="center" class="text-center ma-4">
             <v-col cols="12" sm="6" md="4" class="d-flex">
               <v-btn
@@ -125,32 +125,42 @@ export default {
   components: {DeleteFranchisee, Handle_franchisee},
   data() {
     return {
+      // search bar value (used with #franchiseesSearchBar v-model)
       search: '',
+      // bunch of icons
       icons: [mdiMagnify, mdiPencil, mdiDelete],
+      // headers for the v-data table
       headers: [
-        {text: 'Nom', value: 'name', align: 'center'},
-        {text: 'Adresse', value: 'address', align: 'center'},
-        {text: 'Téléphone', value: 'phone', align: 'center'},
-        {text: "Actif", value: "isactive", align: 'center'},
-        {text: "Structures", sortable: false, align: 'center'},
-        {text: "Membres", sortable: false, align: 'center'},
-        {text: "Modifier / supprimer", value: "actions", sortable: false, align: 'center'},
+        {text: 'Nom', value: 'name', align: 'start'},
+        {text: 'Adresse', value: 'address', align: 'start'},
+        {text: 'Téléphone', value: 'phone', align: 'start'},
+        {text: "Actif", value: "isactive", align: 'start'},
+        {text: "Structures", sortable: false, align: 'start'},
+        {text: "Membres", sortable: false, align: 'start'},
+        {text: "Modifier / supprimer", value: "actions", sortable: false, align: 'start'},
       ],
     }
   },
   mounted() {
+    // get all franchisees from API
     this.getFranchisees()
   },
   computed: {
+    // stores getters
     ...mapGetters({
+      // all franchisees
       franchisees: 'franchisees/franchisees',
+      // sets modal value (used with #dialog v-model)
       dialog: 'franchisees/dialog',
+      // used to set which component to be displayed in the modal
       dialogType: 'franchisees/dialogType',
     }),
   },
   methods: {
     ...mapActions({
+      // get all franchisees from the API
       getFranchisees: 'franchisees/getFranchisees',
+      // mutates stores values
       updateName: 'franchisees/updateName',
       updateID: 'franchisees/updateID',
       updateAddress: 'franchisees/updateAddress',
@@ -158,27 +168,41 @@ export default {
       updateIsActive: 'franchisees/updateIsActive',
       updateSelectedModules: 'franchisees/updateSelectedModules',
       updateDialog: 'franchisees/updateDialog',
+      // used to call error / success alerts from errors store
       alertError: 'errors/error',
       alertSuccess: 'errors/success'
     }),
 
+    // send patch request to API
     async patchFranchiseeIsActive(franchisee, value) {
       try {
+        // set value to update
         franchisee.isactive = value
-        return await this.$axios.$patch(`api/franchisees/${franchisee.id}`, franchisee).then(() => {
-          this.getFranchisees()
-          this.alertSuccess(`Franchisé '${franchisee.name}' modifié avec succès'`)
+        // use axios to send request
+        return await this.$axios.$patch(`api/franchisees/${franchisee.id}`, franchisee).then((response) => {
+          // if response status is ok, calls success alert
+          if (response.status === 200) {
+            this.alertSuccess(`Franchisé '${franchisee.name}' modifié avec succès'`)
+          }
+          // send request to API to update franchisees data
+          return this.getFranchisees()
         })
+        // else catch error
       } catch (error) {
         this.alertError(error.message)
       }
     },
+
+    // use the store' state to keep data alive when handling a franchisee (create, edit or delete)
     setFranchiseeAndDialog(franchisee, dialogType) {
       this.updateID(franchisee.id)
       this.updateName(franchisee.name)
       this.updateAddress(franchisee.address)
       this.updatePhone(franchisee.phone)
       this.updateIsActive(franchisee.isactive)
+      // to use the select input when handling a franchisee, we need to get an array of strings with the keys that
+      // have a true value in the default_modules property of the handled franchisee
+      // modules is a self invoking function that returns those values in an array
       let modules = (() => {
         let array = []
         for (let [key, value] of Object.entries(franchisee.default_modules)) {
@@ -186,7 +210,9 @@ export default {
         }
         return array
       })();
+      // set the results of modules in selected modules (in store)
       this.updateSelectedModules(modules)
+      // used to set which component to displays in the v-dialog
       this.updateDialog({value: true, type: dialogType})
     }
   }
@@ -202,12 +228,18 @@ export default {
 
 #franchiseesDataTable:deep(td) {
   word-break: break-word !important;
-
 }
 
 #btnCreateFranchisee {
   font-weight: bold;
 }
+
+@media screen and (max-width: 599px) {
+  #btnCreateFranchisee {
+    justify-content: center!important;
+  }
+}
+
 
 :deep(th) {
   font-size: 0.9em !important;
@@ -218,10 +250,13 @@ export default {
 
 :deep(.v-data-table__mobile-row ) {
   font-family: 'Poppins', sans-serif !important;
+  justify-content: start !important;
+  align-items: baseline;
 }
 
 :deep(.v-data-table__mobile-row__header) {
   font-weight: bold;
+  word-break: keep-all !important;
 }
 
 </style>

@@ -1,13 +1,13 @@
 export const state = () => ({
-  franchisees: [],
-  id: null,
-  name: '',
-  address: '',
-  phone: '',
-  isActive: false,
-  selectedModules: [],
-  dialog: false,
-  dialogType: '',
+  franchisees: [], // to store all franchisees
+  id: null, // when handling one franchisee
+  name: '', // when handling one franchisee
+  address: '', // when handling one franchisee
+  phone: '', // when handling one franchisee
+  isActive: false, // when handling one franchisee
+  selectedModules: [], // when handling one franchisee
+  dialog: false, // to enable or disable a v-dialog component
+  dialogType: '', // use to choose which component to be displayed in the v-dialog 'create', 'patch' or 'delete'
 })
 
 export const getters = {
@@ -50,6 +50,7 @@ export const mutations = {
   MUTATE_DIALOG_TYPE(state, payload) {
     state.dialogType = payload;
   },
+  // reset all values
   CLEAR_FRANCHISEE(state) {
     state.id = null;
     state.name = '';
@@ -58,6 +59,7 @@ export const mutations = {
     state.isActive = false;
     state.selectedModules = [];
   },
+  // reset value
   CLEAR_FRANCHISEES(state) {
     state.franchisees = [];
   },
@@ -65,13 +67,16 @@ export const mutations = {
 
 export const actions = {
 
+  // send a request to API to get all franchisees
   async getFranchisees({commit, dispatch}) {
     try {
       const franchisees = await this.$axios.$get("/api/franchisees/")
+      // if response mutate franchisees
       if (franchisees) {
         commit('MUTATE_FRANCHISEES', franchisees.data)
         return true
       }
+      // else catch error
     } catch (error) {
       dispatch('errors/error', error.message, {root: true})
     }
@@ -94,6 +99,7 @@ export const actions = {
   updateSelectedModules({commit}, payload) {
     commit('MUTATE_SELECTED_MODULES', payload)
   },
+  // value will disable or enable a v-dialog and type will be defined to display a selected component
   updateDialog({commit}, payload) {
     commit('MUTATE_DIALOG', payload.value)
     commit('MUTATE_DIALOG_TYPE', payload.type)

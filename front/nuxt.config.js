@@ -7,7 +7,6 @@ export default {
 
    privateRuntimeConfig: {
     apiUrl: process.env.API_URL
-    //  apiUrl: 'http://localhost:3000'
   },
 
   auth: {
@@ -35,7 +34,6 @@ export default {
 
   axios: {
     baseURL: process.env.API_URL,
-    // baseURL: 'http://localhost:3000'
   },
 
   router: {
