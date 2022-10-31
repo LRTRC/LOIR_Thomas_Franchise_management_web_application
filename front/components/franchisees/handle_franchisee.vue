@@ -261,8 +261,8 @@ export default {
     }),
 
     // function used to validate the form
-    send(franchisee) {
-      this.postFranchisee(franchisee).then(() => {
+    send() {
+      this.postFranchisee().then(() => {
         this.clear();
         this.getFranchisees()
       })

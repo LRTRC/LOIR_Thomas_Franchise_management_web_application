@@ -39,7 +39,7 @@
                 :prepend-icon="icons[1]"
                 :clear-icon="icons[2]"
                 type="password"
-                placeholder="password"
+                placeholder="mot de passe"
                 required
                 clearable
                 dense
