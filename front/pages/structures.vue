@@ -69,7 +69,7 @@
                 v-model="item.isactive"
                 color="success"
                 dense
-
+                @change="patchStructureIsActive(item, $event)"
               />
             </template>
             <template v-slot:item.id_franchise="{ item }">
@@ -197,20 +197,44 @@ export default {
       updateSnacks: 'structures/updateSnacks',
       updateSubscriptions: 'structures/updateSubscriptions',
       updateWorkforce: 'structures/updateWorkforce',
+      // used to call error / success alerts from errors store
+      alertError: 'errors/error',
+      alertSuccess: 'errors/success'
     }),
+
+    // send patch request to API
+    async patchStructureIsActive(structure, value) {
+      try {
+        // set value to update
+        structure.isactive = value
+        // use axios to send request
+        return await this.$axios.$patch(`api/structures/${structure.id}`, structure).then((response) => {
+          // if response status is ok, calls success alert
+          if (response.status === 200) {
+            this.alertSuccess(`Structure '${structure.name}' modifiée avec succès'`)
+          }
+          // send request to API to update franchisees data
+          return this.getStructures()
+        })
+        // else catch error
+      } catch (error) {
+        this.alertError(error.message)
+      }
+    },
+
 
     // find a franchisee name with its id to return its name in
     // the header "franchisé" of the v-data-table
     findFranchiseeName(structure, franchisees) {
       if (franchisees.length > 0) {
         let franchisee = franchisees.find(el => el.id === structure.id_franchise)
-        return franchisee.name
+        return `${franchisee.name} (${franchisee.id})`
       }
     },
     formatFranchisees(franchisees) {
       return franchisees.map((el) => {
         return {
-          text: el.name,
+          text: `${el.name} (${el.id})`,
           value: el.id
         }
       })
