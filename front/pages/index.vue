@@ -73,6 +73,13 @@
 
               />
             </template>
+            <template v-slot:item.id="{ item }">
+              <v-chip
+                color="success"
+                text-color="white"
+              />
+            </template>
+
             <template v-slot:item.actions="{ item }">
               <v-btn
                 id="btnEditItem"
@@ -145,7 +152,7 @@ export default {
         {text: 'Adresse', value: 'address', align: 'start'},
         {text: 'Téléphone', value: 'phone', align: 'start'},
         {text: "Actif", value: "isactive", align: 'start'},
-        {text: "Structures", sortable: false, align: 'start'},
+        {text: "Structures", value: 'id', align: 'start'},
         {text: "Membres", align: 'start'},
         {text: "Modifier / supprimer", value: "actions", sortable: false, align: 'start'},
       ],
@@ -153,13 +160,16 @@ export default {
   },
   mounted() {
     // get all franchisees from API
-    this.getFranchisees()
+    this.getFranchisees();
+    this.getStructures();
   },
   computed: {
     // stores getters
     ...mapGetters({
       // all franchisees
       franchisees: 'franchisees/franchisees',
+      // all structures
+      structures: 'structures/structures',
       // sets modal value (used with #dialog v-model)
       dialog: 'franchisees/dialog',
       // used to set which component to be displayed in the modal
@@ -170,6 +180,8 @@ export default {
     ...mapActions({
       // get all franchisees from the API
       getFranchisees: 'franchisees/getFranchisees',
+      // get all structures from API
+      getStructures: 'structures/getStructures',
       // mutates stores values
       updateName: 'franchisees/updateName',
       updateID: 'franchisees/updateID',
@@ -224,6 +236,11 @@ export default {
       this.updateSelectedModules(modules)
       // used to set which component to displays in the v-dialog
       this.updateDialog({value: true, type: dialogType})
+    },
+
+    // returns all the structures possesses by the franchisee
+    findFranchiseeStructures(franchisee, structures) {
+      return structures.map(structure => structure.id_franchise === franchisee.id)
     }
   }
 }
