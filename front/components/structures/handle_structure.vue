@@ -298,6 +298,8 @@ export default {
   },
   watch: {
     id_franchise: function (newValue, oldValue) {
+      // when user create a structure and select a franchise, it sets the franchise's default values
+      // of enabled or disabled modules
       if (this.dialogType === "create" && newValue) {
         let currentFranchisee = this.formatted_franchisees.find(el => el.value === newValue)
         let payload = currentFranchisee.default_modules
