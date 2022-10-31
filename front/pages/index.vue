@@ -10,8 +10,18 @@
           width="5"
         />
         <v-card v-if="franchisees.length > 0" class="card-neumorphism pa-4 ma-4">
+          <v-row>
+            <v-col>
+              <v-card-title id="title" class="pb-0">
+                <v-icon class="px-4" color="primary">
+                  {{ icons[3] }}
+                </v-icon>
+                Liste des franchisés
+              </v-card-title>
+            </v-col>
+          </v-row>
           <v-row justify="center" class="text-center ma-4">
-            <v-col cols="12" sm="6" md="4" class="d-flex">
+            <v-col id="btnCreateFranchiseeColumn" cols="12" sm="6" md="4" class="d-flex">
               <v-btn
                 id="btnCreateFranchisee"
                 class="align-self-end"
@@ -117,7 +127,7 @@
 <script>
 import Handle_franchisee from "../components/franchisees/handle_franchisee";
 import DeleteFranchisee from "../components/franchisees/delete_franchisee";
-import {mdiDelete, mdiMagnify, mdiPencil} from '@mdi/js';
+import {mdiDelete, mdiMagnify, mdiPencil, mdiPlaylistCheck} from '@mdi/js';
 import {mapActions, mapGetters} from 'vuex'
 
 export default {
@@ -128,7 +138,7 @@ export default {
       // search bar value (used with #franchiseesSearchBar v-model)
       search: '',
       // bunch of icons
-      icons: [mdiMagnify, mdiPencil, mdiDelete],
+      icons: [mdiMagnify, mdiPencil, mdiDelete, mdiPlaylistCheck],
       // headers for the v-data table
       headers: [
         {text: 'Nom', value: 'name', align: 'start'},
@@ -136,7 +146,7 @@ export default {
         {text: 'Téléphone', value: 'phone', align: 'start'},
         {text: "Actif", value: "isactive", align: 'start'},
         {text: "Structures", sortable: false, align: 'start'},
-        {text: "Membres", sortable: false, align: 'start'},
+        {text: "Membres", align: 'start'},
         {text: "Modifier / supprimer", value: "actions", sortable: false, align: 'start'},
       ],
     }
@@ -220,7 +230,7 @@ export default {
 </script>
 
 <style scoped>
-#franchiseesDataTable, #franchiseesLoader {
+#franchiseesDataTable {
   background-color: #ecf0f3 !important;
   min-height: 50vh !important;
   max-width: 100vh !important;
@@ -235,7 +245,7 @@ export default {
 }
 
 @media screen and (max-width: 599px) {
-  #btnCreateFranchisee {
+  #btnCreateFranchiseeColumn, #title {
     justify-content: center!important;
   }
 }
@@ -257,6 +267,10 @@ export default {
 :deep(.v-data-table__mobile-row__header) {
   font-weight: bold;
   word-break: keep-all !important;
+}
+
+#title {
+  font-family: 'Poppins', sans-serif !important;
 }
 
 </style>

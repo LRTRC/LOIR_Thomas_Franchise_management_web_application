@@ -179,11 +179,11 @@ export default {
       ],
       // field address regex: length <= 255
       addressRules: [
-        v => v.length <= 255 || "l'adresse ne peut faire plus de 255 caractères",
+        v => v ? v.length <= 255 || "l'adresse ne peut faire plus de 255 caractères" : true
       ],
       // field phone regex: length <= 50
       phoneRules: [
-        v => v.length <= 50 || "le téléphone ne peut faire plus de 50 caractères",
+        v => v ? v.length <= 50 || "le téléphone ne peut faire plus de 50 caractères" : true
       ],
     }
   },
@@ -261,8 +261,8 @@ export default {
     }),
 
     // function used to validate the form
-    send(franchisee) {
-      this.postFranchisee(franchisee).then(() => {
+    send() {
+      this.postFranchisee().then(() => {
         this.clear();
         this.getFranchisees()
       })

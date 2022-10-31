@@ -66,22 +66,6 @@ $ sudo -u postgres psql
 \c franchisesmanagement
 ```
 
-### Grant privileges to the user franchisemanager on tables
-```postgresql
-GRANT SELECT ON ALL TABLES IN SCHEMA public TO franchisemanager ;
-GRANT INSERT ON ALL TABLES IN SCHEMA public TO franchisemanager ;
-GRANT UPDATE ON ALL TABLES IN SCHEMA public TO franchisemanager ;
-GRANT DELETE ON ALL TABLES IN SCHEMA public TO franchisemanager ;
-```
-
-### Disconnect from current user
-alt + d
-
-### Connect to the database with the user 'franchisemanager'
-```
-$ psql -d franchisesmanagement -U franchisemanager
-```
-
 ### Create tables 
 ```postgresql
 CREATE TABLE users(
@@ -131,6 +115,22 @@ id_structure INT NOT NULL REFERENCES structures(id),
 id_user INT NOT NULL REFERENCES users(id)
 );
 
+```
+
+### Grant privileges to the user franchisemanager on tables
+```postgresql
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO franchisemanager ;
+GRANT INSERT ON ALL TABLES IN SCHEMA public TO franchisemanager ;
+GRANT UPDATE ON ALL TABLES IN SCHEMA public TO franchisemanager ;
+GRANT DELETE ON ALL TABLES IN SCHEMA public TO franchisemanager ;
+```
+
+### Disconnect from current user
+alt + d
+
+### Connect to the database with the user 'franchisemanager'
+```
+$ psql -d franchisesmanagement -U franchisemanager
 ```
 
 ### Restart PostgreSQL server
