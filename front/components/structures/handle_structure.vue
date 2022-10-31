@@ -84,7 +84,7 @@
             :prepend-icon="icons[5]"
             v-model="id_franchise"
             label="Franchisé"
-            :items="franchisees"
+            :items="formatted_franchisees"
             item-color="success"
             deletable-chips
             small-chips
@@ -132,8 +132,8 @@
 import {
   mdiAccount,
   mdiClose,
-  mdiOfficeBuilding ,
   mdiMapMarker,
+  mdiOfficeBuilding,
   mdiPhone,
   mdiPlaylistEdit,
   mdiPlaylistPlus
@@ -142,15 +142,6 @@ import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "handle_structure",
-  props: {
-    // get franchisees for the v-select input
-    franchisees: {
-      type: Array,
-      default() {
-        return [];
-      },
-    }
-  },
   data() {
     return {
       // enable or disable #sendBtn
@@ -164,13 +155,12 @@ export default {
       ],
       // field address regex: length <= 255
       addressRules: [
-        v => v.length <= 255 || "l'adresse ne peut faire plus de 255 caractères",
+        v => v ? v.length <= 255 || "l'adresse ne peut faire plus de 255 caractères" : true
       ],
       // field phone regex: length <= 50
       phoneRules: [
-        v => v.length <= 50 || "le téléphone ne peut faire plus de 50 caractères",
+        v => v ? v.length <= 50 || "le téléphone ne peut faire plus de 50 caractères" : true
       ],
-      SelectedFranchisee: []
     }
   },
   computed: {
@@ -181,6 +171,8 @@ export default {
       id_franchise: 'structures/id_franchise',
       // mutate dialog type in store
       dialogType: 'structures/dialogType',
+      // get franchisees for the select input when creating a structure
+      formatted_franchisees: 'structures/formatted_franchisees'
     }),
 
     // way to use v-models with vuex state. Used in the form to create or edit a structure
@@ -197,7 +189,7 @@ export default {
         return this.$store.getters["structures/address"]
       },
       set(newValue) {
-        return this.$store.dispatch('franchisees/updateAddress', newValue)
+        return this.$store.dispatch('structures/updateAddress', newValue)
       },
     },
     phone: {
@@ -298,6 +290,19 @@ export default {
     bannerIcon() {
       return this.dialogType === 'create' ? this.icons[0] : this.dialogType === 'patch' ?
         this.icons[6] : null
+    },
+    // set default modules values if a franchisee is selected and if dialogType === create
+    defaultModules() {
+
+    }
+  },
+  watch: {
+    id_franchise: function (newValue, oldValue) {
+      if (this.dialogType === "create" && newValue) {
+        let currentFranchisee = this.formatted_franchisees.find(el => el.value === newValue)
+        let payload = currentFranchisee.default_modules
+        return this.setDefaultModules(payload)
+      } else return null
     }
   },
   methods: {
@@ -310,7 +315,9 @@ export default {
       alertError: 'errors/error',
       alertSuccess: 'errors/success',
       // clear values used to handle a specific structure
-      clearStructure: 'structures/clearStructure'
+      clearStructure: 'structures/clearStructure',
+      // used to pass default modules values if user wants to create a structure and add a franchisee
+      setDefaultModules: 'structures/setDefaultModules',
     }),
 
     // function used to validate the form
@@ -378,7 +385,8 @@ export default {
 
     // used to set a formatted payload before sending a request to API
     setStructure() {
-      let structure = {
+      // return the formatted object
+      return {
         id_franchise: this.id_franchise,
         name: this.name,
         address: this.address,
@@ -393,9 +401,6 @@ export default {
         subscriptions: this.subscriptions,
         workforce: this.workforce,
       }
-
-      // return the formatted object
-      return structure
     },
 
     // function to clear values of the handled franchisee in store and close the dialog

@@ -16,6 +16,7 @@ export const state = () => ({
   workforce: false, // when handling one structure
   dialog: false, // to enable or disable a v-dialog component
   dialogType: '', // use to choose which component to be displayed in the v-dialog 'create', 'patch' or 'delete'
+  formatted_franchisees: [] // use to feed select input's items when creating a structure
 })
 
 export const getters = {
@@ -36,6 +37,7 @@ export const getters = {
   workforce: state => state.workforce,
   dialog: state => state.dialog,
   dialogType: state => state.dialogType,
+  formatted_franchisees: state => state.formatted_franchisees
 }
 
 export const mutations = {
@@ -112,6 +114,14 @@ export const mutations = {
   CLEAR_STRUCTURES(state) {
     state.structures = [];
   },
+  MUTATE_FORMATTED_FRANCHISEES(state, payload) {
+    state.formatted_franchisees = payload
+  },
+  SET_DEFAULT_MODULES(state, payload) {
+    for (let [key, value] of Object.entries(payload)) {
+      state[key] = value
+    }
+  }
 }
 
 export const actions = {
@@ -172,8 +182,6 @@ export const actions = {
   updateWorkforce({commit}, payload) {
     commit('MUTATE_WORKFORCE', payload)
   },
-
-
   // value will disable or enable a v-dialog and type will be defined to display a selected component
   updateDialog({commit}, payload) {
     commit('MUTATE_DIALOG', payload.value)
@@ -182,5 +190,13 @@ export const actions = {
   clearStructure({commit}) {
     commit('CLEAR_STRUCTURE')
   },
+  // used to pass default modules values if user wants to create a structure and add a franchisee
+  setDefaultModules({commit}, payload) {
+    commit('SET_DEFAULT_MODULES', payload)
+  },
+  // used for v select franchise input in handle_franchisee component
+  updateFormattedFranchisees({commit}, payload) {
+    commit('MUTATE_FORMATTED_FRANCHISEES', payload)
+  }
 }
 

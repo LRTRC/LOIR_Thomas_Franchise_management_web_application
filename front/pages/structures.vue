@@ -117,7 +117,6 @@
       <handle_structure
         v-if="dialogType === 'patch' || dialogType === 'create' && dialog"
         id="handleStructure"
-        :franchisees="formattedFranchisees"
       />
       <delete_structure
         v-if="(dialogType === 'delete') && dialog"
@@ -174,7 +173,7 @@ export default {
   },
   watch: {
     franchisees: function (newValue, oldValue) {
-      this.formattedFranchisees = this.formatFranchisees(newValue)
+      this.updateFormattedFranchisees(this.formatFranchisees(newValue))
     }
   },
   methods: {
@@ -197,6 +196,7 @@ export default {
       updateSnacks: 'structures/updateSnacks',
       updateSubscriptions: 'structures/updateSubscriptions',
       updateWorkforce: 'structures/updateWorkforce',
+      updateFormattedFranchisees: 'structures/updateFormattedFranchisees',
       // used to call error / success alerts from errors store
       alertError: 'errors/error',
       alertSuccess: 'errors/success'
@@ -235,7 +235,8 @@ export default {
       return franchisees.map((el) => {
         return {
           text: `${el.name} (${el.id})`,
-          value: el.id
+          value: el.id,
+          default_modules: el.default_modules,
         }
       })
     },
