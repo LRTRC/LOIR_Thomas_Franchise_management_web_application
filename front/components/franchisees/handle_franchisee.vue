@@ -78,7 +78,7 @@
         </v-col>
       </v-row>
       <v-divider class="my-4"/>
-      <v-row>
+      <v-row  v-if="dialogType === 'patch'">
         <v-col>
           <v-select
             id="selectStructures"
@@ -299,7 +299,6 @@ export default {
 
     // function used to validate the form
     send() {
-      this.patchStructures();
       this.postFranchisee().then(() => {
         this.clear();
         this.getFranchisees()
@@ -333,6 +332,9 @@ export default {
         // if the dialog type is patch
         if (this.dialogType === 'patch') {
 
+          // patch structures owner
+          await this.patchStructures();
+          
           // calls setFranchisee to set the payload
           let franchisee = this.setFranchisee();
 
