@@ -173,7 +173,7 @@ export default {
   },
   watch: {
     franchisees: function (newValue, oldValue) {
-      this.updateFormattedFranchisees(this.formatFranchisees(newValue))
+      this.updateFormattedFranchisees(this.formatFranchisees(newValue));
     }
   },
   methods: {
@@ -211,14 +211,14 @@ export default {
         return await this.$axios.$patch(`api/structures/${structure.id}`, structure).then((response) => {
           // if response status is ok, calls success alert
           if (response.status === 200) {
-            this.alertSuccess(`Structure '${structure.name}' modifiée avec succès'`)
+            this.alertSuccess(`Structure '${structure.name}' modifiée avec succès'`);
           }
           // send request to API to update franchisees data
-          return this.getStructures()
+          return this.getStructures();
         })
         // else catch error
       } catch (error) {
-        this.alertError(error.message)
+        this.alertError(error.message);
       }
     },
 
@@ -228,7 +228,7 @@ export default {
     findFranchiseeName(structure, franchisees) {
       if (franchisees.length > 0) {
         let franchisee = franchisees.find(el => el.id === structure.id_franchise)
-        return `${franchisee.name} (${franchisee.id})`
+        return `${franchisee.name} (${franchisee.id})`;
       }
     },
     formatFranchisees(franchisees) {
@@ -237,29 +237,30 @@ export default {
           text: `${el.name} (${el.id})`,
           value: el.id,
           default_modules: el.default_modules,
-        }
+        };
       })
     },
 
     // use the store' state to keep data alive when handling a structure (create, edit or delete)
+    // todo: refact in store to set the payload in one time
     setStructureAndDialog(structure, dialogType) {
-      this.updateID(structure.id)
-      this.updateIdFranchise(structure.id_franchise)
-      this.updateName(structure.name)
-      this.updateAddress(structure.address)
-      this.updatePhone(structure.phone)
-      this.updateIsActive(structure.isactive)
-      this.updateAdvertising(structure.advertising)
-      this.updateEquipments(structure.equipments)
-      this.updateGroupLessons(structure.group_lessons)
-      this.updatePlannings(structure.plannings)
-      this.updatePrivateCoaching(structure.private_coaching)
-      this.updateSnacks(structure.snacks)
-      this.updateSubscriptions(structure.subscriptions)
-      this.updateWorkforce(structure.workforce)
+      this.updateID(structure.id);
+      this.updateIdFranchise(structure.id_franchise);
+      this.updateName(structure.name);
+      this.updateAddress(structure.address);
+      this.updatePhone(structure.phone);
+      this.updateIsActive(structure.isactive);
+      this.updateAdvertising(structure.advertising);
+      this.updateEquipments(structure.equipments);
+      this.updateGroupLessons(structure.group_lessons);
+      this.updatePlannings(structure.plannings);
+      this.updatePrivateCoaching(structure.private_coaching);
+      this.updateSnacks(structure.snacks);
+      this.updateSubscriptions(structure.subscriptions);
+      this.updateWorkforce(structure.workforce);
 
       // used to set which component to displays in the v-dialog
-      this.updateDialog({value: true, type: dialogType})
+      this.updateDialog({value: true, type: dialogType});
     }
   }
 }
@@ -271,7 +272,6 @@ export default {
 #structuresDataTable {
   background-color: #ecf0f3 !important;
   min-height: 50vh !important;
-  max-width: 100vh !important;
 }
 
 #structuresDataTable:deep(td) {

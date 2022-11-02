@@ -70,14 +70,18 @@
                 @change="patchFranchiseeIsActive(item, $event)"
                 color="success"
                 dense
-
               />
             </template>
-            <template v-slot:item.id="{ item }">
+            <template v-slot:item.structures="{ item }">
               <v-chip
+                v-for="(structure, i) in findFranchiseeStructures(item, structures)"
+                :key="i"
+                class="px-2 ma-1"
                 color="success"
                 text-color="white"
-              />
+              >
+                {{ structure.name }}
+              </v-chip>
             </template>
 
             <template v-slot:item.actions="{ item }">
@@ -152,7 +156,7 @@ export default {
         {text: 'Adresse', value: 'address', align: 'start'},
         {text: 'Téléphone', value: 'phone', align: 'start'},
         {text: "Actif", value: "isactive", align: 'start'},
-        {text: "Structures", value: 'id', align: 'start'},
+        {text: "Structures", value: 'structures', align: 'start'},
         {text: "Membres", align: 'start'},
         {text: "Modifier / supprimer", value: "actions", sortable: false, align: 'start'},
       ],
@@ -204,43 +208,51 @@ export default {
         return await this.$axios.$patch(`api/franchisees/${franchisee.id}`, franchisee).then((response) => {
           // if response status is ok, calls success alert
           if (response.status === 200) {
-            this.alertSuccess(`Franchisé '${franchisee.name}' modifié avec succès'`)
+            this.alertSuccess(`Franchisé '${franchisee.name}' modifié avec succès'`);
           }
           // send request to API to update franchisees data
-          return this.getFranchisees()
+          return this.getFranchisees();
         })
         // else catch error
       } catch (error) {
-        this.alertError(error.message)
+        this.alertError(error.message);
       }
     },
 
     // use the store' state to keep data alive when handling a franchisee (create, edit or delete)
+    // todo: refact in store to set the payload in one time
     setFranchiseeAndDialog(franchisee, dialogType) {
-      this.updateID(franchisee.id)
-      this.updateName(franchisee.name)
-      this.updateAddress(franchisee.address)
-      this.updatePhone(franchisee.phone)
-      this.updateIsActive(franchisee.isactive)
+      this.updateID(franchisee.id);
+      this.updateName(franchisee.name);
+      this.updateAddress(franchisee.address);
+      this.updatePhone(franchisee.phone);
+      this.updateIsActive(franchisee.isactive);
       // to use the select input when handling a franchisee, we need to get an array of strings with the keys that
       // have a true value in the default_modules property of the handled franchisee
       // modules is a self invoking function that returns those values in an array
       let modules = (() => {
         let array = []
         for (let [key, value] of Object.entries(franchisee.default_modules)) {
-          if (value) array.push(key)
+          if (value) array.push(key);
         }
-        return array
+        return array;
       })();
       // set the results of modules in selected modules (in store)
-      this.updateSelectedModules(modules)
+      this.updateSelectedModules(modules);
       // used to set which component to displays in the v-dialog
-      this.updateDialog({value: true, type: dialogType})
+      this.updateDialog({value: true, type: dialogType});
     },
 
     // returns all the structures possesses by the franchisee
     findFranchiseeStructures(franchisee, structures) {
-      return structures.map(structure => structure.id_franchise === franchisee.id)
+      let array = []
+      structures.find(structure => {
+        if (structure.id_franchise === franchisee.id) {
+
+          array.push(structure)
+        }
+      });
+      return array
     }
   }
 }
@@ -250,7 +262,6 @@ export default {
 #franchiseesDataTable {
   background-color: #ecf0f3 !important;
   min-height: 50vh !important;
-  max-width: 100vh !important;
 }
 
 #franchiseesDataTable:deep(td) {
@@ -263,7 +274,7 @@ export default {
 
 @media screen and (max-width: 599px) {
   #btnCreateFranchiseeColumn, #title {
-    justify-content: center!important;
+    justify-content: center !important;
   }
 }
 
