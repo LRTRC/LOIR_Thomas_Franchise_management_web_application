@@ -48,7 +48,7 @@
         </v-col>
         <v-col cols="12" lg="6">
           <v-text-field
-            id="adress"
+            id="address"
             v-model="address"
             label="Adresse"
             class="pa-4"
@@ -409,7 +409,7 @@ export default {
       }
     },
 
-    // function to clear values of the handled franchisee in store and close the dialog
+    // function to clear values of the handled structure in store and close the dialog
     clear() {
       this.clearStructure();
       this.updateDialog({value: false, type: ''})

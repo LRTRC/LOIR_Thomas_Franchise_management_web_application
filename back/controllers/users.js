@@ -114,8 +114,8 @@ const updateUser = async (req, res, next) => {
 
     // build SQL query : update first_name, last_name, phone, role and returns all except passphrase
     const query =
-        "UPDATE users SET first_name=$1, last_name=$2, phone=$3, role=$4 WHERE id=id RETURNING id, first_name, last_name, email, phone, role;";
-    const value = [user.first_name, user.last_name, user.phone, user.role];
+        "UPDATE users SET first_name=$1, last_name=$2, phone=$3, role=$4, id=$5 WHERE id=$5 RETURNING id, first_name, last_name, email, phone, role;";
+    const value = [user.first_name, user.last_name, user.phone, user.role, id];
 
     try {
 

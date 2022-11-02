@@ -48,7 +48,7 @@
         </v-col>
         <v-col cols="12" lg="4">
           <v-text-field
-            id="adress"
+            id="address"
             v-model="address"
             label="Adresse"
             class="pa-4"
@@ -334,7 +334,7 @@ export default {
 
           // patch structures owner
           await this.patchStructures();
-          
+
           // calls setFranchisee to set the payload
           let franchisee = this.setFranchisee();
 
