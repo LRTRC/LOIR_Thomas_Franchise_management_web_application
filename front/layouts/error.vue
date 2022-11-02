@@ -15,7 +15,9 @@
         <br>
         <v-row>
           <v-col class="text-center">
-            <v-btn color="error" class="btn-neumorphism px-12" nuxt to="/">
+            <v-btn color="error" class="btn-neumorphism px-12" nuxt to="/"
+            @click="$router.go(0)"
+            >
               Home page
             </v-btn>
           </v-col>

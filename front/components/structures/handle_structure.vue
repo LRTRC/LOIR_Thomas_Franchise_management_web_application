@@ -93,6 +93,10 @@
       </v-row>
       <v-row>
         <v-col class="flex">
+          <v-divider class="mb-4"/>
+          <span id="modulesTitles">
+            Modules activés :
+          </span>
           <v-card id="permissionsCard" flat>
             <v-checkbox v-model="advertising" label="publicité" color="success" class="px-2"/>
             <v-checkbox v-model="equipments" label="équipements" color="success" class="px-2"/>
@@ -429,5 +433,9 @@ export default {
   flex-wrap: wrap;
   justify-content: flex-start;
   align-content: space-around;
+}
+
+#modulesTitles {
+  font-family: Poppins, sans-serif;
 }
 </style>

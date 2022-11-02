@@ -23,17 +23,47 @@
         {{ title }}
       </v-toolbar-title>
       <v-spacer/>
-      <v-btn text class="mx-4">
-        <v-icon
-          class="px-4"
-        >
-          {{ icons[2] }}
-        </v-icon>
-        <span>
-          {{ name }}
-        </span>
-      </v-btn>
+      <v-menu
+        transition="slide-y-transition"
+        :nudge-width="200"
+        offset-y
+        bottom
+        dark
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            v-bind="attrs"
+            v-on="on"
+            class="mr-8"
+            fab
+            x-small
+            color="primary"
 
+          >
+            <v-icon color="background" large>
+              {{ icons[2] }}
+            </v-icon>
+          </v-btn>
+        </template>
+
+        <v-list dense color="primary">
+          <v-list-item
+            v-for="(item, i) in menuMyAccount"
+            :key="i"
+            @click.native="item.method"
+          >
+            <v-list-item-content>
+              {{ item.title }}
+            </v-list-item-content>
+            <v-list-item-icon>
+              <v-icon :color="item.color">
+                {{ item.icon }}
+              </v-icon>
+            </v-list-item-icon>
+          </v-list-item>
+
+        </v-list>
+      </v-menu>
     </v-app-bar>
     <v-navigation-drawer
       id="drawer"
@@ -59,14 +89,6 @@
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title class="drawerPaths" v-text="item.title"/>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item @click="logout">
-          <v-list-item-action>
-            <v-icon color="error">{{ icons[0] }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title class="drawerPaths" v-text="'Déconnexion'"/>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -122,7 +144,7 @@
 <script>
 import {
   mdiHome, mdiLogout, mdiMenu, mdiAccountCircle,
-  mdiAccountGroup, mdiLayersTriple, mdiEarth
+  mdiAccountGroup, mdiLayersTriple, mdiEarth,
 } from "@mdi/js"
 import {mapGetters} from 'vuex'
 
@@ -161,6 +183,18 @@ export default {
           to: '/utilisateurs'
         },
 
+      ],
+      menuMyAccount: [
+        {
+          title: 'Mon compte',
+          method: () => this.$router.push('/account')
+        },
+        {
+          icon: mdiLogout,
+          color: 'error',
+          title: 'Déconnexion',
+          method: () => this.logout()
+        },
       ],
     }
   },
@@ -219,5 +253,9 @@ export default {
 
 #toolbarTitle:hover {
   cursor: pointer;
+}
+
+#myAccountMenu {
+  background-color: #19344F!important;
 }
 </style>
