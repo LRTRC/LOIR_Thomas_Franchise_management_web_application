@@ -77,16 +77,34 @@
           />
         </v-col>
       </v-row>
+      <v-divider class="my-4"/>
+      <v-row>
+        <v-col>
+          <v-select
+            id="selectStructures"
+            class="px-4"
+            color="success"
+            :prepend-icon="icons[7]"
+            v-model="selectedStructures"
+            label="Structures du franchisé"
+            :items="structures"
+            item-color="success"
+            multiple
+            deletable-chips
+            small-chips
+          />
+        </v-col>
+      </v-row>
       <v-row>
         <v-col>
           <v-select
             id="selectModules"
-            class="pa-4"
+            class="pa-x"
             color="success"
             :prepend-icon="icons[5]"
             v-model="selectedModules"
             label="Modules activés par défault"
-            :items="modules "
+            :items="modules"
             item-color="success"
             multiple
             deletable-chips
@@ -119,15 +137,16 @@
 
 <script>
 import {
-  mdiPlaylistPlus,
-  mdiClose,
   mdiAccount,
-  mdiMapMarker,
-  mdiPhone,
+  mdiClose,
   mdiFormatListChecks,
-  mdiPlaylistEdit
+  mdiMapMarker,
+  mdiOfficeBuildingPlus,
+  mdiPhone,
+  mdiPlaylistEdit,
+  mdiPlaylistPlus
 } from '@mdi/js';
-import {mapGetters, mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "handle_franchisee",
@@ -171,7 +190,7 @@ export default {
         },
       ],
       // bunch of icons
-      icons: [mdiPlaylistPlus, mdiClose, mdiAccount, mdiMapMarker, mdiPhone, mdiFormatListChecks, mdiPlaylistEdit],
+      icons: [mdiPlaylistPlus, mdiClose, mdiAccount, mdiMapMarker, mdiPhone, mdiFormatListChecks, mdiPlaylistEdit, mdiOfficeBuildingPlus],
       // field name regex: required, length <= 100
       nameRules: [
         v => !!v || 'Le nom est requis',
@@ -185,7 +204,13 @@ export default {
       phoneRules: [
         v => v ? v.length <= 50 || "le téléphone ne peut faire plus de 50 caractères" : true
       ],
+      // use to edit with select input the franchisee's structures
+      selectedStructures: []
     }
+  },
+  mounted() {
+    this.selectedStructures = [...this.findFranchiseeStructures(this.id, this.structuresImport)]
+    // console.log(this.findFranchiseeStructures(this.id, this.structuresImport))
   },
   computed: {
     ...mapGetters({
@@ -193,6 +218,8 @@ export default {
       id: 'franchisees/id',
       // mutate dialog type in store
       dialogType: 'franchisees/dialogType',
+      // get all structures from the store
+      structuresImport: 'structures/structures',
     }),
 
     // way to use v-models with vuex state. Used in the form to create or edit a franchisee
@@ -245,6 +272,16 @@ export default {
     bannerIcon() {
       return this.dialogType === 'create' ? this.icons[0] : this.dialogType === 'patch' ?
         this.icons[6] : null
+    },
+    structures() {
+      let array = []
+      for (let structure of this.structuresImport) {
+        array.push({
+          text: structure.name,
+          value: structure.id
+        })
+      }
+      return array
     }
   },
   methods: {
@@ -262,6 +299,7 @@ export default {
 
     // function used to validate the form
     send() {
+      this.patchStructures();
       this.postFranchisee().then(() => {
         this.clear();
         this.getFranchisees()
@@ -289,9 +327,6 @@ export default {
                 // set a success alert
                 this.alertSuccess(`'${franchisee.name}' à été créé avec succès'`)
               }
-
-              // and calls clear
-              this.clear();
             })
         }
 
@@ -311,12 +346,10 @@ export default {
                 // set a success alert
                 this.alertSuccess(`Franchisé '${franchisee.name}' modifié avec succès'`)
               }
-
-              // and calls clear
-              this.clear();
             })
         }
-
+        // and calls clear
+        this.clear();
         // else catch error and set error alert
       } catch (error) {
         this.alertError(error.message)
@@ -354,6 +387,41 @@ export default {
 
       // return the formatted object
       return franchisee
+    },
+
+    // returns all the structures possesses by the franchisee
+    findFranchiseeStructures(franchiseeID, structures) {
+      let array = []
+      structures.find(structure => {
+        if (structure.id_franchise === franchiseeID) {
+          array.push(structure.id)
+        }
+      });
+      return array
+    },
+
+    // get structures by id
+    getStructuresByID(selectedStructures, structures) {
+      return structures.filter(el => {
+        if (selectedStructures.includes(el.id)) {
+         return el
+        }
+      })
+    },
+
+    // patch structures when the user changes the owner of a structure
+    // todo: find a way in controller to avoid loop
+    async patchStructures() {
+      try {
+        const franchiseeID = this.id
+        let structures = this.getStructuresByID(this.selectedStructures, this.structuresImport)
+        for (let structure of structures) {
+          structure.id_franchise = franchiseeID
+          await this.$axios.$patch(`api/structures/${structure.id}`, structure)
+        }
+      } catch(error) {
+        this.alertError(error.message)
+      }
     },
 
     // function to clear values of the handled franchisee in store and close the dialog
