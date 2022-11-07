@@ -1,13 +1,20 @@
 <template>
   <v-row justify="center" class="ma-auto">
-    <v-col cols="12" sm="7" md="4" lg="3" xl="3">
-      <v-card class="card-neumorphism py-12">
-        <v-card-title style="font-family: 'Poppins', sans-serif;font-weight: bold" class="justify-center">
+    <v-col cols="12" sm="7" md="4" lg="3" xl="3"class="text-center">
+      <v-progress-circular
+        v-if="isLoading"
+        color="primary"
+        indeterminate
+        size="120"
+        width="5"
+      />
+      <v-card class="card-neumorphism py-12" v-if="!isLoading">
+        <v-card-title id="title" class="justify-center">
           Franchises
           <br>
           GYM CLUB
         </v-card-title>
-        <v-card-subtitle style="font-weight: bold" class="text-center">
+        <v-card-subtitle id="subTitle" class="text-center">
           Connexion
         </v-card-subtitle>
         <v-form
@@ -114,7 +121,11 @@ export default {
         v => v && v.length <= 60 || "le mot de passe doit contenir moins de 60 caractères",
         v => /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}/.test(v) || "Le mot de pass doit contenir au moins une majuscule, une minuscule, un chiffre, un symbole et 8 caractères minimum",
       ],
+      isLoading: true,
     }
+  },
+  beforeMount() {
+    setTimeout(() => this.isLoading = false, "1300")
   },
   methods: {
     ...mapActions({
@@ -168,6 +179,16 @@ export default {
 
 <style scoped>
 .v-btn {
+  font-weight: bold;
+}
+
+#title {
+  color: #19344F!important;
+  font-family: 'Poppins', sans-serif;
+  font-weight: bold
+}
+
+#subTitle {
   font-weight: bold;
 }
 </style>
