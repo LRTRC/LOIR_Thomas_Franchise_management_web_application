@@ -21,7 +21,7 @@
             </v-col>
           </v-row>
           <v-row justify="center" class="text-center ma-4">
-            <v-col id="btnCreateFranchiseeColumn" cols="12" sm="6" md="4" class="d-flex">
+            <v-col id="btnCreateColumn" cols="12" sm="6" md="4" class="d-flex">
               <v-btn
                 id="btnCreateStructure"
                 class="align-self-end"
@@ -73,7 +73,14 @@
               />
             </template>
             <template v-slot:item.id_franchise="{ item }">
-              {{ findFranchiseeName(item, franchisees) }}
+              <v-chip
+                class="px-2 ma-1"
+                color="success"
+                text-color="white"
+              >
+                {{ findFranchiseeName(item, franchisees) }}
+              </v-chip>
+
             </template>
             <template v-slot:item.actions="{ item }">
               <v-btn
@@ -150,7 +157,7 @@ export default {
         {text: "Actif", value: "isactive", align: 'start'},
         {text: "Franchisé", value: "id_franchise", align: 'start'},
         {text: "Membres", align: 'start'},
-        {text: "Modifier / supprimer", value: "actions", sortable: false, align: 'start'},
+        {text: "Modifier / supprimer", value: "actions", sortable: false, align: 'center'},
       ],
       formattedFranchisees: []
     }
@@ -283,7 +290,7 @@ export default {
 }
 
 @media screen and (max-width: 599px) {
-  #btnCreateFranchiseeColumn, #title {
+  #btnCreateColumn, #title {
     justify-content: center !important;
   }
 }

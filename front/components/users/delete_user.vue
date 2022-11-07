@@ -3,7 +3,7 @@
     class="v-card-glass"
   >
     <v-banner
-      id="bannerDeleteStructure"
+      id="bannerDelete"
       color="error"
       width="100%"
       :icon="icons[0]"
@@ -11,7 +11,7 @@
       single-line
       dark
     >
-      Supprimer la structure
+      Supprimer l'utilisateur
     </v-banner>
     <div class="d-flex justify-center ma-4">
       <v-icon
@@ -25,7 +25,7 @@
         id="cardTitle"
         class="text-h6 justify-center"
       >
-        Êtes-vous sûr de vouloir supprimer la structure "{{ name }}" ?
+        Êtes-vous sûr de vouloir supprimer l'utilisateur "{{ name }}" ?
       </v-card-title>
     </div>
     <v-card-actions>
@@ -48,7 +48,7 @@ import {mapGetters, mapActions} from "vuex";
 import { mdiPlaylistRemove,mdiAlert} from '@mdi/js';
 
 export default {
-  name: "delete_structure",
+  name: "delete_user",
   data() {
     return {
       // bunch of icons
@@ -57,9 +57,9 @@ export default {
   },
   computed: {
     ...mapGetters({
-      // used when a specific structure is handled in the v-data table
-      id: 'structures/id',
-      name: 'structures/name',
+      // used when a specific user is handled in the v-data table
+      id: 'users/id',
+      name: 'users/email',
     })
   },
   methods: {
@@ -68,11 +68,11 @@ export default {
       alertError: 'errors/error',
       alertSuccess: 'errors/success',
       // mutate dialog
-      updateDialog: 'structures/updateDialog',
-      // get all structures from API
-      getStructures: 'structures/getStructures',
+      updateDialog: 'users/updateDialog',
+      // get all users from API
+      getUsers: 'users/getUsers',
       // clear the current values used to handle a specific franchisee
-      clearStructure: 'structures/clearStructure'
+      clearUser: 'users/clearUser'
     }),
 
     // function to validate the form to delete an existing franchisee
@@ -81,7 +81,7 @@ export default {
       try {
 
         // sent to API
-        await this.$axios.$delete(`/api/structures/${this.id}`)
+        await this.$axios.$delete(`/api/users/${this.id}`)
           .then((response) => {
 
             // if status ok
@@ -91,7 +91,7 @@ export default {
               this.alertSuccess(`'${this.name}' à été supprimé avec succès'`);
             }
             // get all franchisees from API
-            this.getStructures();
+            this.getUsers();
 
             // calls clear function
             this.clear()
@@ -107,7 +107,7 @@ export default {
     clear() {
 
       // clear handled franchisee in the store
-      this.clearStructure();
+      this.clearUser();
 
       // close dialog
       this.updateDialog({value: false, type: ''});

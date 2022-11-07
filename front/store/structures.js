@@ -86,7 +86,6 @@ export const mutations = {
   MUTATE_WORKFORCE(state, payload) {
     state.workforce = payload;
   },
-
   MUTATE_DIALOG(state, payload) {
     state.dialog = payload;
   },

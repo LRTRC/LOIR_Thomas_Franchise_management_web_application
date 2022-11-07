@@ -21,7 +21,7 @@
             </v-col>
           </v-row>
           <v-row justify="center" class="text-center ma-4">
-            <v-col id="btnCreateFranchiseeColumn" cols="12" sm="6" md="4" class="d-flex">
+            <v-col id="btnCreateColumn" cols="12" sm="6" md="4" class="d-flex">
               <v-btn
                 id="btnCreateFranchisee"
                 class="align-self-end"
@@ -158,7 +158,7 @@ export default {
         {text: "Actif", value: "isactive", align: 'start'},
         {text: "Structures", value: 'structures', align: 'start'},
         {text: "Membres", align: 'start'},
-        {text: "Modifier / supprimer", value: "actions", sortable: false, align: 'start'},
+        {text: "Modifier / supprimer", value: "actions", sortable: false, align: 'center'},
       ],
     }
   },
@@ -273,7 +273,7 @@ export default {
 }
 
 @media screen and (max-width: 599px) {
-  #btnCreateFranchiseeColumn, #title {
+  #btnCreateColumn, #title {
     justify-content: center !important;
   }
 }
