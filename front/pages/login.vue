@@ -112,7 +112,7 @@ export default {
       passwordRules: [
         v => !!v || 'Le mot de passe est requis',
         v => v && v.length <= 60 || "le mot de passe doit contenir moins de 60 caractères",
-        v => /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}/.test(v) || "Le mot de pass doit contenir au moins une majuscule, une minuscule, une chiffre, un symbole et 8 caractères minimum",
+        v => /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}/.test(v) || "Le mot de pass doit contenir au moins une majuscule, une minuscule, un chiffre, un symbole et 8 caractères minimum",
       ],
     }
   },

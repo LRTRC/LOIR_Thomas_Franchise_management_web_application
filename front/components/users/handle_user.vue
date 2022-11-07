@@ -20,15 +20,78 @@
         <v-col cols="12" lg="6">
           <v-text-field
             id="address"
-            :value="email"
+            v-model="email"
             label="Email"
+            type="email"
             class="pa-4"
             color="success"
             :prepend-icon="icons[3]"
             :clear-icon="icons[1]"
+            :rules="emailRules"
             clearable
             dense
             :disabled="disabled"
+          />
+        </v-col>
+        <v-col cols="12" lg="6" v-if="dialogType === 'create'">
+          <v-text-field
+            id="password"
+            v-model="password"
+            label="Mot de passe"
+            class="pa-4"
+            color="success"
+            type="password"
+            :prepend-icon="icons[7]"
+            :clear-icon="icons[1]"
+            :rules="passwordRules"
+            :counter="60"
+            clearable
+            dense
+          />
+        </v-col>
+        <v-col cols="12" lg="6">
+          <v-text-field
+            id="last_name"
+            v-model="last_name"
+            label="Nom"
+            class="pa-4"
+            color="success"
+            :prepend-icon="icons[6]"
+            :rules="nameRules"
+            :counter="100"
+            :clear-icon="icons[1]"
+            clearable
+            dense
+          />
+        </v-col>
+        <v-col cols="12" lg="6">
+          <v-text-field
+            id="first_name"
+            v-model="first_name"
+            label="Prénom"
+            class="pa-4"
+            color="success"
+            :prepend-icon="icons[6]"
+            :rules="nameRules"
+            :counter="100"
+            :clear-icon="icons[1]"
+            clearable
+            dense
+          />
+        </v-col>
+        <v-col cols="12" lg="6">
+          <v-select
+            id="selectRoles"
+            class="pa-4"
+            color="success"
+            :prepend-icon="icons[5]"
+            v-model="role"
+            label="Rôle"
+            :items="roles"
+            :rules="roleRules"
+            item-color="success"
+            deletable-chips
+            small-chips
           />
         </v-col>
         <v-col cols="12" lg="6">
@@ -44,50 +107,6 @@
             :clear-icon="icons[1]"
             clearable
             dense
-          />
-        </v-col>
-        <v-col cols="12" lg="6">
-          <v-text-field
-            id="last_name"
-            v-model="last_name"
-            label="Nom"
-            class="pa-4"
-            color="success"
-            :rules="nameRules"
-            :counter="100"
-            :clear-icon="icons[1]"
-            required
-            clearable
-            dense
-          />
-        </v-col>
-        <v-col cols="12" lg="6">
-          <v-text-field
-            id="first_name"
-            v-model="first_name"
-            label="Prénom"
-            class="pa-4"
-            color="success"
-            :rules="nameRules"
-            :counter="100"
-            :clear-icon="icons[1]"
-            required
-            clearable
-            dense
-          />
-        </v-col>
-        <v-col cols="12" lg="6">
-          <v-select
-            id="selectRoles"
-            class="pa-4"
-            color="success"
-            :prepend-icon="icons[5]"
-            v-model="role"
-            label="Rôle"
-            :items="roles"
-            item-color="success"
-            deletable-chips
-            small-chips
           />
         </v-col>
       </v-row>
@@ -122,7 +141,8 @@ import {
   mdiAccountCog,
   mdiPhone,
   mdiPlaylistEdit,
-  mdiPlaylistPlus
+  mdiPlaylistPlus,
+  mdiLock
 } from "@mdi/js";
 import {mapActions, mapGetters} from "vuex";
 
@@ -133,21 +153,33 @@ export default {
       // enable or disable #sendBtn
       valid: false,
       // bunch of icons
-      icons: [mdiPlaylistPlus, mdiClose, mdiAccount, mdiEmail, mdiPhone, mdiAccountCog, mdiPlaylistEdit],
-      // field name regex: required, length <= 100
+      icons: [mdiPlaylistPlus, mdiClose, mdiAccount, mdiEmail, mdiPhone, mdiAccountCog, mdiPlaylistEdit, mdiLock],
+      // items for select input 'roles'
+      roles: ["admin", "visitor"],
+      // field name regex: length <= 100
       nameRules: [
-        v => !!v || 'Le nom est requis',
-        v => v && v.length <= 100 || 'Le nom ne peut faire plus de 100 caractères',
-      ],
-      // field address regex: length <= 255
-      mailRules: [
-        v => v ? v.length <= 255 || "l'adresse ne peut faire plus de 255 caractères" : true
+        v => v ? v.length <= 100 || 'Le nom ne peut faire plus de 100 caractères' : true
       ],
       // field phone regex: length <= 50
       phoneRules: [
         v => v ? v.length <= 50 || "le téléphone ne peut faire plus de 50 caractères" : true
       ],
-      roles: ["admin", "visitor"],
+      // regex for email : required, length < 255 and must contain one '@' and a '.' after
+      emailRules: [
+        v => !!v || "L'email est requis",
+        v => v && v.length <= 255 || "L'email doit contenir moins de 255 caractères",
+        v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || "L'email doit être valide",
+      ],
+      // password regex : required, length < 60, must contain 1 upper case 1 lower case, a number, a symbol and length >= 8
+      passwordRules: [
+        v => !!v || 'Le mot de passe est requis',
+        v => v && v.length <= 60 || "le mot de passe doit contenir moins de 60 caractères",
+        v => /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}/.test(v) || "Le mot de pass doit contenir au moins une majuscule, une minuscule, un chiffre, un symbole et 8 caractères minimum",
+      ],
+      // regex for role : required
+      roleRules: [
+        v => !!v || 'Le rôle est requis'
+      ]
     }
   },
   computed: {
@@ -192,6 +224,23 @@ export default {
         return this.$store.dispatch('users/updateRole', newValue)
       },
     },
+    email: {
+      get() {
+        return this.$store.getters["users/email"]
+      },
+      set(newValue) {
+        return this.$store.dispatch('users/updateEmail', newValue)
+      },
+    },
+    password: {
+      get() {
+        return this.$store.getters["users/password"]
+      },
+      set(newValue) {
+        return this.$store.dispatch('users/updatePassword', newValue)
+      },
+    },
+
     // return the good banner title depending on the dialog type
     bannerTitle() {
       return this.dialogType === 'create' ? 'Ajouter une utilisateur' : this.dialogType === 'patch' ?
@@ -222,10 +271,14 @@ export default {
 
     // function used to validate the form
     send() {
-      this.postUser().then(() => {
-        this.clear();
-        this.getUsers()
-      })
+      try {
+        this.postUser().then(() => {
+          this.clear();
+          this.getUsers()
+        })
+      } catch (error) {
+        this.alertError(error.message)
+      }
     },
 
     // function to post a new user or edit an existing one
@@ -286,13 +339,25 @@ export default {
     // used to set a formatted payload before sending a request to API
     setUser() {
       // return the formatted object
-      return {
-        first_name: this.first_name,
-        last_name: this.last_name,
-        email: this.email,
-        phone: this.phone,
-        role: this.role,
+      if (this.dialogType === 'create') {
+        // according to users controller, on methode create a user, join email and password
+        return {
+          first_name: this.first_name,
+          last_name: this.last_name,
+          email: this.email,
+          passphrase: this.password,
+          phone: this.phone,
+          role: this.role,
+        }
+      } else {
+        return {
+          first_name: this.first_name,
+          last_name: this.last_name,
+          phone: this.phone,
+          role: this.role,
+        }
       }
+
     },
 
     // function to clear values of the handled user in store and close the dialog

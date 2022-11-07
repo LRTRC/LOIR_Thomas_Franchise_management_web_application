@@ -4,6 +4,7 @@ export const state = () => ({
   first_name: '', // used when a specific user is handled
   last_name: '', // used when a specific user is handled
   email: '', // used when a specific user is handled
+  password: '', // used when a specific user is handled
   phone: '', // used when a specific user is handled
   role: '', // used when a specific user is handled
   franchisees_users: [], // to store all franchisees_users
@@ -20,6 +21,7 @@ export const getters = {
   first_name: state => state.first_name,
   last_name: state => state.last_name,
   email: state => state.email,
+  password: state => state.password,
   phone: state => state.phone,
   role: state => state.role,
   dialog: state => state.dialog,
@@ -32,20 +34,21 @@ export const mutations = {
     state.users = payload;
   },
   MUTATE_USER(state, user) {
-    state.id = user.id
-    state.first_name = user.first_name
-    state.last_name = user.last_name
-    state.email = user.email
-    state.phone = user.phone
-    state.role = user.role
+    state.id = user.id;
+    state.first_name = user.first_name;
+    state.last_name = user.last_name;
+    state.email = user.email;
+    state.phone = user.phone;
+    state.role = user.role;
   },
   CLEAR_USER(state) {
-    state.id = null
-    state.first_name = ''
-    state.last_name = ''
-    state.email = ''
-    state.phone = ''
-    state.role = ''
+    state.id = null;
+    state.first_name = '';
+    state.last_name = '';
+    state.email = '';
+    state.password = '';
+    state.phone = '';
+    state.role = '';
   },
   MUTATE_FRANCHISEES_USERS(state, payload) {
     state.franchisees_users = payload;
@@ -59,9 +62,12 @@ export const mutations = {
   MUTATE_LAST_NAME(state, payload) {
     state.last_name = payload;
   },
-  // MUTATE_EMAIL(state, payload) {
-  //   state.email = payload;
-  // },
+  MUTATE_EMAIL(state, payload) {
+    state.email = payload;
+  },
+  MUTATE_PASSWORD(state, payload) {
+    state.password = payload;
+  },
   MUTATE_PHONE(state, payload) {
     state.phone = payload;
   },
@@ -103,9 +109,12 @@ export const actions = {
   updateLastName({commit}, user) {
     commit('MUTATE_LAST_NAME', user)
   },
-  //  updateEmail({commit}, user) {
-  //   commit('MUTATE_EMAIL', user)
-  // },
+   updateEmail({commit}, user) {
+    commit('MUTATE_EMAIL', user)
+  },
+  updatePassword({commit}, user) {
+    commit('MUTATE_PASSWORD', user)
+  },
   updatePhone({commit}, user) {
     commit('MUTATE_PHONE', user)
   },

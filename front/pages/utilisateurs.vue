@@ -133,11 +133,11 @@ export default {
       icons: [mdiMagnify, mdiPencil, mdiDelete, mdiPlaylistCheck],
       // headers for the v-data table
       headers: [
+        {text: 'Email', value: 'email', align: 'start'},
+        {text: "Rôle", value: "role", align: 'start'},
         {text: 'Nom', value: 'last_name', align: 'start'},
         {text: 'Prénom', value: 'first_name', align: 'start'},
-        {text: 'Email', value: 'email', align: 'start'},
         {text: 'Téléphone', value: 'phone', align: 'start'},
-        {text: "Rôle", value: "role", align: 'start'},
         {text: "Franchisés", value: "franchise", align: 'start'},
         {text: "Structures", value: "structure", align: 'start'},
         {text: "Modifier / supprimer", value: "actions", sortable: false, align: 'center'},
