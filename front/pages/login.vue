@@ -1,20 +1,20 @@
 <template>
   <v-row justify="center" class="ma-auto">
-    <v-col cols="12" sm="7" md="4" lg="3" xl="3">
-      <v-progress-linear
+    <v-col cols="12" sm="7" md="4" lg="3" xl="3"class="text-center">
+      <v-progress-circular
         v-if="isLoading"
-        color="success"
+        color="primary"
         indeterminate
-        height="5"
-        rounded
+        size="120"
+        width="5"
       />
       <v-card class="card-neumorphism py-12" v-if="!isLoading">
-        <v-card-title style="font-family: 'Poppins', sans-serif;font-weight: bold" class="justify-center">
+        <v-card-title id="title" class="justify-center">
           Franchises
           <br>
           GYM CLUB
         </v-card-title>
-        <v-card-subtitle style="font-weight: bold" class="text-center">
+        <v-card-subtitle id="subTitle" class="text-center">
           Connexion
         </v-card-subtitle>
         <v-form
@@ -179,6 +179,16 @@ export default {
 
 <style scoped>
 .v-btn {
+  font-weight: bold;
+}
+
+#title {
+  color: #19344F!important;
+  font-family: 'Poppins', sans-serif;
+  font-weight: bold
+}
+
+#subTitle {
   font-weight: bold;
 }
 </style>

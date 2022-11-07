@@ -3,14 +3,15 @@
     :style="{background: $vuetify.theme.themes['light'].background}"
   >
     <v-app-bar
+      id="appBar"
+      class="btn-neumorphism"
       v-if="loggedIn"
       app
       dense
-      dark
-      color="primary"
+      color="background"
     >
       <v-icon
-        dark
+        color="primary"
         class="mx-4"
         @click="drawer = !drawer"
       >
@@ -19,6 +20,7 @@
       <v-toolbar-title
         id="toolbarTitle"
         @click="$router.push('/')"
+        class="text--primary"
       >
         {{ title }}
       </v-toolbar-title>
@@ -132,11 +134,12 @@
     </v-main>
     <v-footer
       id="footer"
+      class="btn-neumorphism"
       v-if="loggedIn"
       absolute
       app
-      color="primary"
-      dark
+      color="background"
+
     >
       <span>{{ footerText }}</span>
     </v-footer>
@@ -241,8 +244,18 @@ export default {
 </script>
 <style scoped>
 
+#appBar, #footer {
+  border-radius: 0!important;
+}
+
 #toolbarTitle, #drawer, #footer {
   font-family: 'Poppins', sans-serif !important;
+  color: #19344F!important;
+  font-weight: bold;
+}
+
+#toolbarTitle {
+  font-size: 1.3em;
 }
 
 #footer {
@@ -257,10 +270,10 @@ export default {
   cursor: pointer;
 }
 
-#myAccountMenu {
-  background-color: #19344F!important;
+.menuBtn{
+  font-family: Poppins, sans-serif;
+  font-size: 0.9em;
 }
-
 .menuBtn:hover {
   cursor: pointer!important;
   background-color: rgba(255, 255, 255, 0.15) !important;
