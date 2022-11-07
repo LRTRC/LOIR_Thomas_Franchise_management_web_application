@@ -54,6 +54,7 @@
                 :rules="emailRules"
                 clearable
                 dense
+                disabled
               />
             </v-col>
             <v-col cols="12" lg="6">
