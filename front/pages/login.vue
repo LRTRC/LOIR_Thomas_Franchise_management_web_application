@@ -1,7 +1,14 @@
 <template>
   <v-row justify="center" class="ma-auto">
     <v-col cols="12" sm="7" md="4" lg="3" xl="3">
-      <v-card class="card-neumorphism py-12">
+      <v-progress-linear
+        v-if="isLoading"
+        color="success"
+        indeterminate
+        height="5"
+        rounded
+      />
+      <v-card class="card-neumorphism py-12" v-if="!isLoading">
         <v-card-title style="font-family: 'Poppins', sans-serif;font-weight: bold" class="justify-center">
           Franchises
           <br>
@@ -114,7 +121,11 @@ export default {
         v => v && v.length <= 60 || "le mot de passe doit contenir moins de 60 caractères",
         v => /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}/.test(v) || "Le mot de pass doit contenir au moins une majuscule, une minuscule, un chiffre, un symbole et 8 caractères minimum",
       ],
+      isLoading: true,
     }
+  },
+  beforeMount() {
+    setTimeout(() => this.isLoading = false, "1300")
   },
   methods: {
     ...mapActions({

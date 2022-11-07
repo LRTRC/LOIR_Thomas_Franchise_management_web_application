@@ -26,6 +26,7 @@
       <v-menu
         transition="slide-y-transition"
         :nudge-width="200"
+        nudge-bottom="15"
         offset-y
         bottom
         dark
@@ -38,7 +39,6 @@
             fab
             x-small
             color="primary"
-
           >
             <v-icon color="background" large>
               {{ icons[2] }}
@@ -48,6 +48,8 @@
 
         <v-list dense color="primary">
           <v-list-item
+            class="menuBtn"
+            v-ripple
             v-for="(item, i) in menuMyAccount"
             :key="i"
             @click.native="item.method"
@@ -257,5 +259,10 @@ export default {
 
 #myAccountMenu {
   background-color: #19344F!important;
+}
+
+.menuBtn:hover {
+  cursor: pointer!important;
+  background-color: rgba(255, 255, 255, 0.15) !important;
 }
 </style>
