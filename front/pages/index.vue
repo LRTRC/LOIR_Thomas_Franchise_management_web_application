@@ -293,7 +293,7 @@ export default {
       }
     },
 
-
+    // get all the needed data from API
     fetchData() {
       this.getFranchisees();
       this.getStructures();

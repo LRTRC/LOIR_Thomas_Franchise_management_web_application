@@ -24,7 +24,6 @@
       >
         {{ title }}
       </v-toolbar-title>
-      <v-spacer/>
       <v-menu
         transition="slide-y-transition"
         :nudge-width="200"
@@ -37,7 +36,7 @@
           <v-btn
             v-bind="attrs"
             v-on="on"
-            class="mr-8"
+            class="mx-4"
             fab
             x-small
             color="primary"

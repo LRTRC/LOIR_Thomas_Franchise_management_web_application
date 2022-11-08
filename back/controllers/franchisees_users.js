@@ -15,12 +15,12 @@ const getFranchiseesUsers = async (req, res, next) => {
 
         // if no result return 404
         if (data.rowCount === 0)
-            return res.status(404).send("No franchisee exists");
+            return res.status(404).send("No franchisee's user exists");
 
         // else return result
         return res.status(200).json({
             status: 200,
-            message: "All franchisees:",
+            message: "All franchisees users:",
             data: data.rows
         });
 
@@ -39,7 +39,7 @@ const createFranchiseeUser = async (req, res, next) => {
     // sets a franchisee with the model
     const franchisee_user = new FranchiseeUser(id_franchise, id_user)
 
-    // build SQL query : insert all columns except id into franchisees table, returns the franchisee created
+    // build SQL query : insert all columns except id into franchisees_users table, returns the franchisees_users created
     const query =
         "INSERT INTO franchisees_users (id_franchise, id_user)  VALUES($1, $2) RETURNING *;";
     const values = [franchisee_user.id_franchise, franchisee_user.id_user];
@@ -51,7 +51,7 @@ const createFranchiseeUser = async (req, res, next) => {
         // if ok send 201
         return res.status(201).json({
             status: 201,
-            message: "Franchisee added successfully",
+            message: "Franchisee's user added successfully",
             data: data.rows
         });
         // else return error
@@ -66,8 +66,8 @@ const getFranchiseeUserById = async (req, res, next) => {
     // gets id from request params
     const id = parseInt(req.params.id);
 
-    // build SQL query : select all columns from franchisees table where id = id in request
-    const query = "SELECT * FROM franchisees WHERE id=$1;";
+    // build SQL query : select all columns from franchisees_users table where id = id in request
+    const query = "SELECT * FROM franchisees_users WHERE id=$1;";
     const value = [id];
 
     try {
@@ -76,12 +76,12 @@ const getFranchiseeUserById = async (req, res, next) => {
         const data = await pool.query(query, value);
 
         // if no result send 404
-        if (data.rowCount === 0) return res.status(404).send("No franchisee exists");
+        if (data.rowCount === 0) return res.status(404).send("No franchisee's user exists");
 
         // else send result
         return res.status(200).json({
             status: 200,
-            message: "Franchisee:",
+            message: "Franchisee's user:",
             data: data.rows
         })
 
@@ -98,15 +98,15 @@ const updateFranchiseeUser = async (req, res, next) => {
     const id = parseInt(req.params.id);
 
     // set values from request body
-    const {name, address, phone, default_modules, isactive} = req.body;
+    const {id_franchise, id_user} = req.body;
 
-    // create a franchisee with the model
-    const franchisee = new Franchisee(name, address, phone, default_modules, isactive)
+    // create a franchisees_users with the model
+    const franchiseeUser = new FranchiseeUser(id_franchise, id_user)
 
     // build SQL query : update all columns and returns all columns
     const query =
-        "UPDATE franchisees SET name=$1, address=$2, phone=$3, default_modules=$4, isactive=$5, id=$6 WHERE id=$6 RETURNING *;";
-    const value = [franchisee.name, franchisee.address, franchisee.phone, franchisee.default_modules, franchisee.isactive, id];
+        "UPDATE franchisees_users SET id_franchise=$1, id_user=$2, id=$3 WHERE id=$3 RETURNING *;";
+    const value = [franchiseeUser.id_franchise, franchiseeUser.id_user, id];
 
     try {
 
@@ -114,12 +114,12 @@ const updateFranchiseeUser = async (req, res, next) => {
         const data = await pool.query(query, value);
 
         // if no result send 404
-        if (data.rowCount === 0) return res.status(404).send("Franchisee does not exist");
+        if (data.rowCount === 0) return res.status(404).send("Franchisee's user does not exist");
 
         // else return result
         return res.status(200).json({
             status: 200,
-            message: "Franchisee updated successfully ",
+            message: "Franchisee's user updated successfully ",
             data: data.rows
         })
 
@@ -137,7 +137,7 @@ const deleteFranchiseeUser = async (req, res, next) => {
     const value = [id];
 
     // build SQL query : delete tuple where id = id in request
-    const query = "DELETE FROM franchisees WHERE id=$1;";
+    const query = "DELETE FROM franchisees_users WHERE id=$1;";
 
     try {
 
@@ -145,12 +145,12 @@ const deleteFranchiseeUser = async (req, res, next) => {
         const data = await pool.query(query, value);
 
         // if no result send 404
-        if (data.rowCount === 0) return res.status(404).send("Franchisee does not exist");
+        if (data.rowCount === 0) return res.status(404).send("Franchisee's user does not exist");
 
         // else send result
         return res.status(200).json({
             status: 200,
-            message: "Franchisee deleted successfully"
+            message: "Franchisee's user deleted successfully"
         })
 
         // or catch error
