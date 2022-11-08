@@ -1,155 +1,155 @@
 <template>
-  <v-card class="v-card-glass">
-    <v-banner
-      id="bannerHandleFranchisee"
-      color="primary"
-      width="100%"
-      :icon="bannerIcon"
-      icon-color="white"
-      single-line
-      dark
-    >
-      {{ bannerTitle }}
-      <v-spacer/>
-      <template v-slot:actions>
-        <v-switch
-          class="px-4"
-          id="isActive"
-          label="Activé / désactivé"
-          v-model="isActive"
+    <v-card class="v-card-glass" v-if="!isLoading">
+      <v-banner
+        id="bannerHandleFranchisee"
+        color="primary"
+        width="100%"
+        :icon="bannerIcon"
+        icon-color="white"
+        single-line
+        dark
+      >
+        {{ bannerTitle }}
+        <v-spacer/>
+        <template v-slot:actions>
+          <v-switch
+            class="px-4"
+            id="isActive"
+            label="Activé / désactivé"
+            v-model="isActive"
+            color="success"
+            inset
+            dense
+            dark
+          />
+        </template>
+      </v-banner>
+      <v-form
+        class="pa-4"
+        ref="form"
+        v-model="valid"
+      >
+        <v-row>
+          <v-col cols="12" lg="4">
+            <v-text-field
+              id="name"
+              v-model="name"
+              label="Nom"
+              class="pa-4"
+              color="success"
+              :rules="nameRules"
+              :counter="100"
+              :prepend-icon="icons[2]"
+              :clear-icon="icons[1]"
+              required
+              clearable
+              dense
+            />
+          </v-col>
+          <v-col cols="12" lg="4">
+            <v-text-field
+              id="address"
+              v-model="address"
+              label="Adresse"
+              class="pa-4"
+              color="success"
+              :rules="addressRules"
+              :counter="255"
+              :prepend-icon="icons[3]"
+              :clear-icon="icons[1]"
+              clearable
+              dense
+            />
+          </v-col>
+          <v-col cols="12" lg="4">
+            <v-text-field
+              id="phone"
+              v-model="phone"
+              label="Téléphone"
+              class="pa-4"
+              color="success"
+              :rules="phoneRules"
+              :counter="50"
+              :prepend-icon="icons[4]"
+              :clear-icon="icons[1]"
+              clearable
+              dense
+            />
+          </v-col>
+        </v-row>
+        <v-divider class="my-4"/>
+        <v-row v-if="dialogType === 'patch'">
+          <v-col>
+            <v-select
+              id="selectStructures"
+              class="px-4"
+              color="success"
+              :prepend-icon="icons[7]"
+              v-model="selectedStructures"
+              label="Structures du franchisé"
+              :items="structures"
+              item-color="success"
+              multiple
+              deletable-chips
+              small-chips
+            />
+          </v-col>
+        </v-row>
+        <v-row v-if="dialogType === 'patch'">
+          <v-col>
+            <v-select
+              id="selectUsers"
+              class="px-4"
+              color="success"
+              :prepend-icon="icons[8]"
+              v-model="selectedUsers"
+              label="Utilisateurs du franchisé"
+              :items="users"
+              item-color="success"
+              multiple
+              deletable-chips
+              small-chips
+            />
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-select
+              id="selectModules"
+              class="pa-x"
+              color="success"
+              :prepend-icon="icons[5]"
+              v-model="selectedModules"
+              label="Modules activés par défault"
+              :items="modules"
+              item-color="success"
+              multiple
+              deletable-chips
+              small-chips
+            />
+          </v-col>
+        </v-row>
+      </v-form>
+      <v-card-actions class="px-4">
+        <v-spacer></v-spacer>
+        <v-btn
+          id="clearBtn"
+          text
+          @click.native="clear"
+        >
+          annuler
+        </v-btn>
+        <v-btn
+          id="sendBtn"
           color="success"
-          inset
-          dense
-          dark
-        />
-      </template>
-    </v-banner>
-    <v-form
-      class="pa-4"
-      ref="form"
-      v-model="valid"
-    >
-      <v-row>
-        <v-col cols="12" lg="4">
-          <v-text-field
-            id="name"
-            v-model="name"
-            label="Nom"
-            class="pa-4"
-            color="success"
-            :rules="nameRules"
-            :counter="100"
-            :prepend-icon="icons[2]"
-            :clear-icon="icons[1]"
-            required
-            clearable
-            dense
-          />
-        </v-col>
-        <v-col cols="12" lg="4">
-          <v-text-field
-            id="address"
-            v-model="address"
-            label="Adresse"
-            class="pa-4"
-            color="success"
-            :rules="addressRules"
-            :counter="255"
-            :prepend-icon="icons[3]"
-            :clear-icon="icons[1]"
-            clearable
-            dense
-          />
-        </v-col>
-        <v-col cols="12" lg="4">
-          <v-text-field
-            id="phone"
-            v-model="phone"
-            label="Téléphone"
-            class="pa-4"
-            color="success"
-            :rules="phoneRules"
-            :counter="50"
-            :prepend-icon="icons[4]"
-            :clear-icon="icons[1]"
-            clearable
-            dense
-          />
-        </v-col>
-      </v-row>
-      <v-divider class="my-4"/>
-      <v-row v-if="dialogType === 'patch'">
-        <v-col>
-          <v-select
-            id="selectStructures"
-            class="px-4"
-            color="success"
-            :prepend-icon="icons[7]"
-            v-model="selectedStructures"
-            label="Structures du franchisé"
-            :items="structures"
-            item-color="success"
-            multiple
-            deletable-chips
-            small-chips
-          />
-        </v-col>
-      </v-row>
-      <v-row v-if="dialogType === 'patch'">
-        <v-col>
-          <v-select
-            id="selectUsers"
-            class="px-4"
-            color="success"
-            :prepend-icon="icons[8]"
-            v-model="selectedUsers"
-            label="Utilisateurs du franchisé"
-            :items="users"
-            item-color="success"
-            multiple
-            deletable-chips
-            small-chips
-          />
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <v-select
-            id="selectModules"
-            class="pa-x"
-            color="success"
-            :prepend-icon="icons[5]"
-            v-model="selectedModules"
-            label="Modules activés par défault"
-            :items="modules"
-            item-color="success"
-            multiple
-            deletable-chips
-            small-chips
-          />
-        </v-col>
-      </v-row>
-    </v-form>
-    <v-card-actions class="px-4">
-      <v-spacer></v-spacer>
-      <v-btn
-        id="clearBtn"
-        text
-        @click.native="clear"
-      >
-        annuler
-      </v-btn>
-      <v-btn
-        id="sendBtn"
-        color="success"
-        :disabled="!valid"
-        text
-        @click.native="send"
-      >
-        sauvegarder
-      </v-btn>
-    </v-card-actions>
-  </v-card>
+          :disabled="!valid"
+          text
+          @click.native="send"
+        >
+          sauvegarder
+        </v-btn>
+      </v-card-actions>
+    </v-card>
 </template>
 
 <script>
@@ -170,6 +170,8 @@ export default {
   name: "handle_franchisee",
   data() {
     return {
+      //
+      isLoading: false,
       // enable or disable #sendBtn
       valid: false,
       // existing modules that can be selected, used in the select input
@@ -343,7 +345,9 @@ export default {
 
     // function used to validate the form
     send() {
+      this.isLoading = true
       this.postFranchisee().then(() => {
+        this.isLoading = true
         this.clear();
       })
     },
