@@ -4,10 +4,11 @@ const express = require('express');
 // import cors module
 const cors = require('cors');
 
-// import franchisees router
+// import routers
 const franchiseesRouter = require("./routes/franchisees");
 const structuresRouter = require("./routes/structures");
 const usersRouter = require("./routes/users");
+const franchiseesUsersRouter = require("./routes/franchisees_users");
 const authRouter = require("./routes/auth");
 
 
@@ -37,6 +38,7 @@ app.use(cors());
 app.use("/api/franchisees", franchiseesRouter);
 app.use("/api/structures", structuresRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/franchisees_users", franchiseesUsersRouter);
 app.use("/auth", authRouter);
 
 // export app to access it from node server

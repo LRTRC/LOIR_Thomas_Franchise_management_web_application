@@ -78,7 +78,7 @@
         </v-col>
       </v-row>
       <v-divider class="my-4"/>
-      <v-row  v-if="dialogType === 'patch'">
+      <v-row v-if="dialogType === 'patch'">
         <v-col>
           <v-select
             id="selectStructures"
@@ -88,6 +88,23 @@
             v-model="selectedStructures"
             label="Structures du franchisé"
             :items="structures"
+            item-color="success"
+            multiple
+            deletable-chips
+            small-chips
+          />
+        </v-col>
+      </v-row>
+      <v-row v-if="dialogType === 'patch'">
+        <v-col>
+          <v-select
+            id="selectUsers"
+            class="px-4"
+            color="success"
+            :prepend-icon="icons[8]"
+            v-model="selectedUsers"
+            label="Utilisateurs du franchisé"
+            :items="users"
             item-color="success"
             multiple
             deletable-chips
@@ -138,6 +155,7 @@
 <script>
 import {
   mdiAccount,
+  mdiAccountMultiple,
   mdiClose,
   mdiFormatListChecks,
   mdiMapMarker,
@@ -190,7 +208,15 @@ export default {
         },
       ],
       // bunch of icons
-      icons: [mdiPlaylistPlus, mdiClose, mdiAccount, mdiMapMarker, mdiPhone, mdiFormatListChecks, mdiPlaylistEdit, mdiOfficeBuildingPlus],
+      icons: [mdiPlaylistPlus,
+        mdiClose,
+        mdiAccount,
+        mdiMapMarker,
+        mdiPhone,
+        mdiFormatListChecks,
+        mdiPlaylistEdit,
+        mdiOfficeBuildingPlus,
+        mdiAccountMultiple],
       // field name regex: required, length <= 100
       nameRules: [
         v => !!v || 'Le nom est requis',
@@ -205,12 +231,14 @@ export default {
         v => v ? v.length <= 50 || "le téléphone ne peut faire plus de 50 caractères" : true
       ],
       // use to edit with select input the franchisee's structures
-      selectedStructures: []
+      selectedStructures: [],
+      // use to edit with select input the franchisee's users
+      selectedUsers: [],
     }
   },
   mounted() {
     this.selectedStructures = [...this.findFranchiseeStructures(this.id, this.structuresImport)]
-    // console.log(this.findFranchiseeStructures(this.id, this.structuresImport))
+    this.selectedUsers = [...this.findFranchiseeUsers(this.id, this.franchises_users, this.usersImport)]
   },
   computed: {
     ...mapGetters({
@@ -220,6 +248,10 @@ export default {
       dialogType: 'franchisees/dialogType',
       // get all structures from the store
       structuresImport: 'structures/structures',
+      // get all users from the store
+      usersImport: 'users/users',
+      // get all franchisees_users from the store
+      franchises_users: 'franchisees_users/franchisees_users'
     }),
 
     // way to use v-models with vuex state. Used in the form to create or edit a franchisee
@@ -274,11 +306,21 @@ export default {
         this.icons[6] : null
     },
     structures() {
-      let array = []
+      let array = [];
       for (let structure of this.structuresImport) {
         array.push({
           text: structure.name,
           value: structure.id
+        })
+      }
+      return array
+    },
+    users() {
+      let array = [];
+      for (let user of this.usersImport) {
+        array.push({
+          text: user.email,
+          value: user.id
         })
       }
       return array
@@ -288,6 +330,8 @@ export default {
     ...mapActions({
       // get all franchisees from API
       getFranchisees: 'franchisees/getFranchisees',
+      // get franchisees_users
+      getFranchisesUsers: 'franchisees_users/getFranchiseesUsers',
       // mutate dialog value and type
       updateDialog: 'franchisees/updateDialog',
       // display success or error alert
@@ -301,7 +345,6 @@ export default {
     send() {
       this.postFranchisee().then(() => {
         this.clear();
-        this.getFranchisees()
       })
     },
 
@@ -331,6 +374,9 @@ export default {
 
         // if the dialog type is patch
         if (this.dialogType === 'patch') {
+
+          // post or patch franchiseesUsers
+          await this.postFranchiseesUsers();
 
           // patch structures owner
           await this.patchStructures();
@@ -394,6 +440,7 @@ export default {
     // returns all the structures possesses by the franchisee
     findFranchiseeStructures(franchiseeID, structures) {
       let array = []
+      // v select and v model push only the value property in the array of selected items (when using UI)
       structures.find(structure => {
         if (structure.id_franchise === franchiseeID) {
           array.push(structure.id)
@@ -402,14 +449,35 @@ export default {
       return array
     },
 
+    // returns all the users bound to the franchisee
+    findFranchiseeUsers(franchiseeID, franchisees_users, users) {
+      let franchiseesUsers = franchisees_users.filter(franchisee_user => franchisee_user.id_franchise === franchiseeID)
+      let result = []
+      for (let franchiseUser of franchiseesUsers) {
+        let user = users.find(el => el.id === franchiseUser.id_user)
+        result.push(user.id)
+      }
+      return result
+    },
+
     // get structures by id
     getStructuresByID(selectedStructures, structures) {
       return structures.filter(el => {
         if (selectedStructures.includes(el.id)) {
-         return el
+          return el
         }
       })
     },
+
+    // get franchisees users by id
+    getUsersByID(selectedUsers, users) {
+      return users.filter(el => {
+        if (selectedUsers.includes(el.id)) {
+          return el
+        }
+      })
+    },
+
 
     // patch structures when the user changes the owner of a structure
     // todo: find a way in controller to avoid loop
@@ -421,7 +489,33 @@ export default {
           structure.id_franchise = franchiseeID
           await this.$axios.$patch(`api/structures/${structure.id}`, structure)
         }
-      } catch(error) {
+      } catch (error) {
+        this.alertError(error.message)
+      }
+    },
+
+    // post franchisee's users
+    async postFranchiseesUsers() {
+      try {
+        // get current franchisee id
+        const franchiseeID = this.id
+        // get users selected in select input
+        let users = this.getUsersByID(this.selectedUsers, this.usersImport)
+        // for each user find its pair in the junction table franchisees_users
+        for (let user of users) {
+          let item = this.franchises_users.find(el => el.id_user === user.id)
+          // if a selected tuple already exist, patch it
+          if (item) {
+            item.id_franchise = franchiseeID
+            await this.$axios.$patch(`api/franchisees_users/${item.id}`, item)
+          }
+          // else create it
+          else {
+            const payload = {id_user: user.id, id_franchise: franchiseeID}
+            await this.$axios.$post('api/franchisees_users/', payload)
+          }
+        }
+      } catch (error) {
         this.alertError(error.message)
       }
     },
@@ -429,8 +523,11 @@ export default {
     // function to clear values of the handled franchisee in store and close the dialog
     clear() {
       this.clearFranchisee();
-      this.updateDialog({value: false, type: ''})
+      this.updateDialog({value: false, type: ''});
+      this.getFranchisees();
+      this.getFranchisesUsers();
     },
+
   }
 }
 </script>
