@@ -83,6 +83,17 @@
                 {{ structure.name }}
               </v-chip>
             </template>
+            <template v-slot:item.users="{ item }">
+              <v-chip
+                v-for="(franchisee_user, i) in findFranchiseeUsers(item, franchisees_users)"
+                :key="i"
+                class="px-2 ma-1"
+                color="success"
+                text-color="white"
+              >
+                {{ findUser(franchisee_user, users) }}
+              </v-chip>
+            </template>
 
             <template v-slot:item.actions="{ item }">
               <v-btn
@@ -157,15 +168,14 @@ export default {
         {text: 'Téléphone', value: 'phone', align: 'start'},
         {text: "Actif", value: "isactive", align: 'start'},
         {text: "Structures", value: 'structures', align: 'start'},
-        {text: "Membres", align: 'start'},
+        {text: "Membres", value: "users", align: 'start'},
         {text: "Modifier / supprimer", value: "actions", sortable: false, align: 'center'},
       ],
     }
   },
   mounted() {
-    // get all franchisees from API
-    this.getFranchisees();
-    this.getStructures();
+    // get all needed data from API
+  this.fetchData();
   },
   computed: {
     // stores getters
@@ -174,6 +184,10 @@ export default {
       franchisees: 'franchisees/franchisees',
       // all structures
       structures: 'structures/structures',
+      // all structures
+      franchisees_users: 'franchisees_users/franchisees_users',
+      // all structures
+      users: 'users/users',
       // sets modal value (used with #dialog v-model)
       dialog: 'franchisees/dialog',
       // used to set which component to be displayed in the modal
@@ -186,6 +200,10 @@ export default {
       getFranchisees: 'franchisees/getFranchisees',
       // get all structures from API
       getStructures: 'structures/getStructures',
+      // get all franchisees_users from API
+      getFranchiseesUsers: 'franchisees_users/getFranchiseesUsers',
+      // get all users from API
+      getUsers: 'users/getUsers',
       // mutates stores values
       updateName: 'franchisees/updateName',
       updateID: 'franchisees/updateID',
@@ -253,6 +271,34 @@ export default {
         }
       });
       return array
+    },
+
+    // returns all the users bound to the franchisee
+    findFranchiseeUsers(franchisee, franchisees_users) {
+      let array = []
+      franchisees_users.find(franchisee_user => {
+        if (franchisee_user.id_franchise === franchisee.id) {
+
+          array.push(franchisee_user)
+        }
+      });
+      return array
+    },
+
+    // returns the user email
+    findUser(franchisee_user, users) {
+      if (users.length > 0 ) {
+        let user = users.find(el => el.id === franchisee_user.id_user)
+        return user.email
+      }
+    },
+
+
+    fetchData() {
+      this.getFranchisees();
+      this.getStructures();
+      this.getFranchiseesUsers();
+      this.getUsers();
     }
   }
 }
