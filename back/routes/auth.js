@@ -5,10 +5,11 @@ const express = require("express");
 const router = express.Router();
 
 // import auth controller
-const {login} = require("../controllers/auth");
+const {login, refreshToken} = require("../controllers/auth");
 
 // sets login middleware on /auth/login path with the action post
 router.post("/login", login);
+router.post("/refresh_token", refreshToken)
 
 // don't forget to export it
 module.exports = router;

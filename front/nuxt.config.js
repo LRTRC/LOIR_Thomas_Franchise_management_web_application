@@ -13,11 +13,16 @@ export default {
     plugins: [ '~/plugins/auth.js' ],
     strategies: {
       local: {
+        scheme: 'refresh',
         token: {
           property: 'data.token',
           global: true,
           // required: true,
           // type: 'Bearer'
+        },
+        refreshToken: {
+          property: 'data.refresh_token',
+          type: 'X-Refresh-Token',
         },
         user: {
           property: 'data',
@@ -25,6 +30,8 @@ export default {
         },
         endpoints: {
           login: { url: '/auth/login', method: 'post', propertyName: 'data' },
+          // fetch token_refresh
+          refresh: { url: '/auth/refresh_token', method: 'post', propertyName: 'data.access_token' },
           logout: false,
           user: false
         },
