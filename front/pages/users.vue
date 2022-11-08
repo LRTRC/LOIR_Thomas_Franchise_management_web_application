@@ -123,7 +123,7 @@ import Handle_user from "../components/users/handle_user";
 import Delete_user from "../components/users/delete_user";
 
 export default {
-  name: "utilisateurs",
+  name: "users",
   components: {Delete_user, Handle_user},
   data() {
     return {

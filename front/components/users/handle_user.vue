@@ -332,7 +332,11 @@ export default {
 
         // else catch error and set error alert
       } catch (error) {
-        this.alertError(error.message)
+        if (error.response.data.message === "Adresse email déjà utilisée") {
+          return this.alertError("Adresse email déjà utilisée")
+        } else {
+          return this.alertError(error.message)
+        }
       }
     },
 

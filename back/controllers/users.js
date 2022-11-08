@@ -63,7 +63,11 @@ const createUser = async (req, res, next) => {
             data: data.rows
         });
     } catch (error) {
-        return next(error);
+        if (error.message === "duplicate key value violates unique constraint \"email_unique\"") {
+            return res.status(501).send({message: 'Adresse email déjà utilisée'})
+        } else {
+            return next(error);
+        }
     }
 };
 
