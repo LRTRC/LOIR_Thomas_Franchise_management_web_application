@@ -185,7 +185,7 @@ export default {
         {
           icon: mdiAccountGroup,
           title: 'Utilisateurs',
-          to: '/utilisateurs'
+          to: '/users'
         },
 
       ],
