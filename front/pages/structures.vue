@@ -131,6 +131,7 @@
       persistent
       v-model="dialog"
       max-width="600px"
+      scrollable
     >
       <handle_structure
         v-if="dialogType === 'patch' || dialogType === 'create' && dialog"

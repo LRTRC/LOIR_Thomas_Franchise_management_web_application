@@ -1,6 +1,17 @@
 <template>
-    <v-card class="v-card-glass" v-if="!isLoading">
+  <v-card class="v-card-glass" style="overflow-x: hidden!important;">
+      <v-col v-if="isLoading" class="text-center">
+        <v-progress-circular
+          class="ma-8 pa-8"
+          color="primary"
+          indeterminate
+          size="120"
+          width="5"
+        />
+      </v-col>
+
       <v-banner
+        v-if="!isLoading"
         id="bannerHandleFranchisee"
         color="primary"
         width="100%"
@@ -25,6 +36,7 @@
         </template>
       </v-banner>
       <v-form
+        v-if="!isLoading"
         class="pa-4"
         ref="form"
         v-model="valid"
@@ -130,7 +142,7 @@
           </v-col>
         </v-row>
       </v-form>
-      <v-card-actions class="px-4">
+      <v-card-actions v-if="!isLoading" class="px-4">
         <v-spacer></v-spacer>
         <v-btn
           id="clearBtn"
@@ -149,7 +161,7 @@
           sauvegarder
         </v-btn>
       </v-card-actions>
-    </v-card>
+  </v-card>
 </template>
 
 <script>
@@ -170,7 +182,7 @@ export default {
   name: "handle_franchisee",
   data() {
     return {
-      //
+      // used to close form after validate it
       isLoading: false,
       // enable or disable #sendBtn
       valid: false,
@@ -347,8 +359,9 @@ export default {
     send() {
       this.isLoading = true
       this.postFranchisee().then(() => {
-        this.isLoading = true
         this.clear();
+        this.getFranchisees();
+        this.getFranchisesUsers();
       })
     },
 
@@ -528,8 +541,6 @@ export default {
     clear() {
       this.clearFranchisee();
       this.updateDialog({value: false, type: ''});
-      this.getFranchisees();
-      this.getFranchisesUsers();
     },
 
   }

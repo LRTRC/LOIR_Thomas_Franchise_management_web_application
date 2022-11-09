@@ -134,7 +134,7 @@
       v-model="dialog"
       max-width="600px"
       transition="dialog-bottom-transition"
-
+      scrollable
     >
       <handle_franchisee
         v-if="dialogType === 'patch' || dialogType === 'create' && dialog"
