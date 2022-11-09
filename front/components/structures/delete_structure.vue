@@ -60,6 +60,7 @@ export default {
       // used when a specific structure is handled in the v-data table
       id: 'structures/id',
       name: 'structures/name',
+      structures: 'structures/structures'
     })
   },
   methods: {
