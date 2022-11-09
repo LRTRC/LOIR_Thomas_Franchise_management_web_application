@@ -27,13 +27,13 @@ export const mutations = {
     state.id_user = payload;
   },
   // reset all values
-  CLEAR_FRANCHISEE(state) {
+  CLEAR_FRANCHISEE_USER(state) {
     state.id = null;
     state.id_franchise = null;
     state.id_user = null;
   },
   // reset value
-  CLEAR_FRANCHISEES(state) {
+  CLEAR_FRANCHISEES_USER(state) {
     state.franchisees_users = [];
   },
 }
@@ -64,7 +64,7 @@ export const actions = {
     commit('MUTATE_ID_USER', payload)
   },
   clearFranchisee({commit}) {
-    commit('CLEAR_FRANCHISEE')
+    commit('CLEAR_FRANCHISEE_USER')
   },
 }
 

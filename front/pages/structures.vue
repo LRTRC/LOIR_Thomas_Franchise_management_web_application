@@ -82,6 +82,17 @@
               </v-chip>
 
             </template>
+            <template v-slot:item.users="{ item }">
+              <v-chip
+                v-for="(structure_user, i) in findStructureUsers(item, structures_users)"
+                :key="i"
+                class="px-2 ma-1"
+                color="success"
+                text-color="white"
+              >
+                {{ findUser(structure_user, users) }}
+              </v-chip>
+            </template>
             <template v-slot:item.actions="{ item }">
               <v-btn
                 id="btnEditItem"
@@ -156,7 +167,7 @@ export default {
         {text: 'Téléphone', value: 'phone', align: 'start'},
         {text: "Actif", value: "isactive", align: 'start'},
         {text: "Franchisé", value: "id_franchise", align: 'start'},
-        {text: "Membres", align: 'start'},
+        {text: "Membres", value: "users", align: 'start'},
         {text: "Modifier / supprimer", value: "actions", sortable: false, align: 'center'},
       ],
       formattedFranchisees: []
@@ -164,14 +175,15 @@ export default {
   },
   mounted() {
     // get all structures and franchisees from API
-    this.getFranchisees();
-    this.getStructures();
+   this.fetchData();
   },
   computed: {
     ...mapGetters({
       // all the needed data from stores
       franchisees: 'franchisees/franchisees',
       structures: 'structures/structures',
+      users: 'users/users',
+      structures_users: 'structures_users/structures_users',
       // sets modal value (used with #dialog v-model)
       dialog: 'structures/dialog',
       // used to set which component to be displayed in the modal
@@ -188,6 +200,8 @@ export default {
       // all actions needed from stores
       getFranchisees: 'franchisees/getFranchisees',
       getStructures: 'structures/getStructures',
+      getUsers: 'users/getUsers',
+      getStructuresUsers: 'structures_users/getStructuresUsers',
       updateDialog: 'structures/updateDialog',
       updateID: 'structures/updateID',
       updateIdFranchise: 'structures/updateIdFranchise',
@@ -268,11 +282,38 @@ export default {
 
       // used to set which component to displays in the v-dialog
       this.updateDialog({value: true, type: dialogType});
-    }
+    },
+
+    // get all data needed from API
+    fetchData() {
+      this.getFranchisees();
+      this.getStructures();
+      this.getUsers();
+      this.getStructuresUsers();
+    },
+
+    // returns all the users bound to the structure
+    findStructureUsers(structure, structures_users) {
+      let array = []
+      structures_users.find(franchisee_user => {
+        if (franchisee_user.id_structure === structure.id) {
+
+          array.push(franchisee_user)
+        }
+      });
+      return array
+    },
+
+    // returns the user email
+    findUser(structure_user, users) {
+      if (users.length > 0 ) {
+        let user = users.find(el => el.id === structure_user.id_user)
+        return user.email
+      }
+    },
   }
 }
 
-// todo: page to manage structures
 </script>
 
 <style scoped>

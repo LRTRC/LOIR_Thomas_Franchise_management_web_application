@@ -9,6 +9,7 @@ const franchiseesRouter = require("./routes/franchisees");
 const structuresRouter = require("./routes/structures");
 const usersRouter = require("./routes/users");
 const franchiseesUsersRouter = require("./routes/franchisees_users");
+const structuresUsersRouter = require("./routes/structures_users");
 const authRouter = require("./routes/auth");
 
 
@@ -39,6 +40,7 @@ app.use("/api/franchisees", franchiseesRouter);
 app.use("/api/structures", structuresRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/franchisees_users", franchiseesUsersRouter);
+app.use("/api/structures_users", structuresUsersRouter);
 app.use("/auth", authRouter);
 
 // export app to access it from node server
