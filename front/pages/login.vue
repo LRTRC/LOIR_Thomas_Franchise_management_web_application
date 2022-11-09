@@ -125,7 +125,7 @@ export default {
     }
   },
   beforeMount() {
-    setTimeout(() => this.isLoading = false, "1300")
+    setTimeout(() => this.isLoading = false, "500")
   },
   methods: {
     ...mapActions({

@@ -495,6 +495,15 @@ export default {
       })
     },
 
+    // sort users that do not belong to the franchisee
+    getNotOwnedUsers(selectedUsers, users) {
+      return users.filter(el => {
+        if (!selectedUsers.includes(el.id)) {
+          return el
+        }
+      })
+    },
+
 
     // patch structures when the user changes the owner of a structure
     // todo: find a way in controller to avoid loop
@@ -530,6 +539,14 @@ export default {
           else {
             const payload = {id_user: user.id, id_franchise: franchiseeID}
             await this.$axios.$post('api/franchisees_users/', payload)
+          }
+        }
+        // delete old tuples
+        let notOwnerUsers = this.getNotOwnedUsers(this.selectedUsers, this.usersImport)
+        for (let user of notOwnerUsers) {
+          let item = this.franchises_users.find(el => el.id_user === user.id && this.id === el.id_franchise)
+          if (item) {
+            await this.$axios.delete(`api/franchisees_users/${item.id}`)
           }
         }
       } catch (error) {
