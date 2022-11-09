@@ -1,7 +1,7 @@
 // import pool object from pg module exported in config.js
 const {pool} = require("../config");
 
-// import Franchisee model
+// import FranchiseeUser model
 const FranchiseeUser = require('../models/franchisees_users')
 
 // Get all franchisees_users
@@ -36,7 +36,7 @@ const createFranchiseeUser = async (req, res, next) => {
     // get values from body request
     const {id_franchise, id_user} = req.body;
 
-    // sets a franchisee with the model
+    // sets a franchisee_user with the model
     const franchisee_user = new FranchiseeUser(id_franchise, id_user)
 
     // build SQL query : insert all columns except id into franchisees_users table, returns the franchisees_users created
