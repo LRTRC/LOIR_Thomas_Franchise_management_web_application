@@ -157,6 +157,7 @@ import {mapActions, mapGetters} from 'vuex'
 export default {
   name: 'IndexPage',
   components: {DeleteFranchisee, Handle_franchisee},
+  middleware: ['admin'],
   data() {
     return {
       // search bar value (used with #franchiseesSearchBar v-model)

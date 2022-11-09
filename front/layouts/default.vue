@@ -11,6 +11,7 @@
       color="background"
     >
       <v-icon
+        v-if="isAdmin"
         color="primary"
         class="mx-4"
         @click="drawer = !drawer"
@@ -215,6 +216,10 @@ export default {
     // tells if loggedIn is true (from nuxt auth)
     loggedIn() {
       return !!this.$auth.loggedIn
+    },
+    // get user's role
+    isAdmin() {
+      return this.$auth.user.role === "admin"
     },
     // set a string to display into the footer
     footerText() {

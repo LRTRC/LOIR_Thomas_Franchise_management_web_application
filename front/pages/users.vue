@@ -125,6 +125,7 @@ import Delete_user from "../components/users/delete_user";
 export default {
   name: "users",
   components: {Delete_user, Handle_user},
+  middleware: ['admin'],
   data() {
     return {
       // search bar value (used with #usersSearchBar v-model)
@@ -138,8 +139,6 @@ export default {
         {text: 'Nom', value: 'last_name', align: 'start'},
         {text: 'Prénom', value: 'first_name', align: 'start'},
         {text: 'Téléphone', value: 'phone', align: 'start'},
-        {text: "Franchisés", value: "franchise", align: 'start'},
-        {text: "Structures", value: "structure", align: 'start'},
         {text: "Modifier / supprimer", value: "actions", sortable: false, align: 'center'},
       ],
     }

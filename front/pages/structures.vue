@@ -155,6 +155,7 @@ import Handle_structure from "../components/structures/handle_structure";
 export default {
   name: "structures",
   components: {Handle_structure, Delete_structure},
+  middleware: ['admin'],
   data() {
     return {
       // search bar value (used with #structuresSearchBar v-model)

@@ -96,6 +96,7 @@
               v-model="id_franchise"
               label="Franchisé"
               :items="formatted_franchisees"
+              :rules="franchiseRule"
               item-color="success"
               deletable-chips
               small-chips
@@ -195,6 +196,10 @@ export default {
       // field phone regex: length <= 50
       phoneRules: [
         v => v ? v.length <= 50 || "le téléphone ne peut faire plus de 50 caractères" : true
+      ],
+      // franchise select regex : required
+      franchiseRule: [
+        v => !!v || 'Un franchisé doit être séléctionné'
       ],
       // use to edit with select input the franchisee's users
       selectedUsers: [],
@@ -484,6 +489,15 @@ export default {
       })
     },
 
+    // sort users that do not belong to the franchisee
+    getNotOwnedUsers(selectedUsers, users) {
+      return users.filter(el => {
+        if (!selectedUsers.includes(el.id)) {
+          return el
+        }
+      })
+    },
+
     // post structure's users
     async postStructuresUsers() {
       try {
@@ -503,6 +517,14 @@ export default {
           else {
             const payload = {id_user: user.id, id_structure: structureID}
             await this.$axios.$post('api/structures_users/', payload)
+          }
+        }
+        // delete old tuples
+        let notOwnerUsers = this.getNotOwnedUsers(this.selectedUsers, this.usersImport)
+        for (let user of notOwnerUsers) {
+          let item = this.structures_users.find(el => el.id_user === user.id && this.id === el.id_structure)
+          if (item) {
+            await this.$axios.delete(`api/structures_users/${item.id}`)
           }
         }
       } catch (error) {
