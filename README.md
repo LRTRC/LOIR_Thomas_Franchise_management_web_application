@@ -5,6 +5,14 @@
 
 https://loir-thomas-franchise-management-web-0r8c.onrender.com/
 
+Auth with a user : 
+id = toto@dev.fr
+password = AZE1234a!
+
+Auth with a guest : 
+id = tutu@dev.fr
+password = AZE1234a!
+
 ## GitHub
 GitHub : https://github.com/LRTRC/LOIR_Thomas_Franchise_management_web_application/
 
