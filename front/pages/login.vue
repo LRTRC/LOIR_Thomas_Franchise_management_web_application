@@ -106,7 +106,7 @@ export default {
       // used to disable form before validate
       valid: false,
       // todo: for demo version we will set a default existing user but for production replace by ''
-      email: 'toto@dev.fr',
+      email: '',
       // regex for email : required, length < 255 and must contain one '@' and a '.' after
       emailRules: [
         v => !!v || "L'email est requis",
@@ -114,7 +114,7 @@ export default {
         v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || "L'email doit être valide",
       ],
       // todo: for demo version we will set a default existing user but for production replace by ''
-      password: 'AZE1234a!',
+      password: '',
       // password regex : required, length < 60, must contain 1 upper case 1 lower case, a number, a symbol and length >= 8
       passwordRules: [
         v => !!v || 'Le mot de passe est requis',
