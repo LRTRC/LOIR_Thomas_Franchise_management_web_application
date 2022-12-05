@@ -25,7 +25,7 @@
         id="cardTitle"
         class="text-h6 justify-center"
       >
-        Êtes-vous sûr de vouloir supprimer la structure "{{ name }}" ?
+        <span>Êtes-vous sûr de vouloir supprimer la structure "<strong>{{ name }}</strong>" ?</span>
       </v-card-title>
     </div>
     <v-card-actions>
@@ -60,7 +60,8 @@ export default {
       // used when a specific structure is handled in the v-data table
       id: 'structures/id',
       name: 'structures/name',
-      structures: 'structures/structures'
+      structures: 'structures/structures',
+      structures_users: "structures_users/structures_users",
     })
   },
   methods: {
@@ -73,13 +74,22 @@ export default {
       // get all structures from API
       getStructures: 'structures/getStructures',
       // clear the current values used to handle a specific franchisee
-      clearStructure: 'structures/clearStructure'
+      clearStructure: 'structures/clearStructure',
     }),
 
     // function to validate the form to delete an existing franchisee
     async send() {
 
       try {
+
+
+        // delete structures_users related to the handled structure
+        let structureUsers = this.findStructureUsers(this.id, this.structures_users);
+        if (structureUsers && structureUsers.length  > 0) {
+          for (const structure_user of structureUsers) {
+            await this.$axios.$delete(`/api/structures_users/${structure_user.id}`)
+          }
+        }
 
         // sent to API
         await this.$axios.$delete(`/api/structures/${this.id}`)
@@ -112,8 +122,14 @@ export default {
 
       // close dialog
       this.updateDialog({value: false, type: ''});
-    }
-  },
+    },
+
+    // returns all the users bound to the structure
+    findStructureUsers(structureID, structures_users) {
+      return structures_users.filter(structure_user => structure_user.id_structure === structureID)
+    },
+
+  }
 }
 </script>
 

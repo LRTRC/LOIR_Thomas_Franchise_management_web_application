@@ -251,7 +251,7 @@ export default {
     findFranchiseeName(structure, franchisees) {
       if (franchisees.length > 0) {
         let franchisee = franchisees.find(el => el.id === structure.id_franchise)
-        return `${franchisee.name} (${franchisee.id})`;
+        if (franchisee) return `${franchisee.name} (${franchisee.id})`;
       }
     },
     formatFranchisees(franchisees) {
