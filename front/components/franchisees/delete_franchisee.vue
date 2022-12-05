@@ -25,7 +25,13 @@
         id="cardTitle"
         class="text-h6 justify-center"
       >
-        Êtes-vous sûr de vouloir supprimer le franchisé "{{ name }}" ?
+        <span class="text-center">
+          Êtes-vous sûr de vouloir supprimer le franchisé "<strong>{{ name }}</strong>" ?
+        </span>
+        <br>
+        <span class="text-center">
+          Attention, si des structures sont liées, elles seront automatiquement supprimées aussi.
+        </span>
       </v-card-title>
     </div>
     <v-card-actions>
@@ -59,6 +65,8 @@ export default {
       // used when a specific franchisee is handled in the v-data table
       id: 'franchisees/id',
       name: 'franchisees/name',
+      franchisees_users: 'franchisees_users/franchisees_users',
+      structures: 'structures/structures'
     })
   },
   methods: {
@@ -78,6 +86,22 @@ export default {
     async send() {
 
       try {
+
+        // delete franchisees_structures related to the current franchisee
+        let franchiseesUsers = this.findFranchiseeUsers(this.id, this.franchisees_users);
+        if (franchiseesUsers && franchiseesUsers.length > 0) {
+          for (const franchise_user of franchiseesUsers) {
+            await this.$axios.$delete(`/api/franchisees_users/${franchise_user.id}`)
+          }
+        }
+
+        // delete franchisees_structures related to the current franchisee
+        let franchiseesStructures = this.findFranchiseeStructures(this.id, this.structures);
+        if (franchiseesStructures && franchiseesStructures.length > 0) {
+          for (const structure of franchiseesStructures) {
+            await this.$axios.$delete(`/api/structures/${structure.id}`)
+          }
+        }
 
         // sent to API
         await this.$axios.$delete(`/api/franchisees/${this.id}`)
@@ -110,7 +134,18 @@ export default {
 
       // close dialog
       this.updateDialog({value: false, type: ''});
+    },
+
+    // returns all the users bound to the structure
+    findFranchiseeUsers(franchiseeID, franchisees_users) {
+      return franchisees_users.filter(franchisee_user => franchisee_user.id_franchise === franchiseeID)
+    },
+
+    // find franchisee structures
+    findFranchiseeStructures(franchiseeID, structures) {
+      return structures.filter(structure => structure.id_franchise === franchiseeID)
     }
+
   },
 }
 </script>

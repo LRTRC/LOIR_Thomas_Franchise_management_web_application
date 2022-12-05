@@ -113,18 +113,6 @@ export default {
           third: '#5685FF',
           fourth: '#EF64D9'
         },
-        // light: {
-        //   primary: '#19344F',
-        //   secondary: '#225F9C',
-        //   accent: '#082139',
-        //   error: '#9C3832',
-        //   info: '#2D9ACF',
-        //   success: '#419C2A',
-        //   warning: '#FFC107',
-        //   background: '#e0e0e0',
-        //   third: '#225F9C',
-        //   fourth: '#EF64D9'
-        // }
       }
     }
   },
