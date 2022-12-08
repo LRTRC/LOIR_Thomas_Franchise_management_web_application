@@ -42,8 +42,8 @@ app.use(cors());
 app.use("/api/franchisees", isAdmin,franchiseesRouter);
 app.use("/api/structures", isAdmin, structuresRouter);
 app.use("/api/users", isAdmin, usersRouter);
-app.use("/api/franchisees_users", isAdmin,franchiseesUsersRouter);
-app.use("/api/structures_users", isAdmin,structuresUsersRouter);
+app.use("/api/franchisees_users",franchiseesUsersRouter);
+app.use("/api/structures_users",structuresUsersRouter);
 app.use("/auth", authRouter);
 
 // export app to access it from node server

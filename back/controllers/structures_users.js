@@ -91,6 +91,38 @@ const getStructureUserById = async (req, res, next) => {
     }
 };
 
+
+// get a franchisee_user by its user_id
+const getStructureUserByUserId = async (req, res, next) => {
+
+    // gets id from request params
+    const {id_user} = req.body;
+
+    // build SQL query : select all columns from franchisees_users table where id = id in request
+    const query = "SELECT * FROM structures_users WHERE id_user=$1;";
+    const value = [id_user];
+
+    try {
+
+        // send request
+        const data = await pool.query(query, value);
+
+        // if no result send 404
+        if (data.rowCount === 0) return res.status(404).send("No user's structure exists");
+
+        // else send result
+        return res.status(200).json({
+            status: 200,
+            message: "User's structures",
+            data: data.rows
+        })
+
+        // or catch error
+    } catch (error) {
+        return next(error);
+    }
+};
+
 // update a structure_user
 const updateStructureUser = async (req, res, next) => {
 
@@ -164,6 +196,7 @@ module.exports = {
     getStructuresUsers,
     createStructureUser,
     getStructureUserById,
+    getStructureUserByUserId,
     updateStructureUser,
     deleteStructureUser
 };
