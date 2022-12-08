@@ -29,7 +29,7 @@ router
     .post("/", auth, isAdmin, createFranchiseeUser)
     .get("/", auth, isAdmin, getFranchiseesUsers);
 router.get("/:id", auth, isAdmin, getFranchiseeUserById);
-router.get("/:id", auth, getFranchiseeUserByUserId);
+router.get("/user/:id", auth, getFranchiseeUserByUserId);
 router.patch("/:id", auth, isAdmin, updateFranchiseeUser);
 router.delete("/:id", auth, isAdmin, deleteFranchiseeUser);
 

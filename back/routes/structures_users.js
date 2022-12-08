@@ -29,7 +29,7 @@ router
     .post("/", auth, isAdmin, createStructureUser)
     .get("/", auth, isAdmin, getStructuresUsers);
 router.get("/:id", auth, isAdmin, getStructureUserById);
-router.get("/:id", auth, getStructureUserByUserId);
+router.get("/user/:id", auth, getStructureUserByUserId);
 router.patch("/:id", auth, isAdmin, updateStructureUser);
 router.delete("/:id", auth, isAdmin, deleteStructureUser);
 
