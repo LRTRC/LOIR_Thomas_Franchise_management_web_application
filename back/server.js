@@ -69,6 +69,7 @@ const errorHandler = error => {
 
         // else throw error
         default:
+            console.log(error)
             throw error;
     }
 };

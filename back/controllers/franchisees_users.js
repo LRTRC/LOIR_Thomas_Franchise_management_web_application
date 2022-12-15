@@ -95,7 +95,8 @@ const getFranchiseeUserById = async (req, res, next) => {
 const getFranchiseeUserByUserId = async (req, res, next) => {
 
     // gets id from request params
-    const {id_user} = req.body;
+    const id_user = req.params.id;
+
 
     // build SQL query : select all columns from franchisees_users table where id = id in request
     const query = "SELECT * FROM franchisees_users WHERE id_user=$1;";

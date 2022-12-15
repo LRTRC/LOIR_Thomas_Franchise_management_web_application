@@ -65,10 +65,14 @@ const login = async (req, res, next) => {
                         })
                     }
                 }) // if there is an error of communication between backend and database
-                .catch(error => res.status(500).json({error}))
+                .catch(error => {
+                    console.log(error)
+                    res.status(500).json({error})
+                })
         }
         // catch errors
     } catch (error) {
+        console.log(error)
         return next(error);
     }
 };

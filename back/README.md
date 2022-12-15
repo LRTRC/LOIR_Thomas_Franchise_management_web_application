@@ -15,7 +15,7 @@ $ npm run start
 ```
 
 ## Environment variables
-On dev setup, create a .env file in root folder : 'front/' and set
+On local setup, create a .env file in root folder : 'back/' and set
 ```bash
 # database url
 DATABASE_URL=postgresql://franchisemanager:zx9Kr4LNK7S@localhost:5432/franchisesmanagement

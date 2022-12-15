@@ -24,7 +24,7 @@
             <v-col cols="12" md="4">
               <v-text-field
                 id="franchiseesSearchBar"
-                v-model="FranchiseesSearch"
+                v-model="franchiseesSearch"
                 clearable
                 :prepend-icon="icons[0]"
                 label="Rechercher"
@@ -36,10 +36,10 @@
           <v-data-table
             id="franchiseesDataTable"
             class="pa-4 mt-4"
-            :headers="FranchiseesHeaders"
+            :headers="franchiseesHeaders"
             :items="franchisees"
             :items-per-page="franchisees.length"
-            :search="FranchiseesSearch"
+            :search="franchiseesSearch"
             item-key="id"
             loading-text="Chargement des données"
             no-data-text="Aucune donnée"
@@ -109,14 +109,18 @@ export default {
       icons: [mdiMagnify, mdiPlaylistCheck],
       franchisees: [],
       structures: [],
-      FranchiseesHeaders: [],
-      FranchiseesSearch: [],
-      structuresHeaders: [],
-      structuresSearch: [],
+      franchiseesHeaders: [
+        {text: 'Franchisé', value: 'id_franchise', align: 'start'},
+      ],
+      franchiseesSearch: '',
+      structuresHeaders: [
+        {text: 'Structure', value: 'id_structure', align: 'start'},
+      ],
+      structuresSearch: '',
     }
   },
   mounted() {
-    this.fetData(this.user)
+    this.fetchData(this.user)
   },
   computed: {
     ...mapGetters({
@@ -138,8 +142,8 @@ export default {
           const franchisees = await this.$axios.$get(`/api/franchisees_users/user/${id}`)
 
           // if response mutate franchisees
-          if (franchisees) {
-            return this.franchisees = franchisees
+          if (franchisees.status === 200 && franchisees.data.length > 0) {
+            return this.franchisees = franchisees.data
           }
         }
 
@@ -156,8 +160,8 @@ export default {
           const structures = await this.$axios.$get(`/api/structures_users/user/${id}`)
 
           // if response mutate franchisees
-          if (structures) {
-            return this.structures = structures
+          if (structures.status === 200 && structures.data.length > 0) {
+            return this.structures = structures.data
           }
         }
 
@@ -167,7 +171,7 @@ export default {
       }
     },
 
-    fetData(user) {
+    fetchData(user) {
       this.findUserFranchisees(user);
       this.findUserStructures(user)
     }

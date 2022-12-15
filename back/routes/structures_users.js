@@ -10,7 +10,7 @@ const router = express.Router();
 const auth = require('../middleware/auth');
 
 // import isAdmin middleware
-const isAdmin = require('./middleware/isAdmin')
+const isAdmin = require('../middleware/isAdmin')
 
 // import controller for the entity "structures_users"
 const {
