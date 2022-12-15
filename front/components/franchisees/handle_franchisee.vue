@@ -529,15 +529,11 @@ export default {
         let users = this.getUsersByID(this.selectedUsers, this.usersImport)
         // for each user find its pair in the junction table franchisees_users
         for (let user of users) {
-          let item = this.franchises_users.find(el => el.id_user === user.id)
-          // if a selected tuple already exist, patch it
-          if (item) {
-            item.id_franchise = franchiseeID
-            await this.$axios.$patch(`api/franchisees_users/${item.id}`, item)
-          }
-          // else create it
-          else {
-            const payload = {id_user: user.id, id_franchise: franchiseeID}
+
+          const payload = {id_user: user.id, id_franchise: franchiseeID}
+          let isExisting = this.franchises_users.find(el => el.id_user === user.id && el.id_franchise === franchiseeID)
+
+          if (!isExisting) {
             await this.$axios.$post('api/franchisees_users/', payload)
           }
         }

@@ -9,11 +9,14 @@ const router = express.Router();
 // todo: try router.use(auth) (less verbose)
 const auth = require('../middleware/auth');
 
+// import isAdmin middleware
+const isAdmin = require('../middleware/isAdmin')
+
 // import controller for the entity "franchisee"
 const {
     getFranchisees,
     createFranchisee,
-    getFranchiseeById,
+    getFranchiseesById,
     updateFranchisee,
     deleteFranchisee
 } = require("../controllers/franchisees");
@@ -22,10 +25,10 @@ const {
 // As API REST pattern, we will define routes and middlewares to get access to data
 // from our database with simple CRUDs
 router
-    .post("/", auth, createFranchisee)
-    .get("/", auth, getFranchisees);
-router.get("/:id", auth, getFranchiseeById);
-router.patch("/:id", auth, updateFranchisee);
-router.delete("/:id", auth, deleteFranchisee);
+    .post("/", auth, isAdmin, createFranchisee)
+    .get("/", auth, isAdmin, getFranchisees);
+router.get("/:id", auth, getFranchiseesById);
+router.patch("/:id", auth, isAdmin,updateFranchisee);
+router.delete("/:id", auth, isAdmin, deleteFranchisee);
 
 module.exports = router;

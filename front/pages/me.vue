@@ -161,6 +161,8 @@ export default {
 
           // if response mutate franchisees
           if (structures.status === 200 && structures.data.length > 0) {
+            let ids = structures.data.map(el => el.id)
+            console.log('ids ' + ids)
             return this.structures = structures.data
           }
         }

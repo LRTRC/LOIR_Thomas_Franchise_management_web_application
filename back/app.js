@@ -39,8 +39,8 @@ app.use(cors());
 
 // As API REST pattern, sets the different routers for main entities available in the API
 // with a corresponding path
-app.use("/api/franchisees", isAdmin,franchiseesRouter);
-app.use("/api/structures", isAdmin, structuresRouter);
+app.use("/api/franchisees",franchiseesRouter);
+app.use("/api/structures", structuresRouter);
 app.use("/api/users", isAdmin, usersRouter);
 app.use("/api/franchisees_users",franchiseesUsersRouter);
 app.use("/api/structures_users",structuresUsersRouter);
