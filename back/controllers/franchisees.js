@@ -60,15 +60,14 @@ const createFranchisee = async (req, res, next) => {
     }
 };
 
-// get a franchisees by their id
+// get franchisees by their id
 const getFranchiseesById = async (req, res, next) => {
 
-    // gets id from request params
-    const ids = parseInt(req.body.id);
-    console.log(ids)
+    // gets id from request body
+    const ids = req.body;
 
     // build SQL query : select all columns from franchisees table where id = id in request
-    const query = "SELECT * FROM franchisees WHERE id @> ARRAY[$1];";
+    const query = "SELECT * FROM franchisees WHERE id = ANY($1::int[]);";
     const value = [ids];
 
     try {

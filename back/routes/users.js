@@ -8,6 +8,9 @@ const router = express.Router();
 // todo: try router.use(auth) (less verbose)
 const auth = require('../middleware/auth');
 
+// import isAdmin middleware
+const isAdmin = require('../middleware/isAdmin')
+
 // import controller for the entity "user"
 const {
     getUsers,
@@ -20,10 +23,10 @@ const {
 // As API REST pattern, we will define routes and middlewares to get access to data
 // from our database with simple CRUDs
 router
-    .post("/", auth, createUser)
-    .get("/", auth, getUsers);
+    .post("/", auth, isAdmin, createUser)
+    .get("/", auth, isAdmin, getUsers);
 router.get("/:id", auth, getUserById);
 router.patch("/:id", auth, updateUser);
-router.delete("/:id", auth, deleteUser);
+router.delete("/:id", auth, isAdmin, deleteUser);
 
 module.exports = router;

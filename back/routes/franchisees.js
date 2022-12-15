@@ -27,7 +27,7 @@ const {
 router
     .post("/", auth, isAdmin, createFranchisee)
     .get("/", auth, isAdmin, getFranchisees);
-router.get("/:id", auth, getFranchiseesById);
+router.post("/details", auth, getFranchiseesById);
 router.patch("/:id", auth, isAdmin,updateFranchisee);
 router.delete("/:id", auth, isAdmin, deleteFranchisee);
 

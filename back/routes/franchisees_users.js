@@ -18,6 +18,7 @@ const {
     createFranchiseeUser,
     getFranchiseeUserById,
     getFranchiseeUserByUserId,
+    getFranchiseeUsersByFranchiseeId,
     updateFranchiseeUser,
     deleteFranchiseeUser
 } = require("../controllers/franchisees_users");
@@ -30,6 +31,7 @@ router
     .get("/", auth, isAdmin, getFranchiseesUsers);
 router.get("/:id", auth, isAdmin, getFranchiseeUserById);
 router.get("/user/:id", auth, getFranchiseeUserByUserId);
+router.get("/franchise/:id", auth, getFranchiseeUsersByFranchiseeId);
 router.patch("/:id", auth, isAdmin, updateFranchiseeUser);
 router.delete("/:id", auth, isAdmin, deleteFranchiseeUser);
 
