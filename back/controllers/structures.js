@@ -87,7 +87,7 @@ const createStructure = async (req, res, next) => {
     }
 };
 
-// get franchisees by their id
+// get structures by their id
 const getStructuresById = async (req, res, next) => {
 
     // gets id from request body
@@ -135,7 +135,7 @@ const getStructuresByIdFranchise = async (req, res, next) => {
         const data = await pool.query(query, value);
 
         // if no result send 404
-        if (data.rowCount === 0) return res.status(404).send("No structure exists");
+        if (data.rowCount === 0) return res.status(200).send("No structure exists");
 
         // else send result
         return res.status(200).json({

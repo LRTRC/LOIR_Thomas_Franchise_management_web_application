@@ -108,7 +108,7 @@ const getFranchiseeUserByUserId = async (req, res, next) => {
         const data = await pool.query(query, value);
 
         // if no result send 404
-        if (data.rowCount === 0) return res.status(404).send("No user's franchisee exists");
+        if (data.rowCount === 0) return res.status(200).send("No user's franchisee exists");
 
         // else send result
         return res.status(200).json({

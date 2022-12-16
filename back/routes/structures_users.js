@@ -18,6 +18,7 @@ const {
     createStructureUser,
     getStructureUserById,
     getStructureUserByUserId,
+    getStructuresUsersByIdStructure,
     updateStructureUser,
     deleteStructureUser
 } = require("../controllers/structures_users");
@@ -30,6 +31,7 @@ router
     .get("/", auth, isAdmin, getStructuresUsers);
 router.get("/:id", auth, isAdmin, getStructureUserById);
 router.get("/user/:id", auth, getStructureUserByUserId);
+router.get("/structures/:id", auth, getStructuresUsersByIdStructure);
 router.patch("/:id", auth, isAdmin, updateStructureUser);
 router.delete("/:id", auth, isAdmin, deleteStructureUser);
 

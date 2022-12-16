@@ -137,6 +137,26 @@
                 {{ item.franchise }}
               </v-chip>
             </template>
+            <template v-slot:item.users="{ item }">
+              <v-chip
+                v-for="(user, i) in item.users"
+                :key="i"
+                class="px-2 ma-2"
+                color="success"
+                text-color="white"
+              >
+                {{ user }}
+              </v-chip>
+            </template>
+            <template v-slot:item.isactive="{ item }">
+              <v-switch
+                id="structureIsActive"
+                v-model="item.isactive"
+                color="success"
+                dense
+                disabled
+              />
+            </template>
           </v-data-table>
         </v-card>
       </v-col>
@@ -209,7 +229,6 @@ export default {
           if (franchisees.status === 200 && franchisees.data.length > 0) {
             let ids = franchisees.data.map(el => el.id_franchise)
             const usersFranchisees = await this.$axios.$post("/api/franchisees/details/", ids)
-            // return this.franchisees = usersFranchisees.data
 
             if (usersFranchisees.status === 200 && usersFranchisees.data.length > 0) {
               let result = usersFranchisees.data
@@ -239,20 +258,29 @@ export default {
         if (user.id) {
           const structures = await this.$axios.$get(`/api/structures_users/user/${id}`)
 
-          // if response mutate franchisees
           if (structures.status === 200 && structures.data.length > 0) {
             let ids = structures.data.map(el => el.id_structure)
             const usersStructures = await this.$axios.$post("/api/structures/details/", ids)
+
             if (usersStructures.status === 200 && usersStructures.data.length > 0) {
+
               const structures = usersStructures.data
               for (let structure of structures) {
+
+                let users = await this.getStructureUsers(structure)
+                if (users && users.length > 0) {
+                  structure.users = users
+                }
+
+
                 const franchise = await this.$axios.post("/api/franchisees/details/", [structure.id_franchise])
                 if (franchise.status === 200 && franchise.data.data.length > 0) {
                   structure.franchise = franchise.data.data[0].name
                   this.structuresIsLoading = false;
-                  return this.structures = structures
+
                 }
               }
+              return this.structures = structures
             }
           }
         }
@@ -271,8 +299,12 @@ export default {
 
     // get a structures
     async getFranchiseesStructures(franchisee) {
+      let structures = []
       const franchiseesStructures = await this.$axios.$get(`/api/structures/franchise/${franchisee.id}`)
-      return franchiseesStructures.data.map(el => el.name)
+      if (franchiseesStructures.status === 200 && franchiseesStructures.data.length > 0) {
+        structures = franchiseesStructures.data.map(el => el.name)
+      }
+      return structures
 
 
     },
@@ -284,6 +316,20 @@ export default {
       if (franchiseesUsers && franchiseesUsers.data.length > 0) {
 
         for (let user of franchiseesUsers.data) {
+          let result = await this.$axios.$get(`/api/users/${user.id_user}`)
+          users.push(result.data.email)
+        }
+      }
+      return users
+    },
+
+    // get a structure's users
+    async getStructureUsers(structure) {
+      const structureUsers = await this.$axios.$get(`/api/structures_users/structures/${structure.id}`)
+      let users = [];
+      if (structureUsers && structureUsers.data.length > 0) {
+
+        for (let user of structureUsers.data) {
           let result = await this.$axios.$get(`/api/users/${user.id_user}`)
           users.push(result.data.email)
         }
