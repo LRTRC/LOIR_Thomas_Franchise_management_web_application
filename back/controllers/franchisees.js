@@ -60,15 +60,15 @@ const createFranchisee = async (req, res, next) => {
     }
 };
 
-// get a franchisee by its id
-const getFranchiseeById = async (req, res, next) => {
+// get franchisees by their id
+const getFranchiseesById = async (req, res, next) => {
 
-    // gets id from request params
-    const id = parseInt(req.params.id);
+    // gets id from request body
+    const ids = req.body;
 
     // build SQL query : select all columns from franchisees table where id = id in request
-    const query = "SELECT * FROM franchisees WHERE id=$1;";
-    const value = [id];
+    const query = "SELECT * FROM franchisees WHERE id = ANY($1::int[]);";
+    const value = [ids];
 
     try {
 
@@ -163,7 +163,7 @@ const deleteFranchisee = async (req, res, next) => {
 module.exports = {
     getFranchisees,
     createFranchisee,
-    getFranchiseeById,
+    getFranchiseesById,
     updateFranchisee,
     deleteFranchisee
 };

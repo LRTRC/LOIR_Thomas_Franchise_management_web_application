@@ -87,32 +87,64 @@ const createStructure = async (req, res, next) => {
     }
 };
 
-// get a structure by ID
-const getStructureById = async (req, res, next) => {
+// get structures by their id
+const getStructuresById = async (req, res, next) => {
 
-    // get id from request params
-    const id = parseInt(req.params.id);
+    // gets id from request body
+    const ids = req.body;
 
-    // build SQL query, get all columns from the tuple in table structures where id = id from request
-    const query = "SELECT * FROM structures WHERE id=$1;";
-    const value = [id];
+    // build SQL query : select all columns from structures table where id = id in request
+    const query = "SELECT * FROM structures WHERE id = ANY($1::int[]);";
+    const value = [ids];
 
     try {
 
-        // send the query
+        // send request
         const data = await pool.query(query, value);
 
         // if no result send 404
         if (data.rowCount === 0) return res.status(404).send("No structure exists");
 
-        // else returns result
+        // else send result
         return res.status(200).json({
             status: 200,
-            message: "Structure:",
+            message: "Structures:",
             data: data.rows
         })
 
-        // or error
+        // or catch error
+    } catch (error) {
+        return next(error);
+    }
+};
+
+// get structures by its id_franchisee
+const getStructuresByIdFranchise = async (req, res, next) => {
+
+    // get id from request params
+    const id = parseInt(req.params.id);
+
+
+    // build SQL query : select all columns from franchisees_users table where id = id in request
+    const query = "SELECT name FROM structures WHERE id_franchise = $1;";
+    const value = [id];
+
+    try {
+
+        // send request
+        const data = await pool.query(query, value);
+
+        // if no result send 404
+        if (data.rowCount === 0) return res.status(200).send("No structure exists");
+
+        // else send result
+        return res.status(200).json({
+            status: 200,
+            message: "Structures",
+            data: data.rows
+        })
+
+        // or catch error
     } catch (error) {
         return next(error);
     }
@@ -218,7 +250,8 @@ const deleteStructure = async (req, res, next) => {
 module.exports = {
     getStructures,
     createStructure,
-    getStructureById,
+    getStructuresById,
+    getStructuresByIdFranchise,
     updateStructure,
     deleteStructure
 };

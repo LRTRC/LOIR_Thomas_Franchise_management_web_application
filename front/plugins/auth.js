@@ -11,7 +11,6 @@ export default function ({$auth, redirect, app, route}) {
   if ($auth.loggedIn && Object.keys(user).length > 0) {
     let role = $auth.user.role
     if (role !== 'admin' || role === 'visitor') {
-      console.log('auth admin')
       return redirect('/me')
     }
   }

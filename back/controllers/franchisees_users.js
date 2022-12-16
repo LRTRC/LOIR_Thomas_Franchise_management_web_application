@@ -91,6 +91,71 @@ const getFranchiseeUserById = async (req, res, next) => {
     }
 };
 
+// get franchisee_users by its id_user
+const getFranchiseeUserByUserId = async (req, res, next) => {
+
+    // gets id from request params
+    const id_user = req.params.id;
+
+
+    // build SQL query : select all columns from franchisees_users table where id = id in request
+    const query = "SELECT * FROM franchisees_users WHERE id_user=$1;";
+    const value = [id_user];
+
+    try {
+
+        // send request
+        const data = await pool.query(query, value);
+
+        // if no result send 404
+        if (data.rowCount === 0) return res.status(200).send("No user's franchisee exists");
+
+        // else send result
+        return res.status(200).json({
+            status: 200,
+            message: "User's franchisees",
+            data: data.rows
+        })
+
+        // or catch error
+    } catch (error) {
+        return next(error);
+    }
+};
+
+// get franchisee_users by its id_franchise
+const getFranchiseeUsersByFranchiseeId = async (req, res, next) => {
+
+    // gets id from request params
+    const id_franchise = req.params.id;
+
+
+    // build SQL query : select all columns from franchisees_users table where id = id in request
+    const query = "SELECT * FROM franchisees_users WHERE id_franchise=$1;";
+    const value = [id_franchise];
+
+    try {
+
+        // send request
+        const data = await pool.query(query, value);
+
+        // if no result send 404
+        if (data.rowCount === 0) return res.status(404).send("No user's franchisee exists");
+
+        // else send result
+        return res.status(200).json({
+            status: 200,
+            message: "User's franchisees",
+            data: data.rows
+        })
+
+        // or catch error
+    } catch (error) {
+        return next(error);
+    }
+};
+
+
 // update a franchisee_user
 const updateFranchiseeUser = async (req, res, next) => {
 
@@ -164,6 +229,8 @@ module.exports = {
     getFranchiseesUsers,
     createFranchiseeUser,
     getFranchiseeUserById,
+    getFranchiseeUserByUserId,
+    getFranchiseeUsersByFranchiseeId,
     updateFranchiseeUser,
     deleteFranchiseeUser
 };
