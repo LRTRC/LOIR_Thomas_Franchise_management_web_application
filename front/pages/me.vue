@@ -42,6 +42,7 @@
             :items-per-page="franchisees.length"
             :search="franchiseesSearch"
             item-key="id"
+            :loading="franchiseesIsLoading"
             loading-text="Chargement des données"
             no-data-text="Aucune donnée"
             no-results-text="Aucun résultat"
@@ -118,13 +119,25 @@
             :items-per-page="structures.length"
             :search="structuresSearch"
             item-key="id"
+            :loading="structuresIsLoading"
             loading-text="Chargement des données"
             no-data-text="Aucune donnée"
             no-results-text="Aucun résultat"
             hide-default-footer
             dense
             multi-sort
-          />
+          >
+            <template v-slot:item.franchise="{ item }">
+              <v-chip
+                v-if='item.franchise'
+                class="px-2 ma-2"
+                color="success"
+                text-color="white"
+              >
+                {{ item.franchise }}
+              </v-chip>
+            </template>
+          </v-data-table>
         </v-card>
       </v-col>
     </v-row>
@@ -140,6 +153,8 @@ export default {
   name: "me",
   data() {
     return {
+      franchiseesIsLoading: false,
+      structuresIsLoading: false,
       icons: [mdiMagnify, mdiPlaylistCheck],
       franchisees: [],
       structures: [],
@@ -157,7 +172,7 @@ export default {
         {text: 'Adresse', value: 'address', align: 'start'},
         {text: 'Téléphone', value: 'phone', align: 'start'},
         {text: "Actif", value: "isactive", align: 'start'},
-        {text: "Franchisé", value: "id_franchise", align: 'start'},
+        {text: "Franchisé", value: "franchise", align: 'start'},
         {text: "Membres", value: "users", align: 'start'},
       ],
       structuresSearch: '',
@@ -185,6 +200,7 @@ export default {
     // find the users franchisees and those franchisees structures and users
     async findUserFranchisees(user) {
       try {
+        this.franchiseesIsLoading = true;
         const id = user.id
         if (user.id) {
           const franchisees = await this.$axios.$get(`/api/franchisees_users/user/${id}`)
@@ -195,16 +211,19 @@ export default {
             const usersFranchisees = await this.$axios.$post("/api/franchisees/details/", ids)
             // return this.franchisees = usersFranchisees.data
 
-            let result = usersFranchisees.data
-            for (let franchisee of result) {
-              franchisee.structures = await this.getFranchiseesStructures(franchisee)
-              franchisee.users = await this.getFranchiseesUsers(franchisee)
+            if (usersFranchisees.status === 200 && usersFranchisees.data.length > 0) {
+              let result = usersFranchisees.data
+              for (let franchisee of result) {
+                franchisee.structures = await this.getFranchiseesStructures(franchisee)
+                franchisee.users = await this.getFranchiseesUsers(franchisee)
+              }
+              this.franchiseesIsLoading = false;
+              return this.franchisees = result
+
             }
-
-
-            return this.franchisees = result
           }
         }
+        this.franchiseesIsLoading = false;
 
         // else catch error
       } catch (error) {
@@ -215,6 +234,7 @@ export default {
     // find the users structures and those structures franchisees and users
     async findUserStructures(user) {
       try {
+        this.structuresIsLoading = true;
         const id = user.id
         if (user.id) {
           const structures = await this.$axios.$get(`/api/structures_users/user/${id}`)
@@ -223,10 +243,20 @@ export default {
           if (structures.status === 200 && structures.data.length > 0) {
             let ids = structures.data.map(el => el.id_structure)
             const usersStructures = await this.$axios.$post("/api/structures/details/", ids)
-            return this.structures = usersStructures.data
+            if (usersStructures.status === 200 && usersStructures.data.length > 0) {
+              const structures = usersStructures.data
+              for (let structure of structures) {
+                const franchise = await this.$axios.post("/api/franchisees/details/", [structure.id_franchise])
+                if (franchise.status === 200 && franchise.data.data.length > 0) {
+                  structure.franchise = franchise.data.data[0].name
+                  this.structuresIsLoading = false;
+                  return this.structures = structures
+                }
+              }
+            }
           }
         }
-
+        this.structuresIsLoading = false;
         // else catch error
       } catch (error) {
         this.alertError(error.message)
@@ -271,8 +301,6 @@ export default {
 }
 
 #welcome {
-  position: absolute;
-  top: 3%;
-  right: 45%;
+
 }
 </style>
