@@ -346,6 +346,10 @@ export default {
   font-family: 'Poppins', sans-serif !important;
 }
 
+#franchiseesDataTable, #structuresDataTable {
+  background-color: #ecf0f3 !important;
+}
+
 #welcome {
 
 }
