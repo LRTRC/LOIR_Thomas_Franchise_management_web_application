@@ -33,6 +33,9 @@ $ cd LOIR_Thomas_Franchise_management_web_application
 ## UML Diagrams
 Please refer to the app's [UML diagrams](https://drive.google.com/file/d/1ER9JRr4pfG5k1hQrd_xif_c9QbKl-b-L/view?usp=share_link), specially to connect the back-end to a local database that will not be provided in this repository
 
+## UI Prototypes
+Please, find somes [protototypes](https://drive.google.com/file/d/14R3sBUYYPDjVXnRa2y06kPJvODQrJqd4/view?usp=sharing) here, wireframes, Adobe XD prototypes and the Visual identity of the App.
+
 ## Local PostgreSQL server
 
 However, if you still want to use the application locally, you will need to create a local PostgreSQL server. Please follow the next steps.
